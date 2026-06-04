@@ -1,58 +1,56 @@
 const express = require('express');
 const app = express();
+const db = require('./database');
 const cors = require('cors');
 const PORT = 3000;
 
 app.use(express.json());
 app.use(cors());
 
-// temporary task array to be replaced with databse later
-let tasks = [
-    { id: 1, title: 'Learn Express', completed: false },
-    { id: 2, title: 'Build a task manager', completed: false },
-];
 
 //GET all tasks
 app.get('/api/tasks', (req, res) => {
+    const tasks = db.prepare('SELECT * FROM tasks').all();
     res.json(tasks);
 });
 
 //POST new task
 app.post('/api/tasks', (req, res) => {
-    const { title } = req.body;
-    const newTask = {
-        id: tasks.length + 1,
-        title,
-        completed: false,
-    };
-    tasks.push(newTask);
+    const { title, completed } = req.body;
+    const result = db.prepare('INSERT INTO tasks (title, completed) VALUES (?, ?)').run(title, completed ? 1 : 0);
+    const newTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(result.lastInsertRowid);
     res.status(201).json(newTask); //Created new task 201
 });
 
 //PUT update a task
 app.put('/api/tasks/:id', (req, res) => {
+    const { title, completed } = req.body;
     const id = parseInt(req.params.id);
-    const task = tasks.find(t => t.id === id);
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
     if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
 
-    const { title, completed } = req.body;
-    if (title !== undefined) task.title = title;
-    if (completed !== undefined) task.completed = completed;
-    res.json(task);
+    db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ?').run(
+        title ?? task.title,
+        completed !== undefined ? (completed ? 1 : 0) : task.completed,
+        id
+    );
+
+    const updatedTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
+    res.json(updatedTask);
 });
 
-//DELETE a task
+
+
+// DELETE a task
 app.delete('/api/tasks/:id', (req, res) => {
     const id = parseInt(req.params.id);
-    const index = tasks.findIndex(t => t.id === id);
-    if(index === -1) return res.status(404).json({ error: 'Task not found' });
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
+    if (!task) return res.status(404).json({ error: 'Task not found' });
 
-    tasks.splice(index, 1);
-    res.status(204).send(); // 204 Success, but nothing to send back
-})
-
-
-app.listen(PORT, () => {
-    console.log(`Server running on https://localhost:${PORT}`);
+    db.prepare('DELETE FROM tasks WHERE id = ?').run(id);
+    res.status(204).send();
 });
 
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});

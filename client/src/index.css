@@ -1,0 +1,34 @@
+:root {
+    --primary: #EF4444;
+    --primary-dark: #DC2626;
+    --secondary: #F5F0EB;
+
+    --bg: #0F172A;
+
+    --surface: #1E293B;
+
+    --text: #F8FAFC;
+    --text-muted: #94A3B8;
+    
+    --border: #334155;
+
+    --success: #22C55E;
+
+    --warning: #F59E0B;
+}
+
+html,
+body 
+{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 1vh;
+
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#root {
+    width: 100%;
+    max-width: 100vw;
+}

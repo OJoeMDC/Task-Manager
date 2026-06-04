@@ -1,0 +1,20 @@
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-sizing: border-box;
+
+    padding: 12px;
+
+    width: 100%;
+
+    color: var(--text);
+    text-transform: uppercase;
+
+    box-shadow: 0 6px 0 var(--surface);
+}
+
+.title:hover {
+    cursor: pointer;
+    color: var(--text-muted);
+}

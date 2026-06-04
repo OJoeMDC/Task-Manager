@@ -1,0 +1,36 @@
+main {
+    padding: 24px;
+}
+
+.task-form {
+    display: flex;
+    gap: 12px;
+    text-align: center;
+    justify-content: center;
+}
+
+.task-form input {
+    padding: 12px 16px;
+    border: none;
+    font-size: 16px;
+    background-color: var(--surface);
+    color: var(--text);
+
+    box-shadow: 6px 6px 0 black;
+}
+
+.task-form button {
+    background-color: var(--primary);
+    color: var(--text);
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+
+    box-shadow: 6px 6px 0 black;
+}
+
+.task-form button:hover {
+  background-color: var(--primary-dark);
+
+  box-shadow: 4px 4px 0 black;
+}

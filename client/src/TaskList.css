@@ -1,0 +1,54 @@
+.tasklist {
+    display: flex;
+    flex-direction: column;
+    width: 60vw;
+
+    background-color: var(--surface);
+    box-shadow: 6px 6px 0 black;
+}
+
+header {
+    justify-content: center;
+    text-align: center;
+    color: var(--text);
+    border: 4px solid var(--border);
+}
+
+.list {
+    color: var(--text);
+    list-style: none;
+    margin: 12px;
+}
+
+.list-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.buttons button {
+    border: none;
+    box-shadow: 6px 6px 0 black;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.buttons button:hover {
+    box-shadow: 4px 4px 0 black;
+    cursor: pointer;
+}
+
+.delete {
+    background: var(--primary);
+}
+
+.edit {
+    background: var(--warning);
+}
