@@ -30,12 +30,36 @@ function App() {
   .catch(err => console.error(err));
 }
 
+//Delete Task
+const deleteTask = (id) => {
+  fetch(`http://localhost:3000/api/tasks/${id}` , {
+    method: 'DELETE'
+  })
+  .then(() => setTasks(tasks.filter(task => task.id !== id)))
+  .catch(err => console.error(err));
+}
+
+//Complete Task
+const toggleComplete = (id) => {
+  fetch(`http://localhost:3000/api/tasks/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ toggle: true }),
+  })
+  .then( res => res.json())
+  .then(updatedTask => setTasks(tasks.map(t => t.id === id ? updatedTask : t)))
+  .catch(err => console.error(err))
+}
+
 
   return(
     <div className='app'>
       <Navbar />
       <TaskInput onAdd={addTask}/>
-      <TaskList tasks={tasks}/>
+      <TaskList 
+      tasks={tasks} 
+      onDelete={deleteTask} 
+      onToggle={toggleComplete}/>
     </div>
   )
 }

@@ -27,6 +27,12 @@ header {
     padding: 8px;
 }
 
+.list-item.completed span {
+    text-decoration: line-through;
+    opacity: 0.5;
+    color: var(--success);
+}
+
 .buttons {
     display: flex;
     flex-direction: row;
@@ -51,4 +57,8 @@ header {
 
 .edit {
     background: var(--warning);
+}
+
+.complete {
+    background: var(--success);
 }

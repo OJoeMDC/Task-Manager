@@ -24,16 +24,21 @@ app.post('/api/tasks', (req, res) => {
 
 //PUT update a task
 app.put('/api/tasks/:id', (req, res) => {
-    const { title, completed } = req.body;
+    const { title, completed, toggle } = req.body;
     const id = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
     if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
 
-    db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ?').run(
-        title ?? task.title,
-        completed !== undefined ? (completed ? 1 : 0) : task.completed,
-        id
-    );
+    if (toggle) {
+        db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ?').run(id);
+    } else {
+        db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ?').run(
+            title ?? task.title,
+            completed !== undefined ? (completed ? 1 : 0)
+            : task.completed,
+            id
+        );
+    }
 
     const updatedTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
     res.json(updatedTask);
