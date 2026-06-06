@@ -51,6 +51,11 @@ const toggleComplete = (id) => {
   .catch(err => console.error(err))
 }
 
+//Edit Task
+const editTask = (id) => {
+  console.log(task.id);
+}
+
 
   return(
     <div className='app'>
@@ -59,7 +64,8 @@ const toggleComplete = (id) => {
       <TaskList 
       tasks={tasks} 
       onDelete={deleteTask} 
-      onToggle={toggleComplete}/>
+      onToggle={toggleComplete}
+      onEdit={editTask}/>
     </div>
   )
 }

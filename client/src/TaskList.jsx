@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useInsertionEffect } from "react";
 import './TaskList.css'
-import TaskInput from "./TaskInput";
+import Task from "./Task"
 
-function TaskList({ tasks, onDelete, onToggle }) {
+function TaskList({ tasks, onDelete, onToggle, onEdit }) {
+    
 
     return(
         <div className='tasklist'>
@@ -12,14 +13,13 @@ function TaskList({ tasks, onDelete, onToggle }) {
         
         <ul className='list'>
             {tasks.map((task) => (
-                <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''}`}>
-                    <span>{task.title}</span>
-                    <div className="buttons">
-                        <button type="checkbox" className='complete' onClick={() => onToggle(task.id)}>✓</button>
-                        <button className='edit'>Edit</button>
-                        <button className='delete' onClick={() => onDelete(task.id)}>X</button>
-                    </div>
-                </li>
+                <Task
+                key={task.id}
+                task={task}
+                onDelete={onDelete} 
+                onToggle={onToggle}
+                onEdit={onEdit}
+                />
             ))}
         </ul>
         </div>
