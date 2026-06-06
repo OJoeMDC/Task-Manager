@@ -29,6 +29,10 @@
     cursor: pointer;
 }
 
+.buttons button:active {
+    transform: scale(0.96);
+} 
+
 .delete {
     background: var(--primary);
 }

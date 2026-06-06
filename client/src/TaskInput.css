@@ -34,3 +34,7 @@ main {
 
   box-shadow: 4px 4px 0 black;
 }
+
+.task-form button:active {
+    transform: scale(0.96);
+}
