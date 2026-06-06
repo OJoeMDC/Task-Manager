@@ -52,9 +52,18 @@ const toggleComplete = (id) => {
 }
 
 //Edit Task
-const editTask = (id) => {
-  console.log(task.id);
+const editTask = async (id, newTitle) => {
+  const res = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: newTitle })
+  });
+  if (res.ok) {
+    const updated = await res.json();
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, title: newTitle } : t));
+  }
 }
+
 
 
   return(
