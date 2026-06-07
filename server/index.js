@@ -1,10 +1,11 @@
 import Database from 'better-sqlite3';
+import express from 'express'
+import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-const express = require('express');
+
 const app = express();
-const cors = require('cors');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DB_PATH = process.env.DB_PATH ?? (process.env.NODE_ENV == 'production' ? '/data/tasks.db' : path.join(__dirname, 'tasks.db'))
