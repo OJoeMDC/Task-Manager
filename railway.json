@@ -3,7 +3,7 @@
     "builder": "RAILPACK"
   },
   "deploy": {
-    "startCommand": "cd server && npm start",
+    "startCommand": "npm start",
     "healthcheckPath": "/api/tasks",
     "healthcheckTimeout": 100
   }
