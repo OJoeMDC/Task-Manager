@@ -1,11 +1,20 @@
 const express = require('express');
+import cors from 'cors';
 const app = express();
 const db = require('./database');
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://https://bubbly-reprieve-production-4d0b.up.railway.app/'
+]
+
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+}));
 
 
 //GET all tasks
