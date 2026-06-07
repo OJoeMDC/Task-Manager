@@ -67,5 +67,3 @@ fetch(`${API_URL}/api/tasks`, ...)
 2. Add route logic in `App.jsx` (or install `react-router-dom`)
 3. Update `index.html` title if needed
 ```
-
----
