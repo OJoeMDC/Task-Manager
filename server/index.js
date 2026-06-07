@@ -3,10 +3,11 @@ const app = express();
 const db = require('./database');
 const cors = require('cors');
 
-console.log('process.env.PORT =', process.env.PORT);
-const PORT = process.env.PORT || 3000;
-console.log('Listening on:', PORT);
-app.listen(PORT, () => console.log(`Server ready on ${PORT}`));
+console.log('process.env.PORT =', process.env.PORT)
+const PORT = process.env.PORT || 3000
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 
 const allowedOrigins = [
