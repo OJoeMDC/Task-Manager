@@ -1,16 +1,71 @@
-# React + Vite
+### `client/README.md`
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+```markdown
+# Task Manager — Frontend
 
-Currently, two official plugins are available:
+React 19 + Vite single-page application.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Structure
 
-## React Compiler
+```
+client/
+├── public/                 # Static assets (copied to dist/)
+│   └── favicon.png
+├── src/
+│   ├── components/
+│   │   ├── TaskInput.jsx   # Add new task form
+│   │   ├── TaskList.jsx    # Renders task list
+│   │   ├── Task.jsx        # Individual task (edit/toggle/delete)
+│   │   └── Navbar.jsx      # Top navigation
+│   ├── App.jsx             # State + API calls
+│   ├── App.css             # Styles
+│   └── main.jsx            # Entry point
+├── index.html              # Template (edit title/favicon here)
+├── package.json
+├── railpack.json           # Railway static site config
+├── .env.development        # VITE_API_URL=http://localhost:3000
+└── .env.production         # VITE_API_URL=https://your-backend.up.railway.app
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Scripts
 
-## Expanding the ESLint configuration
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Vite dev server (port 5173) |
+| `npm run build` | Build to `dist/` for production |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Environment Variables
+
+| File | Variable | Value |
+|------|----------|-------|
+| `.env.development` | `VITE_API_URL` | `http://localhost:3000` |
+| `.env.production` | `VITE_API_URL` | `https://your-backend.up.railway.app` |
+
+> Only `VITE_*` vars are exposed to the browser.
+
+## API Integration
+
+All API calls in `App.jsx` use:
+
+```js
+const API_URL = import.meta.env.VITE_API_URL
+fetch(`${API_URL}/api/tasks`, ...)
+```
+
+## Deployment (Railway Static Site)
+
+- **Root Directory**: `client`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Environment**: `VITE_API_URL` = backend production URL
+
+## Adding Pages
+
+1. Create component in `src/components/`
+2. Add route logic in `App.jsx` (or install `react-router-dom`)
+3. Update `index.html` title if needed
+```
+
+---
