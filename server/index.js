@@ -1,7 +1,16 @@
+import Database from 'better-sqlite3';
+import path from 'path'
+import { fileURLToPath } from 'url'
+
 const express = require('express');
 const app = express();
 const db = require('./database');
 const cors = require('cors');
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const DB_PATH = process.env.DB_PATH ?? (process.env.NODE_ENV == 'production' ? '/data/tasks.db' : path.join(__dirname, 'tasks.db'))\
+const db = new Database(DB_PATH)
+
 
 console.log('process.env.PORT =', process.env.PORT)
 const PORT = process.env.PORT || 3000
