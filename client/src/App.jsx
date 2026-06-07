@@ -5,11 +5,13 @@ import Navbar from './Navbar'
 import TaskInput from './TaskInput'
 
 function App() {
+  const APU_URL = `${import.meta.env.VITE_API_URL}`
+
   const [tasks, setTasks] = useState([]);
 
   // Fetch all Tasks
   useEffect(() => {
-    fetch('http://localhost:3000/api/tasks')
+    fetch(`${API_URL}/api/tasks`)
       .then(res => res.json())
       .then(data => setTasks(data))
       .catch(err => console.error(err))
@@ -18,7 +20,7 @@ function App() {
 
   //Create a new Task
   const addTask = (title) => {
-    fetch('http://localhost:3000/api/tasks', {
+    fetch(`${API_URL}/api/tasks`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'
     },
@@ -32,7 +34,7 @@ function App() {
 
 //Delete Task
 const deleteTask = (id) => {
-  fetch(`http://localhost:3000/api/tasks/${id}` , {
+  fetch(`${API_URL}/api/tasks/${id}` , {
     method: 'DELETE'
   })
   .then(() => setTasks(tasks.filter(task => task.id !== id)))
@@ -41,7 +43,7 @@ const deleteTask = (id) => {
 
 //Complete Task
 const toggleComplete = (id) => {
-  fetch(`http://localhost:3000/api/tasks/${id}`, {
+  fetch(`${API_URL}/api/tasks/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ toggle: true }),
@@ -53,7 +55,7 @@ const toggleComplete = (id) => {
 
 //Edit Task
 const editTask = async (id, newTitle) => {
-  const res = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+  const res = await fetch(`${API_URL}/api/tasks/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title: newTitle })
