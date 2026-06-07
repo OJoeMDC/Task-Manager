@@ -1,5 +1,4 @@
 const express = require('express');
-import cors from 'cors';
 const app = express();
 const db = require('./database');
 const cors = require('cors');
