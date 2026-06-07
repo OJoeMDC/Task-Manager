@@ -4,7 +4,6 @@ import { fileURLToPath } from 'url'
 
 const express = require('express');
 const app = express();
-const db = require('./database');
 const cors = require('cors');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
