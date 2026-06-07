@@ -5,7 +5,7 @@ import Navbar from './Navbar'
 import TaskInput from './TaskInput'
 
 function App() {
-  const APU_URL = `${import.meta.env.VITE_API_URL}`
+  const API_URL = `${import.meta.env.VITE_API_URL}`
 
   const [tasks, setTasks] = useState([]);
 
