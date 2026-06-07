@@ -11,6 +11,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DB_PATH = process.env.DB_PATH ?? (process.env.NODE_ENV == 'production' ? '/data/tasks.db' : path.join(__dirname, 'tasks.db'))
 const db = new Database(DB_PATH)
 
+//Create table if it doesn't exist
+db.exec(`
+    CREATE TABLE IF NOT EXISTS tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    completed INTEGER DEFAULT 0
+    )
+    `)
+
 
 console.log('process.env.PORT =', process.env.PORT)
 const PORT = process.env.PORT || 3000
