@@ -76,9 +76,6 @@ fetch(${API_URL}/api/tasks, ...)
 
 server/README.md
 
-Markdown
-
-
 # Task Manager — Backend
 
 Express + better-sqlite3 REST API.
@@ -153,7 +150,6 @@ app.use(cors({ origin: allowedOrigins, credentials: true }))
 
 ## Local Development
 
-bash
 cd server
 npm install
 npm start          # Runs on http://localhost:3000
