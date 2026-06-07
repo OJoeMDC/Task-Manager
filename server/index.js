@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = [
     'http://localhost:5173',
-    'https://bubbly-reprieve-production-4d0b.up.railway.app/'
+    'https://bubbly-reprieve-production-4d0b.up.railway.app'
 ]
 
 app.use(express.json());
