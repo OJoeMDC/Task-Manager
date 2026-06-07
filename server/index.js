@@ -3,10 +3,10 @@ const app = express();
 const db = require('./database');
 const cors = require('cors');
 
-
+console.log('process.env.PORT =', process.env.PORT)
 const PORT = process.env.PORT || 3000;
-app.listen(PORT);
-
+console.log('Listening on:', PORT)
+app.listen(PORT, () => console.log(`Server ready on ${PORT}`))
 const allowedOrigins = [
     'http://localhost:5173',
     'https://bubbly-reprieve-production-4d0b.up.railway.app'
