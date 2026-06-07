@@ -2,7 +2,10 @@ const express = require('express');
 const app = express();
 const db = require('./database');
 const cors = require('cors');
+
+
 const PORT = process.env.PORT || 3000;
+app.listen(PORT);
 
 const allowedOrigins = [
     'http://localhost:5173',
