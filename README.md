@@ -53,7 +53,7 @@ Task-Manager/
 ### Backend
 cd server
 npm install
-npm run dev          # Runs on http://localhost:3000
+npm start          # Runs on http://localhost:3000
 
 
 ### Frontend
