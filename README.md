@@ -3,7 +3,7 @@
 A full-stack task management application with React/Vite frontend and Node/Express/SQLite backend.
 
 ## Live Demo
-https://your-app-url.com
+https://bubbly-reprieve-production-4d0b.up.railway.app
 
 ## Tech Stack
 
