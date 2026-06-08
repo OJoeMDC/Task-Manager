@@ -30,6 +30,7 @@ app.listen(PORT, "0.0.0.0", () => {
 
 const allowedOrigins = [
     'http://localhost:5173',
+    'http://127.0.0.1:5173',
     'https://bubbly-reprieve-production-4d0b.up.railway.app'
 ];
 
