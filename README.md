@@ -48,14 +48,12 @@ Task-Manager/
 - npm or pnpm
 
 ### Backend
-bash
 cd server
 npm install
 npm run dev          # Runs on http://localhost:3000
 
 
 ### Frontend
-bash
 cd client
 npm install
 npm run dev          # Runs on http://localhost:5173
