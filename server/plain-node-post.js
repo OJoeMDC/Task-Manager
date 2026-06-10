@@ -16,7 +16,7 @@ const server = http.createServer((req, res) => {
             let parsed;
             try {
                 parsed = JSON.parse(body);
-            } catch (e) {
+            } catch {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Invalid JSON' }));
             }
