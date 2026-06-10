@@ -15,7 +15,7 @@ function App() {
       .then(res => res.json())
       .then(data => setTasks(data))
       .catch(err => console.error(err))
-  }, [])
+  }, [API_URL])
 
 
   //Create a new Task
@@ -62,7 +62,7 @@ const editTask = async (id, newTitle) => {
   });
   if (res.ok) {
     const updated = await res.json();
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, title: newTitle } : t));
+    setTasks(prev => prev.map(t => t.id === id ? updated : t));
   }
 }
 
