@@ -22,8 +22,8 @@ jobs:
           node-version: '24'
           cache: 'npm'
           cache-dependency-path: ./server/package-lock.json
-      - run: npm run lint
       - run: npm ci
+      - run: npm run lint
 
   frontend:
     name: Frontend (Lint + Build)
@@ -38,6 +38,6 @@ jobs:
           node-version: '24'
           cache: 'npm'
           cache-dependency-path: ./client/package-lock.json
-      - run: npm run lint
       - run: npm ci
+      - run: npm run lint
       - run: npm run build
