@@ -10,7 +10,7 @@ on:
 
 jobs:
   backend:
-    name: Backend (Test)
+    name: Backend (Lint + Test)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -22,10 +22,11 @@ jobs:
           node-version: '24'
           cache: 'npm'
           cache-dependency-path: ./server/package-lock.json
+      - run: npm run lint
       - run: npm ci
 
   frontend:
-    name: Frontend (Build)
+    name: Frontend (Lint + Build)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -37,5 +38,6 @@ jobs:
           node-version: '24'
           cache: 'npm'
           cache-dependency-path: ./client/package-lock.json
+      - run: npm run lint
       - run: npm ci
       - run: npm run build
