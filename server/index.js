@@ -4,18 +4,18 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
-import routes from './routes/index.js';
-import { authMiddleware } from './middleware/auth.js';
+// import routes from './routes/index.js';
+// import { authMiddleware } from './middleware/auth.js';
 
 
 const app = express();
 app.use(express.json());
-app.use( '/api', routes);
+// app.use( '/api', routes);
 
 
-app.get('/api/me', authMiddleware, (req, res) => {
-    res.json({ user: req.user });
-});
+// app.get('/api/me', authMiddleware, (req, res) => {
+//     res.json({ user: req.user });
+// });
 
 const allowedOrigins = [
     'http://localhost:5173',
