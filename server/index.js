@@ -10,12 +10,12 @@ import bcrypt from 'bcrypt';
 
 const app = express();
 app.use(express.json());
-app.use( '/api', routes);
+// app.use( '/api', routes);
 
 
-app.get('/api/me', authMiddleware, (req, res) => {
-    res.json({ user: req.user });
-});
+// app.get('/api/me', authMiddleware, (req, res) => {
+//     res.json({ user: req.user });
+// });
 
 const allowedOrigins = [
     'http://localhost:5173',
