@@ -4,8 +4,8 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
-import routes from './routes/index.js';
-import { authMiddleware } from './middleware/auth.js';
+// import routes from './routes/index.js';
+// import { authMiddleware } from './middleware/auth.js';
 
 
 const app = express();
