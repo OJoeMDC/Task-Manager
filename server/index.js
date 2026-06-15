@@ -3,9 +3,29 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { readSync } from 'fs';
+import bcrypt from 'bcrypt';
 
 
 const app = express();
+app.use(express.json());
+
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'https://bubbly-reprieve-production-4d0b.up.railway.app'
+];
+
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+}));
+
+console.log('process.env.PORT =', process.env.PORT);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = process.env.DB_PATH ?? (process.env.NODE_ENV == 'production' ? '/data/tasks.db' : path.join(__dirname, 'tasks.db'));
@@ -20,25 +40,6 @@ db.exec(`
     )
     `);
 
-
-console.log('process.env.PORT =', process.env.PORT);
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-
-const allowedOrigins = [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'https://bubbly-reprieve-production-4d0b.up.railway.app'
-];
-
-app.use(express.json());
-app.use(cors({
-    origin: allowedOrigins,
-    credentials: true
-}));
 
 
 //GET all tasks
@@ -92,3 +93,45 @@ app.delete('/api/tasks/:id', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+//////////////
+//USERS CODE//
+//////////////
+
+//User Array
+const users = [];
+
+
+//Get users
+app.get('/users', (req, res) => {
+    res.json(users);
+});
+
+
+//Create User
+app.post('/users', async (req, res) => {
+    try {
+        const hashedPassword = await bcrypt.hashSync(req.body.password, 10);
+        const user = { name: req.body.name, password: hashedPassword }
+        users.push(user)
+    res.status(201).send()
+    } catch {
+        
+    }
+})
+
+app.post('/users/login', async (req, res) => {
+    const user = users.find(user => user.name = req.body.name);
+    if (user == null) {
+        return res.status(400).send('Cannot find user');
+    }
+    try  { 
+        if( await bcrypt.compare(req.body.password, user.password)) {
+            res.send('Success');
+        } else {
+            res.send('Not Allowed');
+        }
+    } catch {
+        res.status(500).send();
+    }
+})
