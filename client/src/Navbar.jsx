@@ -3,7 +3,13 @@ import './Navbar.css'
 function Navbar() {
     return(
         <main className='navbar'>
-            <h2 className='title'>Task Manager</h2>
+            <a className='title' href='/'>Task Manager</a>
+            <div className='links'>
+            <a className='nav-link' href='/tasks'>Tasks</a>
+            <a className='nav-link' href='/profile'>Profile</a>
+            <a className='nav-link' href='/login'>Login</a>
+            <a className='nav-link' href='/register'>Register</a>
+            </div>
         </main>
     )
 };

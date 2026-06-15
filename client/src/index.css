@@ -17,18 +17,39 @@
     --warning: #F59E0B;
 }
 
+#root {
+    width: 100%;
+}
+
 html,
 body 
 {
     margin: 0;
     padding: 0;
     width: 100%;
-    min-height: 1vh;
 
     font-family: 'Segoe UI', sans-serif;
 }
 
-#root {
+.app-layout {
     width: 100%;
-    max-width: 100vw;
+    min-height: 100vh;
+
+    background-color: var(--bg);
+}
+
+.page {
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    max-height: 100%;
+    max-width: 100%;
+
+    padding: 24px;
+    
+    color: var(--text);
+    text-align: center;
+    background-color: var(--bg);
 }
