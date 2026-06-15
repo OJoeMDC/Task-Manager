@@ -16,6 +16,9 @@ app.use(express.json());
 // app.get('/api/me', authMiddleware, (req, res) => {
 //     res.json({ user: req.user });
 // });
+app.get('/', (req, res) => {
+    res.send('Task Manager API is running');
+});
 
 const allowedOrigins = [
     'http://localhost:5173',
@@ -94,10 +97,6 @@ app.delete('/api/tasks/:id', (req, res) => {
     res.status(204).send();
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
-
 //////////////
 //USERS CODE//
 //////////////
@@ -138,4 +137,8 @@ app.post('/users/login', async (req, res) => {
     } catch {
         res.status(500).send();
     }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });
