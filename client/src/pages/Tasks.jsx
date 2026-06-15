@@ -1,7 +1,7 @@
 import TaskList from '../TaskList'
-import Navbar from '../Navbar'
 import TaskInput from '../TaskInput'
 import { useState, useEffect } from 'react'
+import './Tasks.css'
 
 export default function Tasks() {
     const [tasks, setTasks] = useState([]);
@@ -68,8 +68,7 @@ const editTask = async (id, newTitle) => {
 console.log(API_URL);
 
     return ( 
-    <div className='app'>
-        <Navbar />
+    <div className='tasks'>
         <TaskInput onAdd={addTask}/>
         <TaskList 
         tasks={tasks} 
