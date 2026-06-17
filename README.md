@@ -18,21 +18,26 @@ A full-stack task management application with React/Vite frontend and Node/Expre
 ## Project Structure
 
 
+```text
 Task-Manager/
-├── client/                 # React frontend
-│   ├── public/             # Static assets (favicon, etc.)
+├── client/                     # React frontend
+│   ├── public/                 # Static assets
 │   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── App.jsx         # Main app component
-│   │   └── main.jsx        # Entry point
-│   ├── index.html          # HTML template
+│   │   ├── components/         # Reusable React components
+│   │   ├── pages/              # Page-level components
+│   │   ├── App.jsx             # Main app component
+│   │   └── main.jsx            # React entry point
+│   ├── index.html
 │   ├── package.json
-│   └── railpack.json       # Railway static site config
-├── server/                 # Express backend
-│   ├── index.js            # Server entry point
+│   └── railpack.json           # Railway static site config
+│
+├── server/                     # Express backend
+│   ├── index.js                # Server entry point
 │   ├── package.json
-│   └── tasks.db            # SQLite database (local only)
+│   └── tasks.db                # Local SQLite database
+│
 └── README.md
+```
 
 
 ## Features
