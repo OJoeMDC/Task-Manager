@@ -4,18 +4,12 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
-// import routes from './routes/index.js';
-// import { authMiddleware } from './middleware/auth.js';
 
 
 const app = express();
 app.use(express.json());
-// app.use( '/api', routes);
 
 
-// app.get('/api/me', authMiddleware, (req, res) => {
-//     res.json({ user: req.user });
-// });
 app.get('/', (req, res) => {
     res.send('Task Manager API is running');
 });
@@ -104,27 +98,38 @@ app.delete('/api/tasks/:id', (req, res) => {
 //User Array
 const users = [];
 
+db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+    )
+    `);
+
 
 //Get users
-app.get('/users', (req, res) => {
+app.get('/api/users', (req, res) => {
     res.json(users);
 });
 
 
 //Create User
-app.post('/users', async (req, res) => {
+app.post('/api/users', async (req, res) => {
     try {
-        const hashedPassword = await bcrypt.hashSync(req.body.password, 10);
-        const user = { name: req.body.name, password: hashedPassword };
-        users.push(user);
-    res.status(201).send();
+        const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+        const user = { username: req.body.username, password: hashedPassword };
+        const result = db.prepare('INSERT INTO users (username, password) VALUES (?, ?)').run(user.username, user.password);
+        const newUser = db.prepare('SELECT * FROM users WHERE id = ?').get(result.lastInsertRowid);
+        res.status(201).json(newUser);
     } catch {
         res.status(500).send();
     }
 });
 
-app.post('/users/login', async (req, res) => {
-    const user = users.find(user => user.name === req.body.name);
+
+//User Login
+app.post('/api/users/login', async (req, res) => {
+    const user = users.find(user => user.username === req.body.username);
     if (user == null) {
         return res.status(400).send('Cannot find user');
     }

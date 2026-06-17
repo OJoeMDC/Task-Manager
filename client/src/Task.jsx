@@ -52,7 +52,6 @@ function Task( { task, onDelete, onToggle, onEdit } ) {
     return (
         <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''}`}>
                    <span>{task.title}</span>
-
                     <div className="buttons">
                         <button 
                         type="checkbox" 
