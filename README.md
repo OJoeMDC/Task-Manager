@@ -23,7 +23,7 @@ Task-Manager/
 ├── client/                     # React frontend
 │   ├── public/                 # Static assets
 │   ├── src/
-│   │   ├── components/         # Reusable React components
+│   │   ├── assets/             # React assets
 │   │   ├── pages/              # Page-level components
 │   │   ├── App.jsx             # Main app component
 │   │   └── main.jsx            # React entry point
