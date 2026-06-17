@@ -1,0 +1,19 @@
+.logo {
+  font-size: 4rem;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: -2px;
+}
+
+.cursor {
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+
+  51%, 100% {
+    opacity: 0;
+  }
+}

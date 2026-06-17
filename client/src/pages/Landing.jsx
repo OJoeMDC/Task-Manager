@@ -1,14 +1,34 @@
 import './Landing.css';
+import Logo from '../Logo';
 
 export default function Landing() {
   return (
-    <div className='landing'>
-      <h2>
-        Welcome to Task Manager! <br />
-        Please login or register to manage your tasks.
-      </h2>
+    <main className='landing'>
+      <h1>
+        <Logo />
+      </h1>
 
-      <p>Login will be added soon, please navigate to tasks for app functionality.</p>
-    </div>
+      <section className='landing-content'>
+        <p>Login will be added soon, please navigate to tasks for app functionality.</p>
+      </section>
+
+      <section className='cards'>
+        <article className='card'>
+          <h3 className='card-title'>Task Creation</h3>
+          <p>Create tasks with a title, description, and due date.</p>
+        </article>
+
+        <article className='card'>
+          <h3 className='card-title'>Task Management</h3>
+          <p>Manage your tasks with ease, update their status, and set reminders.</p>
+        </article>
+
+         <article className='card'>
+          <h3 className='card-title'>Stay Organized</h3>
+          <p>Keep your tasks sorted and prioritized for maximum productivity.</p>
+        </article>
+
+      </section>
+    </main>
   );
 };
