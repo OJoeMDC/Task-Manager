@@ -69,7 +69,7 @@ export default function Register() {
         </button>
 
         {error && <p className='error'>{error}</p>}
-        {success && <p className='success'>Account Created! <a href='/login'>Login</a></p>}
+        {success && <p className='success'>Account Created</p>}
       </form>
 
       <p className='loginFooter'>Already have an account? <a href='/login'>Login</a></p>
