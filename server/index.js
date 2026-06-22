@@ -4,6 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
+import { read } from 'fs';
 
 
 const app = express();
@@ -95,8 +96,6 @@ app.delete('/api/tasks/:id', (req, res) => {
 //USERS CODE//
 //////////////
 
-//User Array
-const users = [];
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -109,6 +108,7 @@ db.exec(`
 
 //Get users
 app.get('/api/users', (req, res) => {
+    const users = db.prepare('SELECT id, username FROM users').all();
     res.json(users);
 });
 
@@ -129,8 +129,9 @@ app.post('/api/users', async (req, res) => {
 
 //User Login
 app.post('/api/users/login', async (req, res) => {
-    const user = users.find(user => user.username === req.body.username);
-    if (user == null) {
+    const user = db.prepare('SELECT * FROM users WHERE username = ?').get(req.body.username);
+
+    if (!user) {
         return res.status(400).send('Cannot find user');
     }
     try  { 
