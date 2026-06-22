@@ -21,7 +21,7 @@
     background-color: var(--bg);
 }
 
-.title {
+.navTitle {
     height: fit-content;
 
     color: var(--text);
@@ -31,7 +31,7 @@
     font-weight: bold;
 }
 
-.title:hover {
+.navTitle:hover {
     cursor: pointer;
     color: var(--text-muted);
 }
