@@ -132,13 +132,13 @@ app.post('/api/users/login', async (req, res) => {
     const user = db.prepare('SELECT * FROM users WHERE username = ?').get(req.body.username);
 
     if (!user) {
-        return res.status(400).send('Cannot find user');
+        return res.status(400).send('Invalid username or password');
     }
     try  { 
         if( await bcrypt.compare(req.body.password, user.password)) {
-            res.send('Success');
+            return res.status(200).json({ message: 'Login Successful', user: {id: user.id, username: user.username} });
         } else {
-            res.send('Not Allowed');
+            return res.status(401).json({ error: 'Invalid username or password' });
         }
     } catch {
         res.status(500).send();
