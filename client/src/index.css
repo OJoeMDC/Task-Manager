@@ -59,6 +59,7 @@ body
 }
 
 .button {
+    border: none;
     text-decoration: none;
     background-color: var(--border);
 
@@ -78,6 +79,7 @@ body
 }
 
 a.button {
+    border: none;
     text-decoration: none;
     color: var(--warning)
 }

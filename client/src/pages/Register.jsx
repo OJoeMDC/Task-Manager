@@ -1,7 +1,7 @@
 import './AccountForm.css';
 import { useState } from 'react';
 
-export default function Register() {
+export default function Register({ setUser, user }) {
   const API_URL = `${import.meta.env.VITE_API_URL}`;
 
   const [username, setUsername] = useState('');

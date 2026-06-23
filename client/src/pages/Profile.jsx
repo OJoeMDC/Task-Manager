@@ -1,10 +1,9 @@
 import './Profile.css';
 
-export default function Profile() {
-    const user = JSON.parse(localStorage.getItem('user'));
+export default function Profile({ setUser, user }) {
     const logout = () => {
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        setUser(null);
     }
 
     if(!user) {

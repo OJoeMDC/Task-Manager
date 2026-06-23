@@ -1,7 +1,7 @@
 import { useState} from "react";
 import './AccountForm.css'
 
-export default function Login() {
+export default function Login({ setUser, user }) {
     const API_URL = `${import.meta.env.VITE_API_URL}`;
 
     const [username, setUsername] = useState('');
@@ -9,7 +9,6 @@ export default function Login() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState(null);
-    const user = JSON.parse(localStorage.getItem('user'));
 
     const loginUser = async (e) => {
         e.preventDefault();
@@ -31,6 +30,7 @@ export default function Login() {
 
             setSuccess(true);
             setLoggedInUser(data.user);
+            setUsername(data.user);
             localStorage.setItem('user', JSON.stringify(data.user));
             setUsername('');
             setPassword('');

@@ -3,7 +3,7 @@ import TaskInput from '../TaskInput'
 import { useState, useEffect } from 'react'
 import './Tasks.css'
 
-export default function Tasks() {
+export default function Tasks({ user }) {
     const [tasks, setTasks] = useState([]);
     const API_URL = `${import.meta.env.VITE_API_URL}`
    // Fetch all Tasks
@@ -68,13 +68,16 @@ const editTask = async (id, newTitle) => {
 console.log(API_URL);
 
     return ( 
-    <div className='tasks'>
-        <TaskInput onAdd={addTask}/>
-        <TaskList 
-        tasks={tasks} 
-        onDelete={deleteTask} 
-        onToggle={toggleComplete}
-        onEdit={editTask}/>
-    </div>
+      <main>
+        <h1>{user.username}'s Tasks</h1>
+        <div className='tasks'>
+          <TaskInput onAdd={addTask}/>
+          <TaskList 
+          tasks={tasks} 
+          onDelete={deleteTask} 
+          onToggle={toggleComplete}
+          onEdit={editTask}/>
+        </div>
+      </main>
     );
 };
