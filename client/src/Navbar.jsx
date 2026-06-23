@@ -1,6 +1,8 @@
 import './Navbar.css'
 
 function Navbar() {
+
+
     return(
         <main className='navbar'>
             <a className='navTitle' href='/'>Task Manager</a>

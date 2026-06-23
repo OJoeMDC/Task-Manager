@@ -53,3 +53,31 @@ body
     text-align: center;
     background-color: var(--bg);
 }
+
+.temp {
+    color: var(--warning);
+}
+
+.button {
+    text-decoration: none;
+    background-color: var(--border);
+
+    text-transform: uppercase;
+    font-weight: 600;
+
+    padding: 12px;
+    box-shadow: 6px 6px 0 black;
+
+    color: var(--text);
+}
+
+.button:hover {
+    cursor: pointer;
+    box-shadow: 4px 4px 0 black;
+    background-color: var(--bg);
+}
+
+a.button {
+    text-decoration: none;
+    color: var(--warning)
+}

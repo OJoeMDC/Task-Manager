@@ -1,5 +1,5 @@
 import { useState} from "react";
-import './Login.css'
+import './AccountForm.css'
 
 export default function Login() {
     const API_URL = `${import.meta.env.VITE_API_URL}`;
@@ -9,6 +9,7 @@ export default function Login() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState(null);
+    const user = JSON.parse(localStorage.getItem('user'));
 
     const loginUser = async (e) => {
         e.preventDefault();
@@ -30,6 +31,7 @@ export default function Login() {
 
             setSuccess(true);
             setLoggedInUser(data.user);
+            localStorage.setItem('user', JSON.stringify(data.user));
             setUsername('');
             setPassword('');
         } catch (err) {
@@ -38,9 +40,9 @@ export default function Login() {
     };
 
     return (
-        <main className='loginPage'>
+        <main className='accountPage'>
             <h1 className='loginTitle'>Login</h1>
-            <form onSubmit={loginUser} className='registerForm'>
+            <form onSubmit={loginUser} className='accountForm'>
                 <div className='formEntry'>
                     <label htmlFor='username'>Username</label>
                     <input
@@ -64,14 +66,14 @@ export default function Login() {
                 </div>
 
                 <button
-                className='loginButton'
+                className='button'
                 type='submit'>
                     Login
                 </button>
 
                 {error && <p className='error'>{error}</p>}
                 {success && <p className='success'>Logged in</p>}
-                {loggedInUser && <p>Logged in as: {loggedInUser.username}</p>}
+                {loggedInUser && <p>Logged in as: {user.username}</p>}
             </form>
         </main>
     );

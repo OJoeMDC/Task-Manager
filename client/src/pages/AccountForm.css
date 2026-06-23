@@ -1,4 +1,4 @@
-.registerPage {
+.accountPage {
     display: inline-block;
     align-items: center;
     justify-content: center;
@@ -12,11 +12,11 @@
     box-sizing: border-box;
 }
 
-.registerTitle {
+.accountTitle {
     text-align: center;
 }
 
-.registerForm {
+.accountForm {
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -42,39 +42,16 @@
     text-transform: uppercase;
 }
 
-.registerForm button,
-.registerForm input {
+.accountForm button,
+.accountForm input {
     box-sizing: border-box;
     width: auto;
     border: none;
+}
+
+.accountForm input {
     padding: 8px;
     box-shadow: 6px 6px 0px black;
-}
-
-.registerForm input {
-
-
-    padding: 8px;
-    
-}
-
-.registerForm button {
-
-    background-color: var(--secondary);
-
-    text-transform: uppercase;
-    font-weight: 800;
-}
-
-.registerForm button:hover {
-    background-color: var(--success);
-
-    cursor: pointer;
-}
-
-.registerPage a {
-    text-decoration: none;
-    color: var(--warning)
 }
 
 .success {

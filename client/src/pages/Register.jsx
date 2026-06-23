@@ -1,4 +1,4 @@
-import './Register.css';
+import './AccountForm.css';
 import { useState } from 'react';
 
 export default function Register() {
@@ -35,10 +35,10 @@ export default function Register() {
   };
 
   return (
-    <main className='registerPage'>
-      <h1 className='registerTitle'>Create an Account</h1>
+    <main className='accountPage'>
+      <h1 className='accountTitle'>Create an Account</h1>
 
-      <form onSubmit={addUser} className='registerForm'>
+      <form onSubmit={addUser} className='accountForm'>
         <div className='formEntry'>
           <label htmlFor='username'>Username</label>
           <input
@@ -64,7 +64,10 @@ export default function Register() {
           />
         </div>
 
-        <button type='submit' disabled={success}>
+        <button
+        className='button'
+        type='submit'
+        disabled={success}>
           Register
         </button>
 
@@ -72,7 +75,7 @@ export default function Register() {
         {success && <p className='success'>Account Created</p>}
       </form>
 
-      <p className='loginFooter'>Already have an account? <a href='/login'>Login</a></p>
+      <p className='loginFooter'>Already have an account? <a href='/login' className='button'>Login</a></p>
     </main>
   );
 }
