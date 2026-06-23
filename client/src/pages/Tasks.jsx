@@ -1,7 +1,7 @@
-import TaskList from '../TaskList'
-import TaskInput from '../TaskInput'
-import { useState, useEffect } from 'react'
-import './Tasks.css'
+import TaskList from '../TaskList';
+import TaskInput from '../TaskInput';
+import { useState, useEffect } from 'react';
+import './Tasks.css';
 
 export default function Tasks({ user }) {
     const [tasks, setTasks] = useState([]);
@@ -10,26 +10,32 @@ export default function Tasks({ user }) {
 
    
   useEffect(() => {
-    fetch(`${API_URL}/api/tasks`)
+    if (!user) return;
+
+    fetch(`${API_URL}/api/tasks/${user.id}`)
       .then(res => res.json())
       .then(data => setTasks(data))
       .catch(err => console.error(err))
-  }, [API_URL])
+  }, [API_URL, user]);
 
 
   //Create a new Task
   const addTask = (title) => {
+    console.log("adding task", title, user);
+    
+    if (!user) return;
+
     fetch(`${API_URL}/api/tasks`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'
     },
 
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, userId: user.id }),
   })
   .then(res => res.json())
   .then(newTask => setTasks([...tasks, newTask]))
   .catch(err => console.error(err));
-}
+};
 
 //Delete Task
 const deleteTask = (id) => {
@@ -38,7 +44,7 @@ const deleteTask = (id) => {
   })
   .then(() => setTasks(tasks.filter(task => task.id !== id)))
   .catch(err => console.error(err));
-}
+};
 
 //Complete Task
 const toggleComplete = (id) => {
@@ -50,7 +56,7 @@ const toggleComplete = (id) => {
   .then( res => res.json())
   .then(updatedTask => setTasks(tasks.map(t => t.id === id ? updatedTask : t)))
   .catch(err => console.error(err))
-}
+};
 
 //Edit Task
 const editTask = async (id, newTitle) => {
@@ -63,9 +69,17 @@ const editTask = async (id, newTitle) => {
     const updated = await res.json();
     setTasks(prev => prev.map(t => t.id === id ? updated : t));
   }
-}
+};
 
-console.log(API_URL);
+if (!user) {
+  return (
+    <main>
+      <h1>You are not logged in</h1>
+      <p>Please log in to view tasks</p>
+      <a href='/login' className='button'>Login</a>
+    </main>
+  )
+};
 
     return ( 
       <main>

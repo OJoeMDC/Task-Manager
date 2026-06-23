@@ -1,5 +1,6 @@
 import { useState} from "react";
-import './AccountForm.css'
+import './AccountForm.css';
+import {Link} from 'react-router-dom';
 
 export default function Login({ setUser, user }) {
     const API_URL = `${import.meta.env.VITE_API_URL}`;
@@ -25,11 +26,12 @@ export default function Login({ setUser, user }) {
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.error || 'Login Failed');
+                throw new Error(data.error || 'Invalid username or password');
             }
 
             setSuccess(true);
             setLoggedInUser(data.user);
+            setUser(data.user);
             setUsername(data.user);
             localStorage.setItem('user', JSON.stringify(data.user));
             setUsername('');
@@ -38,6 +40,19 @@ export default function Login({ setUser, user }) {
             setError(err.message);
         }
     };
+
+    if (loggedInUser) {
+        return (
+            <main className="accountPage">
+                {success && <p className='success'>Logged in</p>}
+                {loggedInUser && <p>Welcome back, {user?.username}</p>}
+                <div className='loginLinks'>
+                    <Link to='/tasks' className='button'>View Tasks</Link>
+                    <Link to='/profile' className='button'>Profile</Link>
+                </div>
+            </main>
+        )
+    }
 
     return (
         <main className='accountPage'>
@@ -72,8 +87,6 @@ export default function Login({ setUser, user }) {
                 </button>
 
                 {error && <p className='error'>{error}</p>}
-                {success && <p className='success'>Logged in</p>}
-                {loggedInUser && <p>Logged in as: {user.username}</p>}
             </form>
         </main>
     );

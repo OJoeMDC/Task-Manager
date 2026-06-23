@@ -9,7 +9,6 @@ export default function Landing() {
       </h1>
 
       <section className='landing-content'>
-        <p>Login will be added soon, please navigate to tasks for app functionality.</p>
       </section>
 
       <section className='cards'>

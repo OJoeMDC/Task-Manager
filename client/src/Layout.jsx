@@ -1,10 +1,10 @@
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
 
-function Layout() {
+function Layout({ user, setUser }) {
     return(
         <div className="app-layout">
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
 
             <main className="page">
                 <Outlet />

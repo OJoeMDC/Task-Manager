@@ -64,3 +64,13 @@
 .loginFooter {
     margin-top: 60px;
 }
+
+.loginLinks {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+
+    margin-top: 60px;
+    gap: 12px;
+}

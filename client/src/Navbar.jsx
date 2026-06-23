@@ -1,18 +1,32 @@
 import './Navbar.css'
+import {Link} from 'react-router-dom';
 
-function Navbar() {
+function Navbar({ user, setUser }) {
+    const logout = () => {
+        localStorage.removeItem('user');
+        setUser(null);
+    }
 
 
     return(
-        <main className='navbar'>
-            <a className='navTitle' href='/'>Task Manager</a>
+        <nav className='navbar'>
+            <Link className='navTitle' to='/'>Task Manager</Link>
             <div className='links'>
-            <a className='nav-link' href='/tasks'>Tasks</a>
-            <a className='nav-link' href='/profile'>Profile</a>
-            <a className='nav-link' href='/login'>Login</a>
-            <a className='nav-link' href='/register'>Register</a>
+                {user ? (
+                    <>
+                        <Link className='nav-link' to='/tasks'>Tasks</Link>
+                        <Link className='nav-link' to='/profile'>Profile</Link>
+                    </>
+                ) : (
+                    <>
+                        <Link className='nav-link' to='/tasks'>Tasks</Link>
+                        <Link className='nav-link' to='/profile'>Profile</Link>
+                        <Link className='nav-link' to='/login'>Login</Link>
+                        <Link className='nav-link' to='/register'>Register</Link>
+                    </>
+                )}
             </div>
-        </main>
+        </nav>
     )
 };
 

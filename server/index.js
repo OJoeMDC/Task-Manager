@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import { read } from 'fs';
+import { runInNewContext } from 'vm';
 
 
 const app = express();
@@ -38,24 +39,41 @@ db.exec(`
     CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
-    completed INTEGER DEFAULT 0
+    completed INTEGER DEFAULT 0,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
     )
     `);
 
 
 
 //GET all tasks
-app.get('/api/tasks', (req, res) => {
-    const tasks = db.prepare('SELECT * FROM tasks').all();
+app.get('/api/tasks/:userId', (req, res) => {
+    const { userId } = req.params;
+    const tasks = db.prepare('SELECT * FROM tasks WHERE user_id = ?').all(userId);
     res.json(tasks);
 });
 
 //POST new task
 app.post('/api/tasks', (req, res) => {
-    const { title, completed } = req.body;
-    const result = db.prepare('INSERT INTO tasks (title, completed) VALUES (?, ?)').run(title, completed ? 1 : 0);
-    const newTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(result.lastInsertRowid);
-    res.status(201).json(newTask); //Created new task 201
+    try {
+        console.log('POST body:', req.body);
+
+        const { title, completed, userId } = req.body;
+
+        const result = db.prepare(
+            'INSERT INTO tasks (title, completed, user_id) VALUES (?, ?, ?)'
+        ).run(title, completed ? 1 : 0, userId);
+
+        const newTask = db.prepare(
+            'SELECT * FROM tasks WHERE id = ?'
+        ).get(result.lastInsertRowid);
+
+        res.status(201).json(newTask);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 //PUT update a task
@@ -132,7 +150,7 @@ app.post('/api/users/login', async (req, res) => {
     const user = db.prepare('SELECT * FROM users WHERE username = ?').get(req.body.username);
 
     if (!user) {
-        return res.status(400).send('Invalid username or password');
+        return res.status(400).json('Invalid username or password');
     }
     try  { 
         if( await bcrypt.compare(req.body.password, user.password)) {
@@ -141,7 +159,7 @@ app.post('/api/users/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
     } catch {
-        res.status(500).send();
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
