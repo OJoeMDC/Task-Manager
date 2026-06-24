@@ -18,7 +18,7 @@ function App() {
   return(
     <Routes>
       <Route element={<Layout user={user} setUser={setUser} />}>
-        <Route path='/' element={<Landing />} />
+        <Route path='/' element={<Landing user={user} />} />
         <Route path='/login' element={<Login user={user} setUser={setUser}/>} />
         <Route path='/register' element={<Register setUser={setUser} user={user} />} />
         <Route path='/profile' element={<Profile user={user} setUser={setUser} />} />

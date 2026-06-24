@@ -47,7 +47,7 @@ export default function Login({ setUser, user }) {
                 {success && <p className='success'>Logged in</p>}
                 {loggedInUser && <p>Welcome back, {user?.username}</p>}
                 <div className='loginLinks'>
-                    <Link to='/tasks' className='button'>View Tasks</Link>
+                    <Link to='/tasks' className='button'>View Dashboard</Link>
                     <Link to='/profile' className='button'>Profile</Link>
                 </div>
             </main>

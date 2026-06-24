@@ -70,6 +70,8 @@ body
     box-shadow: 6px 6px 0 black;
 
     color: var(--text);
+
+    width: fit-content;
 }
 
 .button:hover {
@@ -82,4 +84,12 @@ a.button {
     border: none;
     text-decoration: none;
     color: var(--warning)
+}
+
+.highlight {
+    color: var(--warning);
+}
+
+.subtitle {
+    color: var(--text-muted);
 }

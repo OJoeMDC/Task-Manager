@@ -1,12 +1,28 @@
 import './Landing.css';
 import Logo from '../Logo';
+import { Link } from 'react-router-dom';
 
-export default function Landing() {
+export default function Landing({ user }) {
   return (
     <main className='landing'>
-      <h1>
-        <Logo />
-      </h1>
+      <div className='landingHero'>
+        <h1>
+          <Logo />
+        </h1>
+        <p className='subtitle'>Organize tasks with this full-stack application built using 
+          <span className='highlight'> React</span>, 
+          <span className='highlight'> Express</span>, and
+           <span className='highlight'> SQLite</span></p>
+          <div className='landingCTA'>
+            {user ? (
+              <Link className='button' to='/tasks'>View Dashboard</Link>
+            ) : (
+              <>
+                <Link className='button' to='/login'>Login</Link> <p>or</p> <Link className='button' to='/register'>Register</Link> <p>to get started</p>
+              </>
+            )}
+          </div>
+      </div>
 
       <section className='landing-content'>
       </section>
