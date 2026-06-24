@@ -34,6 +34,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = process.env.DB_PATH ?? (process.env.NODE_ENV == 'production' ? '/data/tasks.db' : path.join(__dirname, 'tasks.db'));
 const db = new Database(DB_PATH);
 
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('DB_PATH:', DB_PATH);
+
 //Create table if it doesn't exist
 db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -50,6 +53,13 @@ db.exec(`
     FOREIGN KEY (user_id) REFERENCES users(id)
     )
     `);
+
+    try {
+  db.prepare('ALTER TABLE tasks ADD COLUMN user_id INTEGER').run();
+  console.log('Added user_id column');
+} catch (err) {
+  console.log('Migration skipped:', err.message);
+}
 
 
 
