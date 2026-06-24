@@ -5,6 +5,22 @@ A full-stack task management application with React/Vite frontend and Node/Expre
 ## Live Demo
 [Task-Manager Live Demo](https://bubbly-reprieve-production-4d0b.up.railway.app)
 
+### Demo Account
+
+To quickly explore the application, you can log in using the demo account below.
+
+Username: TestAccount   
+Password: password
+
+Features
+User registration      
+Secure password hashing with bcrypt   
+Personal task lists (users can only view and manage their own tasks)   
+Create, edit, complete, and delete tasks   
+Persistent SQLite database   
+Responsive React frontend   
+RESTful Express API   
+
 ## Tech Stack
 
 | Layer | Technology |
