@@ -36,6 +36,12 @@ const db = new Database(DB_PATH);
 
 //Create table if it doesn't exist
 db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+    );
+
     CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
@@ -113,15 +119,6 @@ app.delete('/api/tasks/:id', (req, res) => {
 //////////////
 //USERS CODE//
 //////////////
-
-
-db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
-    )
-    `);
 
 
 //Get users
