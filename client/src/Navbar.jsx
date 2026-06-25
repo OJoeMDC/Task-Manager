@@ -14,15 +14,15 @@ function Navbar({ user, setUser }) {
             <div className='links'>
                 {user ? (
                     <>
-                        <Link className='nav-link' to='/tasks'>Tasks</Link>
-                        <Link className='nav-link' to='/profile'>Profile</Link>
+                        <Link className='link' to='/tasks'>Tasks</Link>
+                        <Link className='link' to='/profile'>Profile</Link>
                     </>
                 ) : (
                     <>
-                        <Link className='nav-link' to='/tasks'>Tasks</Link>
-                        <Link className='nav-link' to='/profile'>Profile</Link>
-                        <Link className='nav-link' to='/login'>Login</Link>
-                        <Link className='nav-link' to='/register'>Register</Link>
+                        <Link className='link' to='/tasks'>Tasks</Link>
+                        <Link className='link' to='/profile'>Profile</Link>
+                        <Link className='link' to='/login'>Login</Link>
+                        <Link className='link' to='/register'>Register</Link>
                     </>
                 )}
             </div>

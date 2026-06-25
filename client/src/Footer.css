@@ -1,0 +1,57 @@
+.footer {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+    justify-content: space-between;
+    text-align: center;
+
+    margin: 0px;
+    padding: 20px 32px;
+    gap: 0px;
+
+    color: var(--text);
+    background-color: var(--surface);
+}
+
+.footer p {
+    margin: 0;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+
+    margin-left: 40px;
+
+    gap: 12px;
+    padding-top: 8px;
+}
+
+
+.description h3 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.subtext {
+    font-size: small;
+    color: var(--text-muted);
+}
+
+.footerLinks {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right;
+
+    gap: 12px;
+
+    margin-right: 40px;
+}
+
+.copyright {
+    font-size: x-small;
+    color: var(--text-muted);
+}
