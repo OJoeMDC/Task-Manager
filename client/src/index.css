@@ -17,16 +17,25 @@
     --warning: #F59E0B;
 }
 
-#root {
+* {
+    box-sizing: border-box;
+}
+
+.app {
     width: 100%;
+    min-height: 100vh;
 }
 
 html,
-body 
+body,
+#root 
 {
     margin: 0;
     padding: 0;
     width: 100%;
+    min-height: 100vh;
+
+    overflow-x: hidden;
 
     font-family: 'Segoe UI', sans-serif;
 }
@@ -45,13 +54,12 @@ body
 }
 
 .page {
-    padding: 0px;
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    max-height: 100%;
-    max-width: 100%;
+    width: 100%;
+    min-width: 0;
 
     padding: 24px;
     

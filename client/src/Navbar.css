@@ -44,3 +44,36 @@
     height: fit-content;
     width: fit-content;
 }
+
+
+@media (max-width: 768px) {
+
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .navTitle {
+        font-size: 1.5rem;
+        max-width: 100%;
+        overflow-wrap: break-word;
+        text-align: center;
+    }
+
+    .navlinks {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .navlinks a,
+    .navlinks button {
+        font-size: 0.85rem;
+        padding: 6px 10px
+    }
+}

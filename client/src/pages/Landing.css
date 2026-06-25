@@ -89,3 +89,46 @@
 .card:hover .card-title::after {
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .landing {
+    width: auto;
+  }
+
+  .landingHero {
+    width: 100%;
+    max-width: 900px;
+    padding: 0 16px;
+  }
+
+  .landingCTA {
+    flex-direction: column;
+  }
+
+  .landingHero h1 {
+    font-size: 2rem;
+  }
+
+  .landingHero h1,
+  .landingHero p {
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+
+  .landingHero p {
+    font-size: 0.95rem;
+  }
+
+  .cards {
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px 12px;
+  }
+
+  .card {
+    width: 90%;
+    max-width: 300px;
+    height: auto;
+    margin: 0;
+  }
+}

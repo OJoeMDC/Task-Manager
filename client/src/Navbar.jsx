@@ -19,8 +19,6 @@ function Navbar({ user, setUser }) {
                     </>
                 ) : (
                     <>
-                        <Link className='link' to='/tasks'>Tasks</Link>
-                        <Link className='link' to='/profile'>Profile</Link>
                         <Link className='link' to='/login'>Login</Link>
                         <Link className='link' to='/register'>Register</Link>
                     </>
