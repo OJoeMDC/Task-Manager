@@ -38,7 +38,7 @@ return (
                 </a>
             </p>
             <div className='copyright'>
-                <p>© 2026 Osceola Martin del Campo</p>
+                <p>© {new Date().getFullYear()} Osceola Martin del Campo</p>
             </div>
         </div>
     </footer>
