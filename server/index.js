@@ -6,10 +6,13 @@ import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import { read } from 'fs';
 import { runInNewContext } from 'vm';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 
 const app = express();
 app.use(express.json());
+dotenv.config();
 
 
 app.get('/', (req, res) => {
