@@ -3,6 +3,7 @@ import './Profile.css';
 export default function Profile({ setUser, user }) {
     const logout = () => {
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
         setUser(null);
     }
 

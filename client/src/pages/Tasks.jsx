@@ -12,7 +12,13 @@ export default function Tasks({ user }) {
   useEffect(() => {
     if (!user) return;
 
-    fetch(`${API_URL}/api/tasks/${user.id}`)
+    fetch(`${API_URL}/api/tasks`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    },
+    )
       .then(res => res.json())
       .then(data => setTasks(data))
       .catch(err => console.error(err))
@@ -27,20 +33,25 @@ export default function Tasks({ user }) {
 
     fetch(`${API_URL}/api/tasks`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json'
+      headers: { 
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`
     },
 
-    body: JSON.stringify({ title, userId: user.id }),
+    body: JSON.stringify({ title }),
   })
   .then(res => res.json())
-  .then(newTask => setTasks([...tasks, newTask]))
+  .then(newTask => setTasks(prev => [...tasks, newTask]))
   .catch(err => console.error(err));
 };
 
 //Delete Task
 const deleteTask = (id) => {
   fetch(`${API_URL}/api/tasks/${id}` , {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
   })
   .then(() => setTasks(tasks.filter(task => task.id !== id)))
   .catch(err => console.error(err));
@@ -50,7 +61,10 @@ const deleteTask = (id) => {
 const toggleComplete = (id) => {
   fetch(`${API_URL}/api/tasks/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+     },
     body: JSON.stringify({ toggle: true }),
   })
   .then( res => res.json())
@@ -62,7 +76,10 @@ const toggleComplete = (id) => {
 const editTask = async (id, newTitle) => {
   const res = await fetch(`${API_URL}/api/tasks/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+     },
     body: JSON.stringify({ title: newTitle })
   });
   if (res.ok) {

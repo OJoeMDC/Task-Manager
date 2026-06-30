@@ -8,6 +8,7 @@ import { read } from 'fs';
 import { runInNewContext } from 'vm';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { nextTick } from 'process';
 
 
 const app = express();
@@ -67,18 +68,19 @@ db.exec(`
 
 
 //GET all tasks
-app.get('/api/tasks/:userId', (req, res) => {
-    const { userId } = req.params;
+app.get('/api/tasks', authenticateToken, (req, res) => {
+    const userId = req.user.id;
     const tasks = db.prepare('SELECT * FROM tasks WHERE user_id = ?').all(userId);
     res.json(tasks);
 });
 
 //POST new task
-app.post('/api/tasks', (req, res) => {
+app.post('/api/tasks', authenticateToken, (req, res) => {
     try {
         console.log('POST body:', req.body);
 
-        const { title, completed, userId } = req.body;
+        const { title, completed} = req.body;
+        const userId = req.user.id;
 
         const result = db.prepare(
             'INSERT INTO tasks (title, completed, user_id) VALUES (?, ?, ?)'
@@ -96,36 +98,37 @@ app.post('/api/tasks', (req, res) => {
 });
 
 //PUT update a task
-app.put('/api/tasks/:id', (req, res) => {
+app.put('/api/tasks/:id', authenticateToken, (req, res) => {
     const { title, completed, toggle } = req.body;
-    const id = parseInt(req.params.id);
-    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
+    const taskId = parseInt(req.params.id);
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
     if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
 
     if (toggle) {
-        db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ?').run(id);
+        db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ? AND user_id = ?').run(taskId, req.user.id);
     } else {
-        db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ?').run(
+        db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ? AND user_id = ?').run(
             title ?? task.title,
             completed !== undefined ? (completed ? 1 : 0)
             : task.completed,
-            id
+            taskId,
+            req.user.id
         );
     }
 
-    const updatedTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
+    const updatedTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
     res.json(updatedTask);
 });
 
 
 
 // DELETE a task
-app.delete('/api/tasks/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
+app.delete('/api/tasks/:id', authenticateToken, (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
     if (!task) return res.status(404).json({ error: 'Task not found' });
 
-    db.prepare('DELETE FROM tasks WHERE id = ?').run(id);
+    db.prepare('DELETE FROM tasks WHERE id = ?').run(taskId);
     res.status(204).send();
 });
 
@@ -163,15 +166,42 @@ app.post('/api/users/login', async (req, res) => {
         return res.status(400).json('Invalid username or password');
     }
     try  { 
-        if( await bcrypt.compare(req.body.password, user.password)) {
-            return res.status(200).json({ message: 'Login Successful', user: {id: user.id, username: user.username} });
-        } else {
+        const passwordMatches = await bcrypt.compare(req.body.password, user.password);
+
+        if(!passwordMatches) {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
-    } catch {
+
+        const accessToken = jwt.sign(
+        { id: user.id, username: user.username },
+        process.env.ACCESS_TOKEN_SECRET
+        );
+
+        return res.status(200).json({
+            message: 'Login Successful',
+            user: { id: user.id, username: user.username },
+            accessToken
+        });
+
+    } catch(err) {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+
+//Token Authentication
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if(token == null) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    })
+}
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

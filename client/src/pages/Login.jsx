@@ -34,6 +34,7 @@ export default function Login({ setUser, user }) {
             setUser(data.user);
             setUsername(data.user);
             localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('token', data.accessToken);
             setUsername('');
             setPassword('');
         } catch (err) {
