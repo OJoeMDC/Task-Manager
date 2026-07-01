@@ -65,6 +65,19 @@ db.exec(`
   console.log('Migration skipped:', err.message);
 }
 
+try {
+    db.prepare('ALTER TABLE users ADD COLUMN role TEXT DEFAULT \'user\'').run();
+    console.log('Added role column');
+} catch {
+    console.log('Migration skipped: role column already exists');
+}
+
+ try {
+    db.prepare("UPDATE users SET role = 'user' WHERE role IS NULL").run();
+    console.log('Updated existing users to have role user');
+ } catch {
+    console.log('No existing users to update');
+ }
 
 
 //GET all tasks
@@ -139,13 +152,18 @@ app.delete('/api/tasks/:id', authenticateToken, (req, res) => {
 
 //Get users
 app.get('/api/users', (req, res) => {
-    const users = db.prepare('SELECT id, username FROM users').all();
+    const users = db.prepare('SELECT id, username,role FROM users').all();
     res.json(users);
 });
 
 
 //Create User
 app.post('/api/users', async (req, res) => {
+    const existingUser = db.prepare('SELECT * FROM users WHERE username = ?').get(req.body.username);
+    if (existingUser) {
+        return res.status(400).json({ error: 'Username already exists' });
+    }
+
     try {
         const hashedPassword = bcrypt.hashSync(req.body.password, 10);
         const user = { username: req.body.username, password: hashedPassword };
@@ -179,7 +197,7 @@ app.post('/api/users/login', async (req, res) => {
 
         return res.status(200).json({
             message: 'Login Successful',
-            user: { id: user.id, username: user.username },
+            user: { id: user.id, username: user.username, role: user.role },
             accessToken
         });
 

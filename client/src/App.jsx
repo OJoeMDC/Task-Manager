@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 import Tasks from './pages/Tasks'
+import Admin from './pages/Admin'
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -23,6 +24,7 @@ function App() {
         <Route path='/register' element={<Register setUser={setUser} user={user} />} />
         <Route path='/profile' element={<Profile user={user} setUser={setUser} />} />
         <Route path='/tasks' element={<Tasks user={user} />} />
+        <Route path='/admin' element={<Admin user={user} />} />
       </Route>
     </Routes>
   )

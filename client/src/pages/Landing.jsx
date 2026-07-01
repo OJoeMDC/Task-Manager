@@ -1,5 +1,5 @@
 import './Landing.css';
-import Logo from '../Logo';
+import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
 
 export default function Landing({ user }) {

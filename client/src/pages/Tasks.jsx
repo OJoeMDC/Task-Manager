@@ -1,5 +1,5 @@
-import TaskList from '../TaskList';
-import TaskInput from '../TaskInput';
+import TaskList from '../components/TaskList';
+import TaskInput from '../components/TaskInput';
 import { useState, useEffect } from 'react';
 import './Tasks.css';
 

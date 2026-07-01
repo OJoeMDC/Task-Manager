@@ -20,7 +20,7 @@ export default function Profile({ setUser, user }) {
     return (
         <main className="profilePage">
             <h1>Welcome, {user.username}!</h1>
-            <p className='temp'>More profile management to come</p>
+            <p>You role is currently: <span className="highlight">{user?.role}</span></p>
 
             <button
             className="button"

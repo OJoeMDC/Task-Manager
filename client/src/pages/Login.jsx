@@ -26,7 +26,8 @@ export default function Login({ setUser, user }) {
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.error || 'Invalid username or password');
+                setError(data.error || 'Login Failed');
+                return;
             }
 
             setSuccess(true);
@@ -38,7 +39,9 @@ export default function Login({ setUser, user }) {
             setUsername('');
             setPassword('');
         } catch (err) {
-            setError(err.message);
+            //unexpected error
+            console.log(err.message);
+            setError('Unexpected error during login. Please contact developer if the problem persists.');
         }
     };
 

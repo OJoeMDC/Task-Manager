@@ -21,16 +21,20 @@ export default function Register({ setUser, user }) {
         body: JSON.stringify({ username, password }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Registration failed');
+        setError(data.error || 'Registration Failed');
+        return;
       }
 
       setSuccess(true);
       setUsername('');
       setPassword('');
     } catch (err) {
-      setError(err.message);
+      //Unexpected error
+      console.log(err.message);
+      setError('Unexpected error during registration. Please contact developer if the problem persists.');
     }
   };
 
