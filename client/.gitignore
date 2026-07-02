@@ -13,8 +13,8 @@ dist-ssr
 *.local
 
 # Environment variables
-.env
-.env.*
+**/.env
+**/.env.*
 !.env.example
 
 # REST Client
