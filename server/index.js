@@ -4,11 +4,8 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
-import { read } from 'fs';
-import { runInNewContext } from 'vm';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { nextTick } from 'process';
 
 
 const app = express();
@@ -47,7 +44,9 @@ db.exec(`
     CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
+    username_normalized TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    role TEXT DEFAULT 'user'
     );
 
     CREATE TABLE IF NOT EXISTS tasks (
@@ -67,27 +66,9 @@ db.exec(`
   console.log('Migration skipped:', err.message);
 }
 
-//Add role column to users table if it doesn't exist
-try {
-    db.prepare('ALTER TABLE users ADD COLUMN role TEXT DEFAULT \'user\'').run();
-    console.log('Added role column');
-} catch {
-    console.log('Migration skipped: role column already exists');
-}
-
-
-//Update existing users to have role user if role is null
- try {
-    db.prepare("UPDATE users SET role = 'user' WHERE role IS NULL").run();
-    console.log('Updated existing users to have role user');
- } catch {
-    console.log('No existing users to update');
- }
-
-
  //Updpate specific user to admin role
  try {
-    db.prepare("UPDATE users SET role = 'admin' WHERE username = 'administrator'").run();
+    db.prepare("UPDATE users SET role = 'admin' WHERE username_normalized = 'administrator'").run();
     console.log('Updated admin user to have role admin');
  } catch {
     console.log('No admin user to update');
@@ -166,23 +147,25 @@ app.delete('/api/tasks/:id', authenticateToken, (req, res) => {
 
 //Get users
 app.get('/api/users', (req, res) => {
-    const users = db.prepare('SELECT id, username,role FROM users').all();
+    const users = db.prepare('SELECT id, username, username_normalized, role FROM users').all();
     res.json(users);
 });
 
 
 //Create User
 app.post('/api/users', async (req, res) => {
-    const existingUser = db.prepare('SELECT * FROM users WHERE username = ?').get(req.body.username);
+    const displayUsername = req.body.username.trim();
+    const normalized = displayUsername.trim().toLowerCase();
+    const existingUser = db.prepare('SELECT * FROM users WHERE username_normalized = ?').get(normalized);
     if (existingUser) {
         return res.status(400).json({ error: 'Username already exists' });
     }
 
     try {
         const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-        const user = { username: req.body.username, password: hashedPassword };
-        const result = db.prepare('INSERT INTO users (username, password) VALUES (?, ?)').run(user.username, user.password);
-        const newUser = db.prepare('SELECT * FROM users WHERE id = ?').get(result.lastInsertRowid);
+        const user = { username: displayUsername, username_normalized: normalized, password: hashedPassword };
+        const result = db.prepare('INSERT INTO users (username, username_normalized, password) VALUES (?, ?, ?)').run(user.username, user.username_normalized, user.password);
+        const newUser = db.prepare('SELECT username, username_normalized, role FROM users WHERE id = ?').get(result.lastInsertRowid);
         res.status(201).json(newUser);
     } catch {
         res.status(500).send();
@@ -192,7 +175,9 @@ app.post('/api/users', async (req, res) => {
 
 //User Login
 app.post('/api/users/login', async (req, res) => {
-    const user = db.prepare('SELECT * FROM users WHERE username = ?').get(req.body.username);
+    const displayUsername = req.body.username.trim();
+    const normalized = displayUsername.trim().toLowerCase();
+    const user = db.prepare('SELECT * FROM users WHERE username_normalized = ?').get(normalized);
 
     if (!user) {
         return res.status(400).json('Invalid username or password');
@@ -205,7 +190,7 @@ app.post('/api/users/login', async (req, res) => {
         }
 
         const accessToken = jwt.sign(
-        { id: user.id, username: user.username },
+        { id: user.id, username: user.username, role: user.role },
         process.env.ACCESS_TOKEN_SECRET
         );
 
@@ -233,6 +218,13 @@ function authenticateToken(req, res, next) {
         req.user = user;
         next();
     })
+}
+
+function requireAdmin(req, res, next) {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Access denied' });
+    }
+    next();
 }
 
 app.listen(PORT, () => {
