@@ -36,6 +36,7 @@ const PORT = process.env.PORT || 3000;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = process.env.DB_PATH ?? (process.env.NODE_ENV == 'production' ? '/data/tasks.db' : path.join(__dirname, 'tasks.db'));
+console.log('Using database at:', DB_PATH);
 const db = new Database(DB_PATH);
 
 console.log('NODE_ENV:', process.env.NODE_ENV);
@@ -58,6 +59,7 @@ db.exec(`
     )
     `);
 
+    //Add user_id column to tasks table if it doesn't exist
     try {
   db.prepare('ALTER TABLE tasks ADD COLUMN user_id INTEGER').run();
   console.log('Added user_id column');
@@ -65,6 +67,7 @@ db.exec(`
   console.log('Migration skipped:', err.message);
 }
 
+//Add role column to users table if it doesn't exist
 try {
     db.prepare('ALTER TABLE users ADD COLUMN role TEXT DEFAULT \'user\'').run();
     console.log('Added role column');
@@ -72,11 +75,22 @@ try {
     console.log('Migration skipped: role column already exists');
 }
 
+
+//Update existing users to have role user if role is null
  try {
     db.prepare("UPDATE users SET role = 'user' WHERE role IS NULL").run();
     console.log('Updated existing users to have role user');
  } catch {
     console.log('No existing users to update');
+ }
+
+
+ //Updpate specific user to admin role
+ try {
+    db.prepare("UPDATE users SET role = 'admin' WHERE username = 'administrator'").run();
+    console.log('Updated admin user to have role admin');
+ } catch {
+    console.log('No admin user to update');
  }
 
 
