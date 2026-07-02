@@ -1,23 +1,25 @@
-GET http://localhost:3000/users
-
-
-###
-
-POST http://localhost:3000/users
+### Login as Administrator
+POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
-    "name": "Kyle",
-    "password": "password"
+    "username": "Administrator",
+    "password": "adminpassword123!"
 }
 
+### Get all users as Administrator
 
-###
-
-POST http://localhost:3000/users/login
+GET http://localhost:3000/api/users
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJBZG1pbmlzdHJhdG9yIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzMDEyMDgxfQ.ozdLKgpMm34bd5mC9Z983AyBfyCfbkKPDanxTn4qoKQ
 
 {
-    "name": "Kyle",
-    "password": "password"
+    "username": "Administrator",
+    "password": "adminpassword123!"
 }
+
+
+### Get all tasks as Administrator
+GET http://localhost:3000/api/tasks/all
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJBZG1pbmlzdHJhdG9yIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzMDEyMDgxfQ.ozdLKgpMm34bd5mC9Z983AyBfyCfbkKPDanxTn4qoKQ

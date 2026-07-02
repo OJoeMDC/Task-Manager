@@ -74,8 +74,14 @@ db.exec(`
     console.log('No admin user to update');
  }
 
+ //GET ALL tasks
+ app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
+    const tasks = db.prepare('SELECT * FROM tasks').all();
+    res.json(tasks);
+});
 
-//GET all tasks
+
+//GET user tasks
 app.get('/api/tasks', authenticateToken, (req, res) => {
     const userId = req.user.id;
     const tasks = db.prepare('SELECT * FROM tasks WHERE user_id = ?').all(userId);
@@ -146,7 +152,7 @@ app.delete('/api/tasks/:id', authenticateToken, (req, res) => {
 
 
 //Get users
-app.get('/api/users', (req, res) => {
+app.get('/api/users', authenticateToken, requireAdmin, (req, res) => {
     const users = db.prepare('SELECT id, username, username_normalized, role FROM users').all();
     res.json(users);
 });
