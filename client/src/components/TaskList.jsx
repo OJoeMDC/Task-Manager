@@ -1,7 +1,7 @@
 import './TaskList.css'
 import Task from "./Task"
 
-function TaskList({ tasks, onDelete, onToggle, onEdit }) {
+function TaskList({ tasks, onDelete, onToggle, onEdit, user }) {
     
 
     return(
@@ -18,6 +18,7 @@ function TaskList({ tasks, onDelete, onToggle, onEdit }) {
                 onDelete={onDelete} 
                 onToggle={onToggle}
                 onEdit={onEdit}
+                user={task.user}
                 />
             ))}
         </ul>

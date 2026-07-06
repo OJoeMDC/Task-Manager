@@ -10,6 +10,9 @@ import Profile from './pages/Profile'
 import Tasks from './pages/Tasks'
 import Admin from './pages/Admin'
 
+const API_URL = `${import.meta.env.VITE_API_URL}`
+
+
 function App() {
   const [user, setUser] = useState(() => {
     return JSON.parse(localStorage.getItem('user'));
@@ -20,11 +23,11 @@ function App() {
     <Routes>
       <Route element={<Layout user={user} setUser={setUser} />}>
         <Route path='/' element={<Landing user={user} />} />
-        <Route path='/login' element={<Login user={user} setUser={setUser}/>} />
-        <Route path='/register' element={<Register setUser={setUser} user={user} />} />
-        <Route path='/profile' element={<Profile user={user} setUser={setUser} />} />
-        <Route path='/tasks' element={<Tasks user={user} />} />
-        <Route path='/admin' element={<Admin user={user} />} />
+        <Route path='/login' element={<Login user={user} setUser={setUser} API_URL={API_URL} />} />
+        <Route path='/register' element={<Register setUser={setUser} user={user} API_URL={API_URL} />} />
+        <Route path='/profile' element={<Profile user={user} setUser={setUser} API_URL={API_URL} />} />
+        <Route path='/tasks' element={<Tasks user={user} API_URL={API_URL} />} />
+        <Route path='/admin' element={<Admin user={user} API_URL={API_URL} />} />
       </Route>
     </Routes>
   )

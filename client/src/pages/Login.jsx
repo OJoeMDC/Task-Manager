@@ -2,8 +2,7 @@ import { useState} from "react";
 import './AccountForm.css';
 import {Link} from 'react-router-dom';
 
-export default function Login({ setUser, user }) {
-    const API_URL = `${import.meta.env.VITE_API_URL}`;
+export default function Login({ setUser, user, API_URL }) {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

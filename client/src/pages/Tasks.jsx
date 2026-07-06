@@ -3,9 +3,8 @@ import TaskInput from '../components/TaskInput';
 import { useState, useEffect } from 'react';
 import './Tasks.css';
 
-export default function Tasks({ user }) {
+export default function Tasks({ API_URL, user }) {
     const [tasks, setTasks] = useState([]);
-    const API_URL = `${import.meta.env.VITE_API_URL}`
    // Fetch all Tasks
 
    
@@ -107,7 +106,8 @@ if (!user) {
           tasks={tasks} 
           onDelete={deleteTask} 
           onToggle={toggleComplete}
-          onEdit={editTask}/>
+          onEdit={editTask}
+          user={user}/>
         </div>
       </main>
     );

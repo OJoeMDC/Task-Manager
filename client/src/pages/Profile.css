@@ -1,3 +1,10 @@
 .profilePage {
     display: inline-block;
 }
+
+.profileLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
