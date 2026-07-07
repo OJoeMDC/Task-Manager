@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Admin.css';
 import TaskList from '../components/TaskList';
+import UserList from '../components/UserList';
 
 export default function Admin({ user, API_URL }) {
     const [tasks, setTasks] = useState([]);
@@ -46,7 +47,9 @@ export default function Admin({ user, API_URL }) {
             <p>Your role is: {user?.role}</p>
 
             <section className='adminSection'>
-                <p>Manage Users</p>
+                <button className='button' onClick={() => setActiveSection('users')}>
+                    Manage Users
+                </button>
                 <button className='button' onClick={fetchAllTasks}>
                     Manage Tasks
                 </button>
@@ -62,7 +65,7 @@ export default function Admin({ user, API_URL }) {
             {activeSection === 'users' && (
                 <section className='adminSection'>
                     <h2>All Users</h2>
-                    <p>Feature to manage users will be implemented here.</p>
+                    <UserList API_URL={API_URL} />
                 </section>
             )}
         </main>
