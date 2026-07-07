@@ -1,0 +1,21 @@
+.userlist {
+    display: flex;
+    flex-direction: column;
+    width: 60vw;
+
+    background-color: var(--surface);
+    box-shadow: 6px 6px 0 black;
+}
+
+header {
+    justify-content: center;
+    text-align: center;
+    color: var(--text);
+    border: 4px solid var(--border);
+}
+
+.list {
+    color: var(--text);
+    list-style: none;
+    margin: 12px;
+}

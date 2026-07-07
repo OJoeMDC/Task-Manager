@@ -50,15 +50,9 @@ function User( { user, onDelete, onToggle, onEdit } ) {
     }
 
     return (
-        <li key={user.id}>
+        <li key={user.id} className='list-item'>
                    <span>{user.username}</span>
                     <div className="buttons">
-                        <button 
-                        type="checkbox" 
-                        className='complete' 
-                        onClick={() => onToggle(user.id)}>
-                            ✓
-                        </button>
 
                         <button 
                         className='edit'
