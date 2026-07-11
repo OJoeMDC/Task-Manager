@@ -226,6 +226,57 @@ function authenticateToken(req, res, next) {
     })
 }
 
+//Account Seeding
+async function seedUsers() {
+  const users = [
+    {
+      username: process.env.ADMIN_USERNAME || 'admin',
+      password: process.env.ADMIN_PASSWORD,
+      role: 'admin',
+    },
+    {
+      username: process.env.TEST_USERNAME || 'TestAccount',
+      password: process.env.TEST_PASSWORD || 'password',
+      role: 'user',
+    },
+  ];
+
+  const findUser = db.prepare(`
+    SELECT id, username, role
+    FROM users
+    WHERE username = ?
+  `);
+
+  const insertUser = db.prepare(`
+    INSERT INTO users (username, password, role)
+    VALUES (?, ?, ?)
+  `);
+
+  for (const user of users) {
+    if (!user.password) {
+      console.warn(`Skipping ${user.username}: no password configured`);
+      continue;
+    }
+
+    const existingUser = findUser.get(user.username);
+
+    if (existingUser) {
+      console.log(`${user.username} already exists`);
+      continue;
+    }
+
+    const passwordHash = await bcrypt.hash(user.password, 12);
+
+    insertUser.run(
+      user.username,
+      passwordHash,
+      user.role
+    );
+
+    console.log(`Seeded ${user.role} account: ${user.username}`);
+  }
+}
+
 function requireAdmin(req, res, next) {
     if (req.user.role !== 'admin') {
         return res.status(403).json({ error: 'Access denied' });
@@ -233,6 +284,17 @@ function requireAdmin(req, res, next) {
     next();
 }
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+async function startServer() {
+  try {
+    await seedUsers();
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error('Server startup failed:', err);
+    process.exit(1);
+  }
+}
+
+startServer();
