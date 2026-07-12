@@ -2,8 +2,19 @@ import './UserList.css'
 import User from "./User"
 import { useState, useEffect } from 'react';
 
-function UserList({ onDelete, onToggle, onEdit, user, API_URL }) {
+function UserList({ user, API_URL }) {
     const [users, setUsers] = useState([]);
+
+    const deleteUser = (id) => {
+        fetch(`${API_URL}/api/users/${id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+         .then(() => setUsers(users.filter(user => user.id !== id)))
+        .catch(err => console.error(err));
+    }
 
     useEffect(() => {
     fetch(`${API_URL}/api/users`, {
@@ -29,9 +40,7 @@ function UserList({ onDelete, onToggle, onEdit, user, API_URL }) {
                 <User
                 key={user.id}
                 user={user}
-                onDelete={onDelete} 
-                onToggle={onToggle}
-                onEdit={onEdit}
+                deleteUser={deleteUser}
                 />
             ))}
         </ul>

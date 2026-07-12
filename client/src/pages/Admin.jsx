@@ -46,7 +46,7 @@ export default function Admin({ user, API_URL }) {
             <p>Welcome, {user?.username}</p>
             <p>Your role is: {user?.role}</p>
 
-            <section className='adminSection'>
+            <section className='adminButtons'>
                 <button className='button' onClick={() => setActiveSection('users')}>
                     Manage Users
                 </button>
@@ -57,14 +57,12 @@ export default function Admin({ user, API_URL }) {
 
             {activeSection === 'tasks' && (
                 <section className='adminSection'>
-                    <h2>All Tasks</h2>
                     <TaskList tasks={tasks} />
                 </section>
             )}
 
             {activeSection === 'users' && (
                 <section className='adminSection'>
-                    <h2>All Users</h2>
                     <UserList API_URL={API_URL} />
                 </section>
             )}

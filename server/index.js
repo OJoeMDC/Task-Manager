@@ -178,6 +178,18 @@ app.post('/api/users', async (req, res) => {
     }
 });
 
+//Delete User
+app.delete('/api/users/:id', authenticateToken, requireAdmin, (req, res) => {
+    const userId = parseInt(req.params.id);
+    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    db.prepare('DELETE FROM users WHERE id = ?').run(userId);
+    res.status(204).send();
+});
+
 
 //User Login
 app.post('/api/users/login', async (req, res) => {
@@ -231,25 +243,27 @@ async function seedUsers() {
   const users = [
     {
       username: process.env.ADMIN_USERNAME || 'admin',
+      username_normalized: 'admin',
       password: process.env.ADMIN_PASSWORD,
       role: 'admin',
     },
     {
       username: process.env.TEST_USERNAME || 'TestAccount',
+      username_normalized: 'testaccount',
       password: process.env.TEST_PASSWORD || 'password',
       role: 'user',
     },
   ];
 
   const findUser = db.prepare(`
-    SELECT id, username, role
+    SELECT id, username_normalized, role
     FROM users
-    WHERE username = ?
+    WHERE username_normalized = ?
   `);
 
   const insertUser = db.prepare(`
-    INSERT INTO users (username, password, role)
-    VALUES (?, ?, ?)
+    INSERT INTO users (username, username_normalized, password, role)
+    VALUES (?, ?, ?, ?)
   `);
 
   for (const user of users) {
@@ -258,7 +272,7 @@ async function seedUsers() {
       continue;
     }
 
-    const existingUser = findUser.get(user.username);
+    const existingUser = findUser.get(user.username_normalized);
 
     if (existingUser) {
       console.log(`${user.username} already exists`);
@@ -269,6 +283,7 @@ async function seedUsers() {
 
     insertUser.run(
       user.username,
+      user.username_normalized,
       passwordHash,
       user.role
     );

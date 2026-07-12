@@ -1,7 +1,7 @@
 import { useState} from 'react'
 import './Task.css'
 
-function User( { user, onDelete, onToggle, onEdit } ) {
+function User( { user, deleteUser } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(user.name);
 
@@ -62,7 +62,7 @@ function User( { user, onDelete, onToggle, onEdit } ) {
 
                         <button 
                         className='delete' 
-                        onClick={() => onDelete(user.id)}>
+                        onClick={() => deleteUser(user.id)}>
                             X
                         </button>
                     </div>
