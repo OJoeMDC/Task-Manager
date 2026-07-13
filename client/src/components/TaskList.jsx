@@ -18,7 +18,7 @@ function TaskList({ tasks, onDelete, onToggle, onEdit, user }) {
                 onDelete={onDelete} 
                 onToggle={onToggle}
                 onEdit={onEdit}
-                user={task.user}
+                user={user}
                 />
             ))}
         </ul>

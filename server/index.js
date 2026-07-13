@@ -84,7 +84,7 @@ db.exec(`
 //GET user tasks
 app.get('/api/tasks', authenticateToken, (req, res) => {
     const userId = req.user.id;
-    const tasks = db.prepare('SELECT * FROM tasks WHERE user_id = ?').all(userId);
+    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE users.id = ?').all(userId);
     res.json(tasks);
 });
 

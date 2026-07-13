@@ -5,9 +5,9 @@ import './Tasks.css';
 
 export default function Tasks({ API_URL, user }) {
     const [tasks, setTasks] = useState([]);
-   // Fetch all Tasks
 
-   
+
+   // Fetch all Tasks
   useEffect(() => {
     if (!user) return;
 
@@ -96,7 +96,6 @@ if (!user) {
     </main>
   )
 };
-
     return ( 
       <main>
         <h1>{user.username}'s Tasks</h1>

@@ -1,9 +1,10 @@
 import { useState} from 'react'
 import './Task.css'
 
-function Task( { task, onDelete, onToggle, onEdit } ) {
+function Task( { task, onDelete, onToggle, onEdit, user } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
+    const isAdmin = user && user.role === 'admin';
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -52,6 +53,7 @@ function Task( { task, onDelete, onToggle, onEdit } ) {
     return (
         <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''}`}>
                    <span>{task.title}</span>
+                   {isAdmin && <span>{task.username}</span>}
                     <div className="buttons">
                         <button 
                         type="checkbox" 
@@ -73,7 +75,6 @@ function Task( { task, onDelete, onToggle, onEdit } ) {
                         </button>
                     </div>
                 </li>
-
     )
 }
 
