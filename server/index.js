@@ -130,7 +130,7 @@ app.put('/api/tasks/:id', authenticateToken, (req, res) => {
         );
     }
 
-    const updatedTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+    const updatedTask = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE tasks.id = ?').get(taskId);
     res.json(updatedTask);
 });
 
