@@ -7,7 +7,7 @@ export default function Tasks({ API_URL, user }) {
     const [tasks, setTasks] = useState([]);
 
 
-   // Fetch all Tasks
+   // Fetch user tasks
   useEffect(() => {
     if (!user) return;
 

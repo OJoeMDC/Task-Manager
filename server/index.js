@@ -76,7 +76,7 @@ db.exec(`
 
  //GET ALL tasks
  app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
-    const tasks = db.prepare('SELECT * FROM tasks').all();
+    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id').all();
     res.json(tasks);
 });
 

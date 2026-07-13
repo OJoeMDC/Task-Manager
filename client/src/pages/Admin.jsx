@@ -3,6 +3,7 @@ import './Admin.css';
 import TaskList from '../components/TaskList';
 import UserList from '../components/UserList';
 
+
 export default function Admin({ user, API_URL }) {
     const [tasks, setTasks] = useState([]);
     const [activeSection, setActiveSection] = useState('users'); // 'users' or 'tasks'
@@ -28,6 +29,19 @@ export default function Admin({ user, API_URL }) {
             console.error(err);
         }
     };
+
+
+    //Delete Task
+const deleteTask = (id) => {
+  fetch(`${API_URL}/api/tasks/${id}` , {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+  .then(() => setTasks(tasks.filter(task => task.id !== id)))
+  .catch(err => console.error(err));
+};
 
 
     if (!user) {
@@ -57,7 +71,7 @@ export default function Admin({ user, API_URL }) {
 
             {activeSection === 'tasks' && (
                 <section className='adminSection'>
-                    <TaskList tasks={tasks} />
+                    <TaskList tasks={tasks} user={user} onDelete={deleteTask} />
                 </section>
             )}
 
