@@ -5,14 +5,21 @@ A full-stack task management application with React/Vite frontend and Node/Expre
 ## Live Demo
 [Task-Manager Live Demo](https://bubbly-reprieve-production-4d0b.up.railway.app)
 
-### Demo Account
+### Seeded Accounts
 
 To quickly explore the application, you can log in using the demo account below.
+
+#### Test Account
 
 Username: TestAccount   
 Password: password
 
-Features
+#### Admin
+
+Username: admin
+password: replace-this-with-a-strong-password
+
+## Features
 User registration      
 Secure password hashing with bcrypt   
 Personal task lists (users can only view and manage their own tasks)   
@@ -133,10 +140,20 @@ VITE_API_URL=http://localhost:3000
 ## Database Schema
 
 sql
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT NOT NULL UNIQUE,
+  username_normalized TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  role TEXT DEFAULT 'user'
+);
+    
 CREATE TABLE tasks (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
-  completed INTEGER DEFAULT 0
+  completed INTEGER DEFAULT 0,
+  user_id INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 
@@ -147,7 +164,6 @@ CREATE TABLE tasks (
 | `npm run dev` | Start dev server (both client/server) |
 | `npm run build` | Build frontend for production |
 | `npm start` | Start production server |
-| `npm run lint` | Run ESLint |
 
 ## License
 
