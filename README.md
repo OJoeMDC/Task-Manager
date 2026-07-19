@@ -124,18 +124,7 @@ VITE_API_URL=http://localhost:3000
 - **Environment Variables**:
   
   VITE_API_URL=https://your-backend-url.up.railway.app
-
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/tasks` | List all tasks |
-| POST | `/api/tasks` | Create task |
-| PUT | `/api/tasks/:id` | Update task |
-| PUT | `/api/tasks/:id` (with `toggle`) | Toggle completion |
-| DELETE | `/api/tasks/:id` | Delete task |
-| GET | `/api/health` | Health check |
+  
 
 ## Database Schema
 
@@ -165,6 +154,12 @@ CREATE TABLE tasks (
 | `npm run build` | Build frontend for production |
 | `npm start` | Start production server |
 
-## License
+## To Do:
 
-MIT
+Admin account CRUD controls
+Jest testing
+Move deleted projects to archive instead
+
+Group Management / Owners
+Task assignment to accounts
+Password reset
