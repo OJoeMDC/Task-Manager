@@ -67,7 +67,6 @@ db.exec(`
   console.log('Migration skipped:', err.message);
 }
 
- }
 
  //GET ALL tasks
  app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
