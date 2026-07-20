@@ -31,12 +31,13 @@ export default function Admin({ user, API_URL }) {
     };
 
 
-    //Delete Task
-const deleteTask = (id) => {
+    //Archive Task
+const archiveTask = (id) => {
   fetch(`${API_URL}/api/tasks/${id}` , {
-    method: 'DELETE',
+    method: 'PUT',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json'
     }
   })
   .then(() => setTasks(tasks.filter(task => task.id !== id)))
@@ -71,7 +72,7 @@ const deleteTask = (id) => {
 
             {activeSection === 'tasks' && (
                 <section className='adminSection'>
-                    <TaskList tasks={tasks} user={user} onDelete={deleteTask} />
+                    <TaskList tasks={tasks} user={user} onArchive={archiveTask} />
                 </section>
             )}
 

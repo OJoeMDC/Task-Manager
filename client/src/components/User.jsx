@@ -1,7 +1,7 @@
 import { useState} from 'react'
 import './Task.css'
 
-function User( { user, deleteUser } ) {
+function User( { user, archiveUser } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(user.name);
 
@@ -62,7 +62,7 @@ function User( { user, deleteUser } ) {
 
                         <button 
                         className='delete' 
-                        onClick={() => deleteUser(user.id)}>
+                        onClick={() => archiveUser(user.id)}>
                             X
                         </button>
                     </div>

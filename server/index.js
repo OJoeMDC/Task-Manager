@@ -67,10 +67,17 @@ db.exec(`
   console.log('Migration skipped:', err.message);
 }
 
+//Add archive column to users table if not exist
+try {
+    db.prepare('ALTER TABLE users ADD COLUMN archived INTEGER DEFAULT 0').run();
+    console.log('Added archived column to users table');
+} catch (err) {
+    console.log('Migration skipped:', err.message);
+}
 
  //GET ALL tasks
  app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
-    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id').all();
+    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id AND tasks.archived = 0').all();
     res.json(tasks);
 });
 
@@ -78,7 +85,7 @@ db.exec(`
 //GET user tasks
 app.get('/api/tasks', authenticateToken, (req, res) => {
     const userId = req.user.id;
-    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE users.id = ?').all(userId);
+    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE users.id = ? AND tasks.archived = 0').all(userId);
     res.json(tasks);
 });
 
@@ -125,19 +132,28 @@ app.put('/api/tasks/:id', authenticateToken, (req, res) => {
     }
 
     const updatedTask = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE tasks.id = ?').get(taskId);
-    res.json(updatedTask);
+    res.status(200).json(updatedTask);
 });
 
 
 
-// DELETE a task
-app.delete('/api/tasks/:id', authenticateToken, (req, res) => {
+// ARCHIVE a task
+app.put('/api/tasks/:id', authenticateToken, (req, res) => {
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
-    if (!task) return res.status(404).json({ error: 'Task not found' });
+    if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
 
-    db.prepare('DELETE FROM tasks WHERE id = ?').run(taskId);
-    res.status(204).send();
+    db.prepare('UPDATE tasks SET archived = 1 WHERE id = ? and user_id = ?').run(taskId, req.user.id);
+
+
+    const updatedTask = db
+        .prepare('SELECT * FROM tasks WHERE id = ? and user_id = ?')
+        .get(taskId, req.user.id);
+
+
+    res.status(200).json(updatedTask);
 });
 
 //////////////
@@ -147,7 +163,7 @@ app.delete('/api/tasks/:id', authenticateToken, (req, res) => {
 
 //Get users
 app.get('/api/users', authenticateToken, requireAdmin, (req, res) => {
-    const users = db.prepare('SELECT id, username, username_normalized, role FROM users').all();
+    const users = db.prepare('SELECT id, username, username_normalized, role FROM users WHERE archived = 0').all();
     res.json(users);
 });
 
@@ -156,7 +172,7 @@ app.get('/api/users', authenticateToken, requireAdmin, (req, res) => {
 app.post('/api/users', async (req, res) => {
     const displayUsername = req.body.username.trim();
     const normalized = displayUsername.trim().toLowerCase();
-    const existingUser = db.prepare('SELECT * FROM users WHERE username_normalized = ?').get(normalized);
+    const existingUser = db.prepare('SELECT * FROM users WHERE username_normalized = ? AND archived = 0').get(normalized);
     if (existingUser) {
         return res.status(400).json({ error: 'Username already exists' });
     }
@@ -172,16 +188,23 @@ app.post('/api/users', async (req, res) => {
     }
 });
 
-//Delete User
-app.delete('/api/users/:id', authenticateToken, requireAdmin, (req, res) => {
+//Archive User
+app.put('/api/users/:id/archive', authenticateToken, requireAdmin, (req, res) => {
     const userId = parseInt(req.params.id);
     const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+
     if (!user) {
         return res.status(404).json({ error: 'User not found' });
     }
 
-    db.prepare('DELETE FROM users WHERE id = ?').run(userId);
-    res.status(204).send();
+    db.prepare('UPDATE users SET archived = 1 WHERE id = ?').run(userId);
+
+    const updatedUser = db
+        .prepare('SELECT id, username, username_normalized, role FROM users WHERE id = ?')
+        .get(userId);
+
+
+    res.status(204).send(updatedUser);
 });
 
 

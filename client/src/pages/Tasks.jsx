@@ -5,6 +5,7 @@ import './Tasks.css';
 
 export default function Tasks({ API_URL, user }) {
     const [tasks, setTasks] = useState([]);
+    const [error, setError] = useState('');
 
 
    // Fetch user tasks
@@ -44,16 +45,32 @@ export default function Tasks({ API_URL, user }) {
   .catch(err => console.error(err));
 };
 
-//Delete Task
-const deleteTask = (id) => {
-  fetch(`${API_URL}/api/tasks/${id}` , {
-    method: 'DELETE',
+//Archive Task
+const archiveTask = async (id) => {
+  try {
+    const res = await fetch(`${API_URL}/api/tasks/${id}` , {
+    method: 'PUT',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`
-    }
-  })
-  .then(() => setTasks(tasks.filter(task => task.id !== id)))
-  .catch(err => console.error(err));
+    },
+    body: JSON.stringify({ archived: 1 })
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    setError(data.error || 'Failed to archive task. res not ok');
+    return;
+  }
+
+  setTasks(prevTasks => 
+    prevTasks.filter(task => task.id !== id)
+  );
+  } catch(err) {
+    console.error(err);
+    setError('Failed to archive task');
+  }
+  
 };
 
 //Complete Task
@@ -103,7 +120,7 @@ if (!user) {
           <TaskInput onAdd={addTask}/>
           <TaskList 
           tasks={tasks} 
-          onDelete={deleteTask} 
+          onArchive={archiveTask} 
           onToggle={toggleComplete}
           onEdit={editTask}
           user={user}/>

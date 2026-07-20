@@ -4,29 +4,32 @@ import { useState, useEffect } from 'react';
 
 function UserList({ user, API_URL }) {
     const [users, setUsers] = useState([]);
+    const [error, setError] = useState('');
 
-    const deleteUser = async (id) => {
+    const archiveUser = async (id) => {
         try {
-            const res = await fetch(`${API_URL}/api/users/${id}`, {
-            method: 'DELETE',
+            const res = await fetch(`${API_URL}/api/users/${id}/archive`, {
+            method: 'PUT',
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
             }
         });
 
         if (!res.ok) {
             const data = await res.json();
-            setError(data.error || 'Failed to delete user');
+            setError(data.error || 'Failed to archive user');
             return;
         }
 
+        console.log(`User with ID ${id} archived successfully`);
         setUsers(prevUsers =>
             prevUsers.filter(user => user.id !== id)
         );
         }
         catch(err) {
             console.error(err);
-            setError('Failed to delete user');
+            setError('Failed to archive user');
         }
     }
 
@@ -54,7 +57,7 @@ function UserList({ user, API_URL }) {
                 <User
                 key={user.id}
                 user={user}
-                deleteUser={deleteUser}
+                archiveUser={archiveUser}
                 />
             ))}
         </ul>

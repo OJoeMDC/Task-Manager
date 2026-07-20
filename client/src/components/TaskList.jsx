@@ -1,7 +1,7 @@
 import './TaskList.css'
 import Task from "./Task"
 
-function TaskList({ tasks, onDelete, onToggle, onEdit, user }) {
+function TaskList({ tasks, onArchive, onToggle, onEdit, user }) {
     
 
     return(
@@ -15,7 +15,7 @@ function TaskList({ tasks, onDelete, onToggle, onEdit, user }) {
                 <Task
                 key={task.id}
                 task={task}
-                onDelete={onDelete} 
+                onArchive={onArchive} 
                 onToggle={onToggle}
                 onEdit={onEdit}
                 user={user}
