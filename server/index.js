@@ -54,24 +54,19 @@ db.exec(`
     title TEXT NOT NULL,
     completed INTEGER DEFAULT 0,
     user_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    archived INTEGER DEFAULT 0
     )
     `);
 
     //Add user_id column to tasks table if it doesn't exist
     try {
-  db.prepare('ALTER TABLE tasks ADD COLUMN user_id INTEGER').run();
-  console.log('Added user_id column');
+  db.prepare('ALTER TABLE tasks ADD COLUMN archived INTEGER DEFAULT 0').run();
+  console.log('Added archived column');
 } catch (err) {
   console.log('Migration skipped:', err.message);
 }
 
- //Updpate specific user to admin role
- try {
-    db.prepare("UPDATE users SET role = 'admin' WHERE username_normalized = 'administrator'").run();
-    console.log('Updated admin user to have role admin');
- } catch {
-    console.log('No admin user to update');
  }
 
  //GET ALL tasks

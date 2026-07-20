@@ -5,15 +5,29 @@ import { useState, useEffect } from 'react';
 function UserList({ user, API_URL }) {
     const [users, setUsers] = useState([]);
 
-    const deleteUser = (id) => {
-        fetch(`${API_URL}/api/users/${id}`, {
+    const deleteUser = async (id) => {
+        try {
+            const res = await fetch(`${API_URL}/api/users/${id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-        })
-         .then(() => setUsers(users.filter(user => user.id !== id)))
-        .catch(err => console.error(err));
+        });
+
+        if (!res.ok) {
+            const data = await res.json();
+            setError(data.error || 'Failed to delete user');
+            return;
+        }
+
+        setUsers(prevUsers =>
+            prevUsers.filter(user => user.id !== id)
+        );
+        }
+        catch(err) {
+            console.error(err);
+            setError('Failed to delete user');
+        }
     }
 
     useEffect(() => {
