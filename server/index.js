@@ -54,8 +54,8 @@ db.exec(`
     title TEXT NOT NULL,
     completed INTEGER DEFAULT 0,
     user_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    archived INTEGER DEFAULT 0
+    archived INTEGER DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(id)
     )
     `);
 
