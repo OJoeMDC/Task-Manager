@@ -1,7 +1,7 @@
 import { useState} from 'react'
 import './Task.css'
 
-function User( { user, archiveUser, restoreUser} ) {
+export default function User( { user, archiveUser, restoreUser} ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(user.name);
 
@@ -53,20 +53,20 @@ function User( { user, archiveUser, restoreUser} ) {
         <li key={user.id} className={`list-item ${user.archived === 1 ? 'archived' : ''}`}>
                    <span>{user.username}</span>
                     <div className="buttons">
-
-                        <button 
-                        className='edit'
-                        onClick={(() => setIsEditing(true))}>
-                            Edit
-                        </button>
-
                         {/* Delete button if they're not already archived */}
                         {user.archived === 0 && (
-                        <button 
-                        className='delete' 
-                        onClick={() => archiveUser(user.id)}>
-                            X
-                        </button>
+                            <>
+                                <button 
+                                    className='edit'
+                                    onClick={(() => setIsEditing(true))}>
+                                        Edit
+                                </button>
+                                <button 
+                                    className='delete' 
+                                    onClick={() => archiveUser(user.id)}>
+                                        X
+                                </button>
+                            </>
                         )}
 
                         {/* Unarchive button if they're archived */}
@@ -81,5 +81,3 @@ function User( { user, archiveUser, restoreUser} ) {
                 </li>
     )
 }
-
-export default User

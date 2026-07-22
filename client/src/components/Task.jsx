@@ -55,20 +55,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                    <span>{task.title}</span>
                    {isAdmin && <span>{task.username}</span>}
                     <div className="buttons">
-                        <button 
-                        type="checkbox" 
-                        className='complete' 
-                        onClick={() => toggleComplete(task.id)}>
-                            ✓
-                        </button>
-
-                        <button 
-                        className='edit'
-                        onClick={(() => setIsEditing(true))}>
-                            Edit
-                        </button>
-                        
-                        {/* Restore task if archived */}
+                        {/* Archived task button */}
                         {task.archived === 1 && (
                             <button 
                             className='restore'
@@ -77,13 +64,29 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                             </button>
                         )}
 
-                        {/* Archive task if not archived */}
+                        {/* Unarchived task buttons */}
                         {task.archived === 0 && (
-                            <button 
-                            className='delete' 
-                            onClick={() => archiveTask(task.id)}>
-                                X
-                            </button>
+                            <>
+                                <button 
+                                    type="checkbox" 
+                                    className='complete' 
+                                    onClick={() => toggleComplete(task.id)}>
+                                        ✓
+                                </button>
+
+                                <button 
+                                    className='edit'
+                                    onClick={(() => setIsEditing(true))}>
+                                        Edit
+                                </button>
+
+                                <button 
+                                    className='delete' 
+                                    onClick={() => archiveTask(task.id)}>
+                                        X
+                                </button>
+                            </>
+                            
                         )}
                     </div>
                 </li>
