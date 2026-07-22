@@ -125,7 +125,7 @@ app.post('/api/tasks', authenticateToken, (req, res) => {
 });
 
 //PUT update a task
-app.put('/api/tasks/:id', authenticateToken, (req, res) => {
+app.put('/api/tasks/:id/toggle', authenticateToken, (req, res) => {
     const { title, completed, toggle } = req.body;
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
@@ -150,7 +150,7 @@ app.put('/api/tasks/:id', authenticateToken, (req, res) => {
 
 
 // ARCHIVE a task
-app.put('/api/tasks/:id', authenticateToken, (req, res) => {
+app.put('/api/tasks/:id/archive', authenticateToken, (req, res) => {
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
     if (!task) {

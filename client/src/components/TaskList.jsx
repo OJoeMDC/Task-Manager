@@ -16,11 +16,11 @@ function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreT
                 <Task
                 key={task.id}
                 task={task}
-                onArchive={archiveTask} 
-                onToggle={toggleComplete}
-                onEdit={editTask}
+                archiveTask={archiveTask} 
+                toggleComplete={toggleComplete}
+                editTask={editTask}
                 user={user}
-                onRestore={restoreTask}
+                restoreTask={restoreTask}
                 />
             ))}
         </ul>

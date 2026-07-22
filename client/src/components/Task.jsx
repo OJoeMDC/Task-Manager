@@ -1,7 +1,7 @@
 import { useState} from 'react'
 import './Task.css'
 
-function Task( { task, onArchive, onToggle, onEdit, user, onRestore } ) {
+export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
     const isAdmin = user && user.role === 'admin';
@@ -58,7 +58,7 @@ function Task( { task, onArchive, onToggle, onEdit, user, onRestore } ) {
                         <button 
                         type="checkbox" 
                         className='complete' 
-                        onClick={() => onToggle(task.id)}>
+                        onClick={() => toggleComplete(task.id)}>
                             ✓
                         </button>
 
@@ -72,7 +72,7 @@ function Task( { task, onArchive, onToggle, onEdit, user, onRestore } ) {
                         {task.archived === 1 && (
                             <button 
                             className='restore'
-                            onClick={() => onRestore(task.id)}>
+                            onClick={() => restoreTask(task.id)}>
                                 Restore
                             </button>
                         )}
@@ -81,7 +81,7 @@ function Task( { task, onArchive, onToggle, onEdit, user, onRestore } ) {
                         {task.archived === 0 && (
                             <button 
                             className='delete' 
-                            onClick={() => onArchive(task.id)}>
+                            onClick={() => archiveTask(task.id)}>
                                 X
                             </button>
                         )}
@@ -89,5 +89,3 @@ function Task( { task, onArchive, onToggle, onEdit, user, onRestore } ) {
                 </li>
     )
 }
-
-export default Task

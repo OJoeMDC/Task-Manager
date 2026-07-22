@@ -60,13 +60,12 @@ export default function useTasks(user) {
     //Archive Task
     const archiveTask = async (id) => {
     try {
-        const res = await fetch(`${API_URL}/api/tasks/${id}` , {
+        const res = await fetch(`${API_URL}/api/tasks/${id}/archive` , {
         method: 'PUT',
         headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ archived: 1 })
+        }
     });
 
     if (!res.ok) {
@@ -76,6 +75,7 @@ export default function useTasks(user) {
     }
 
     console.log('Archived task with ID:', id);
+    const updatedTask = await res.json();
     setTasks(prevTasks => 
         prevTasks.filter(task => task.id !== id)
     );
@@ -83,7 +83,6 @@ export default function useTasks(user) {
         console.error(err);
         setError('Failed to archive task');
     }
-    
     };
 
     //Admin archive task
@@ -103,6 +102,7 @@ export default function useTasks(user) {
                 return;
             }
 
+            console.log('Successfully admin archived task with ID:', id)
             const updatedTask = await res.json();
             setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
         } catch (err) {
@@ -140,7 +140,7 @@ export default function useTasks(user) {
 
     //Complete Task
     const toggleComplete = (id) => {
-    fetch(`${API_URL}/api/tasks/${id}`, {
+    fetch(`${API_URL}/api/tasks/${id}/toggle`, {
         method: 'PUT',
         headers: { 
         'Content-Type': 'application/json',
