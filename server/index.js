@@ -75,9 +75,21 @@ try {
     console.log('Migration skipped:', err.message);
 }
 
- //GET ALL tasks
- app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
+ //GET all unarchived tasks
+ app.get('/api/tasks/unarchived', authenticateToken, requireAdmin, (req, res) => {
     const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id AND tasks.archived = 0').all();
+    res.json(tasks);
+});
+
+//Get all archived tasks
+app.get('/api/tasks/archived', authenticateToken, requireAdmin, (req, res) => {
+    const tasks = db.prepare('SELET tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id AND tasks.archived = 1').all();
+    res.json(tasks);
+});
+
+//Get ALL tasks
+app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
+    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id').all();
     res.json(tasks);
 });
 
@@ -163,7 +175,13 @@ app.put('/api/tasks/:id', authenticateToken, (req, res) => {
 
 //Get users
 app.get('/api/users', authenticateToken, requireAdmin, (req, res) => {
-    const users = db.prepare('SELECT id, username, username_normalized, role FROM users WHERE archived = 0').all();
+    const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users WHERE archived = 0').all();
+    res.json(users);
+});
+
+//Get ALL users
+app.get('/api/users/all', authenticateToken, requireAdmin, (req, res) => {
+    const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users').all();
     res.json(users);
 });
 
@@ -203,6 +221,24 @@ app.put('/api/users/:id/archive', authenticateToken, requireAdmin, (req, res) =>
         .prepare('SELECT id, username, username_normalized, role FROM users WHERE id = ?')
         .get(userId);
 
+
+    res.status(204).send(updatedUser);
+});
+
+//Restore User
+app.put('/api/users/:id/restore', authenticateToken, requireAdmin, (req, res) => {
+    const userId = parseInt(req.params.id);
+    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    db.prepare('UPDATE users SET archived = 0 WHERE id = ?').run(userId);
+
+    const updatedUser = db
+        .prepare('SELECT id, username, username_normalized, role FROM users WHERE id = ?')
+        .get(userId);
 
     res.status(204).send(updatedUser);
 });

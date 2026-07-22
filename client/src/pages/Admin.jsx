@@ -7,12 +7,17 @@ import UserList from '../components/UserList';
 export default function Admin({ user, API_URL }) {
     const [tasks, setTasks] = useState([]);
     const [activeSection, setActiveSection] = useState('users'); // 'users' or 'tasks'
+    const [viewArchived, setViewArchived] = useState(false); // State to toggle between active and archived tasks
 
     //Fetch ALL tasks
     const fetchAllTasks = async () => {
-        setActiveSection('tasks'); // Switch to tasks section when fetching tasks
         try {
-            const res = await fetch(`${API_URL}/api/tasks/all`, {
+            const endpoint = !viewArchived
+                ? `${API_URL}/api/tasks/unarchived`
+                : `${API_URL}/api/tasks/all`;
+
+
+            const res = await fetch(endpoint, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -30,6 +35,14 @@ export default function Admin({ user, API_URL }) {
         }
     };
 
+useEffect(() => {
+    setViewArchived(false); // Reset to active tasks when switching sections
+}, [])
+
+    //Update fetch when View Archived button is clicked
+    useEffect(() => {
+        fetchAllTasks();
+}, [viewArchived]);
 
     //Archive Task
 const archiveTask = (id) => {
@@ -65,8 +78,16 @@ const archiveTask = (id) => {
                 <button className='button' onClick={() => setActiveSection('users')}>
                     Manage Users
                 </button>
-                <button className='button' onClick={fetchAllTasks}>
+                <button className='button' onClick={() => {
+                    setActiveSection('tasks'); 
+                    fetchAllTasks
+                    }}>
                     Manage Tasks
+                </button>
+                <button className={`button ${viewArchived ? 'toggled' : ''}`} onClick={() => {
+                    setViewArchived(!viewArchived); // Toggle between active and archived 
+                }}>
+                    View Archived
                 </button>
             </section>
 
@@ -78,7 +99,7 @@ const archiveTask = (id) => {
 
             {activeSection === 'users' && (
                 <section className='adminSection'>
-                    <UserList API_URL={API_URL} />
+                    <UserList API_URL={API_URL} viewArchived={viewArchived} />
                 </section>
             )}
         </main>

@@ -15,6 +15,7 @@
     --success: #22C55E;
 
     --warning: #F59E0B;
+    --warning-hover: #ff6f00;
 }
 
 * {
@@ -89,6 +90,14 @@ body,
     color: var(--text);
 
     width: fit-content;
+}
+
+button.toggled {
+    background-color: var(--warning);
+}
+
+button.toggled:hover {
+    background-color: var(--warning-hover);
 }
 
 .button:hover {

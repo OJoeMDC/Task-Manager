@@ -1,7 +1,7 @@
 import { useState} from 'react'
 import './Task.css'
 
-function User( { user, archiveUser } ) {
+function User( { user, archiveUser, restoreUser} ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(user.name);
 
@@ -16,6 +16,7 @@ function User( { user, archiveUser } ) {
         setEditValue(user.name);
         setIsEditing(false);
     }
+
 
     if (isEditing) {
     return (
@@ -37,7 +38,6 @@ function User( { user, archiveUser } ) {
                                 type='submit'>
                                     Save
                                 </button>
-
                                 <button 
                                 className='cancel' 
                                 onClick={handleCancel}>
@@ -50,7 +50,7 @@ function User( { user, archiveUser } ) {
     }
 
     return (
-        <li key={user.id} className='list-item'>
+        <li key={user.id} className={`list-item ${user.archived === 1 ? 'archived' : ''}`}>
                    <span>{user.username}</span>
                     <div className="buttons">
 
@@ -60,14 +60,25 @@ function User( { user, archiveUser } ) {
                             Edit
                         </button>
 
+                        {/* Delete button if they're not already archived */}
+                        {user.archived === 0 && (
                         <button 
                         className='delete' 
                         onClick={() => archiveUser(user.id)}>
                             X
                         </button>
+                        )}
+
+                        {/* Unarchive button if they're archived */}
+                        {user.archived === 1 && (
+                            <button 
+                        className='restore' 
+                        onClick={() => restoreUser(user.id)}>
+                            ↑
+                        </button>
+                        )}
                     </div>
                 </li>
-
     )
 }
 

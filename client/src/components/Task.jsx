@@ -51,7 +51,7 @@ function Task( { task, onArchive, onToggle, onEdit, user } ) {
     }
 
     return (
-        <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''}`}>
+        <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''} ${task.archived === 1 ? 'archived' : ''}`}>
                    <span>{task.title}</span>
                    {isAdmin && <span>{task.username}</span>}
                     <div className="buttons">
