@@ -74,7 +74,7 @@ function User( { user, archiveUser, restoreUser} ) {
                             <button 
                         className='restore' 
                         onClick={() => restoreUser(user.id)}>
-                            ↑
+                            Restore
                         </button>
                         )}
                     </div>

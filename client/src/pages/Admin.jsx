@@ -2,12 +2,22 @@ import React, { useEffect, useState } from 'react';
 import './Admin.css';
 import TaskList from '../components/TaskList';
 import UserList from '../components/UserList';
+import useTasks from '../hooks/useTasks';
 
 
 export default function Admin({ user, API_URL }) {
-    const [tasks, setTasks] = useState([]);
     const [activeSection, setActiveSection] = useState('users'); // 'users' or 'tasks'
     const [viewArchived, setViewArchived] = useState(false); // State to toggle between active and archived tasks
+
+    const {
+        tasks,
+        editTask,
+        setTasks,
+        archiveTask,
+        adminArchiveTask,
+        restoreTask,
+        toggleComplete
+    } = useTasks(user);
 
     //Fetch ALL tasks
     const fetchAllTasks = async () => {
@@ -36,26 +46,10 @@ export default function Admin({ user, API_URL }) {
     };
 
 useEffect(() => {
-    setViewArchived(false); // Reset to active tasks when switching sections
-}, [])
-
-    //Update fetch when View Archived button is clicked
-    useEffect(() => {
-        fetchAllTasks();
-}, [viewArchived]);
-
-    //Archive Task
-const archiveTask = (id) => {
-  fetch(`${API_URL}/api/tasks/${id}` , {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(() => setTasks(tasks.filter(task => task.id !== id)))
-  .catch(err => console.error(err));
-};
+  if (activeSection === 'tasks') {
+    fetchAllTasks();
+  }
+}, [viewArchived, activeSection, archiveTask, restoreTask, editTask]);
 
 
     if (!user) {
@@ -80,7 +74,7 @@ const archiveTask = (id) => {
                 </button>
                 <button className='button' onClick={() => {
                     setActiveSection('tasks'); 
-                    fetchAllTasks
+                    fetchAllTasks(); // Fetch tasks when switching to the tasks section
                     }}>
                     Manage Tasks
                 </button>
@@ -93,13 +87,20 @@ const archiveTask = (id) => {
 
             {activeSection === 'tasks' && (
                 <section className='adminSection'>
-                    <TaskList tasks={tasks} user={user} onArchive={archiveTask} />
+                    <TaskList
+                    user={user}
+                    tasks={tasks}
+                    archiveTask={adminArchiveTask}
+                     toggleComplete={toggleComplete}
+                      editTask={editTask}
+                       restoreTask={restoreTask}
+                        />
                 </section>
             )}
 
             {activeSection === 'users' && (
                 <section className='adminSection'>
-                    <UserList API_URL={API_URL} viewArchived={viewArchived} />
+                    <UserList API_URL={API_URL} viewArchived={viewArchived} user={user} />
                 </section>
             )}
         </main>

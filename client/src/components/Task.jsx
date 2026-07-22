@@ -1,7 +1,7 @@
 import { useState} from 'react'
 import './Task.css'
 
-function Task( { task, onArchive, onToggle, onEdit, user } ) {
+function Task( { task, onArchive, onToggle, onEdit, user, onRestore } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
     const isAdmin = user && user.role === 'admin';
@@ -67,12 +67,24 @@ function Task( { task, onArchive, onToggle, onEdit, user } ) {
                         onClick={(() => setIsEditing(true))}>
                             Edit
                         </button>
+                        
+                        {/* Restore task if archived */}
+                        {task.archived === 1 && (
+                            <button 
+                            className='restore'
+                            onClick={() => onRestore(task.id)}>
+                                Restore
+                            </button>
+                        )}
 
-                        <button 
-                        className='delete' 
-                        onClick={() => onArchive(task.id)}>
-                            X
-                        </button>
+                        {/* Archive task if not archived */}
+                        {task.archived === 0 && (
+                            <button 
+                            className='delete' 
+                            onClick={() => onArchive(task.id)}>
+                                X
+                            </button>
+                        )}
                     </div>
                 </li>
     )

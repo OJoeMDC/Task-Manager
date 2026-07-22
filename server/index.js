@@ -168,6 +168,40 @@ app.put('/api/tasks/:id', authenticateToken, (req, res) => {
     res.status(200).json(updatedTask);
 });
 
+//Admin archive task
+app.put('/api/admin/tasks/:id/', authenticateToken, requireAdmin, (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+    if (!task) {
+        return res.status(404).json({ error: 'Task not found' });
+    }
+
+    db.prepare('UPDATE tasks SET archived = 1 WHERE id = ?').run(taskId);
+
+    const updatedTask = db
+        .prepare('SELECT * FROM tasks WHERE id = ?')
+        .get(taskId);
+
+    res.status(200).json(updatedTask);
+});
+
+//restore task
+app.put('/api/tasks/:id/restore', authenticateToken, requireAdmin, (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+    if (!task) {
+        return res.status(404).json({ error: 'Task not found' });
+    }
+
+    db.prepare('UPDATE tasks SET archived = 0 WHERE id = ?').run(taskId);
+
+    const updatedTask = db
+        .prepare('SELECT * FROM tasks WHERE id = ?')
+        .get(taskId);
+
+    res.status(200).json(updatedTask);
+});
+
 //////////////
 //USERS CODE//
 //////////////

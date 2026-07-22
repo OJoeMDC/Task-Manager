@@ -1,7 +1,8 @@
 import './TaskList.css'
 import Task from "./Task"
+import useTasks from '../hooks/useTasks';
 
-function TaskList({ tasks, onArchive, onToggle, onEdit, user }) {
+function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreTask }) {
     
 
     return(
@@ -15,10 +16,11 @@ function TaskList({ tasks, onArchive, onToggle, onEdit, user }) {
                 <Task
                 key={task.id}
                 task={task}
-                onArchive={onArchive} 
-                onToggle={onToggle}
-                onEdit={onEdit}
+                onArchive={archiveTask} 
+                onToggle={toggleComplete}
+                onEdit={editTask}
                 user={user}
+                onRestore={restoreTask}
                 />
             ))}
         </ul>
