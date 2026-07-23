@@ -17,7 +17,7 @@ Password: password
 #### Admin
 
 Username: admin
-password: replace-this-with-a-strong-password
+password: StrongPass123#
 
 ## Features
 User registration      
