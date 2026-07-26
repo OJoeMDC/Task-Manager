@@ -49,15 +49,17 @@ db.exec(`
     role TEXT DEFAULT 'user'
     );
 
-    CREATE TABLE IF NOT EXISTS tasks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    completed INTEGER DEFAULT 0,
-    user_id INTEGER NOT NULL,
-    archived INTEGER DEFAULT 0,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    )
+    DROP TABLE tasks
     `);
+
+    // CREATE TABLE IF NOT EXISTS tasks (
+    // id INTEGER PRIMARY KEY AUTOINCREMENT,
+    // title TEXT NOT NULL,
+    // completed INTEGER DEFAULT 0,
+    // user_id INTEGER NOT NULL,
+    // archived INTEGER DEFAULT 0,
+    // FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    // )
 
     //Add user_id column to tasks table if it doesn't exist
     try {
