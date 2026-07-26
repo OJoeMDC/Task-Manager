@@ -17,7 +17,7 @@ Password: password
 #### Admin
 
 Username: admin
-password: StrongPass123#
+password: StrongPass123!
 
 ## Features
 User registration      
@@ -97,6 +97,11 @@ npm run dev          # Runs on http://localhost:5173
 PORT=3000
 NODE_ENV=development
 DB_PATH=./tasks.db
+ACCESS_TOKEN_SECRET=your-random-token-secret
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=StrongPass123!
+TEST_USERNAME=TestAccount
+TEST_PASSWORD=password
 
 
 **Frontend (`client/.env.development`)**
