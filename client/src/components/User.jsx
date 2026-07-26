@@ -1,7 +1,7 @@
 import { useState} from 'react'
 import './Task.css'
 
-export default function User( { user, archiveUser, restoreUser} ) {
+export default function User( { user, archiveUser, restoreUser, deleteUser } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(user.name);
 
@@ -64,18 +64,27 @@ export default function User( { user, archiveUser, restoreUser} ) {
                                 <button 
                                     className='delete' 
                                     onClick={() => archiveUser(user.id)}>
-                                        X
+                                        Archive
                                 </button>
                             </>
                         )}
 
                         {/* Unarchive button if they're archived */}
                         {user.archived === 1 && (
+                            <>
                             <button 
-                        className='restore' 
-                        onClick={() => restoreUser(user.id)}>
-                            Restore
-                        </button>
+                                className='restore' 
+                                onClick={() => restoreUser(user.id)}>
+                                    Restore
+                            </button>
+
+                            <button
+                                className='delete'
+                                onClick={() => deleteUser(user.id)}>
+                                    DELETE
+                            </button>
+                            </>
+                            
                         )}
                     </div>
                 </li>

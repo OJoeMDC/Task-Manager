@@ -55,7 +55,7 @@ db.exec(`
     completed INTEGER DEFAULT 0,
     user_id INTEGER NOT NULL,
     archived INTEGER DEFAULT 0,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     )
     `);
 
@@ -220,6 +220,8 @@ app.get('/api/users/all', authenticateToken, requireAdmin, (req, res) => {
 });
 
 
+
+
 //Create User
 app.post('/api/users', async (req, res) => {
     const displayUsername = req.body.username.trim();
@@ -240,6 +242,9 @@ app.post('/api/users', async (req, res) => {
     }
 });
 
+
+
+
 //Archive User
 app.put('/api/users/:id/archive', authenticateToken, requireAdmin, (req, res) => {
     const userId = parseInt(req.params.id);
@@ -259,6 +264,9 @@ app.put('/api/users/:id/archive', authenticateToken, requireAdmin, (req, res) =>
     res.status(204).send(updatedUser);
 });
 
+
+
+
 //Restore User
 app.put('/api/users/:id/restore', authenticateToken, requireAdmin, (req, res) => {
     const userId = parseInt(req.params.id);
@@ -276,6 +284,23 @@ app.put('/api/users/:id/restore', authenticateToken, requireAdmin, (req, res) =>
 
     res.status(204).send(updatedUser);
 });
+
+
+
+//Delete User
+app.delete('/api/users/:id/delete', authenticateToken, requireAdmin, (req, res) => {
+    const userId = parseInt(req.params.id);
+    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+
+    if(!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    db.prepare('DELETE FROM users WHERE id = ?').run(userId);
+
+    res.status(204).send();
+});
+
 
 
 //User Login

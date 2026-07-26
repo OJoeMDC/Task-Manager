@@ -41,8 +41,7 @@ function UserList({ user, API_URL, viewArchived }) {
             const res = await fetch(`${API_URL}/api/users/${id}/restore`, {
                 method: 'PUT',
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
 
@@ -59,6 +58,33 @@ function UserList({ user, API_URL, viewArchived }) {
         } catch (err) {
             console.error(err);
             setError('Failed to restore user');
+        }
+    }
+
+    //Delete users
+    const deleteUser = async (id) => {
+        try {
+            const res = await fetch(`${API_URL}/api/users/${id}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if(!res.ok) {
+                const data = await res.json();
+                setError(data.error || 'Failed to delete user');
+                return;
+            }
+
+            console.log(`User with ID ${id} deleted successfully`);
+            setUsers(prevUsers =>
+                prevUsers.filter(user => user.id !== id)
+            );
+        } catch (err) {
+            console.error(err);
+            setError('Failed to delete user');
         }
     }
 
@@ -111,6 +137,7 @@ useEffect(() => {
                 user={user}
                 archiveUser={archiveUser}
                 restoreUser={restoreUser}
+                deleteUser={deleteUser}
                 />
             ))}
         </ul>
