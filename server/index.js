@@ -75,31 +75,52 @@ try {
     console.log('Migration skipped:', err.message);
 }
 
- //GET all unarchived tasks
- app.get('/api/tasks/unarchived', authenticateToken, requireAdmin, (req, res) => {
-    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id AND tasks.archived = 0').all();
+ //GET all tasks for a user
+ app.get('/api/tasks', authenticateToken, (req, res) => {
+    const userId = req.user.id;
+
+    const tasks = db.prepare(`
+        SELECT tasks.*, users.username 
+        FROM tasks 
+        INNER JOIN users 
+        ON tasks.user_id = users.id 
+        WHERE tasks.user_id = ?
+        AND tasks.archived = 0
+        `).all(userId);
     res.json(tasks);
 });
 
-//Get all archived tasks
-app.get('/api/tasks/archived', authenticateToken, requireAdmin, (req, res) => {
-    const tasks = db.prepare('SELET tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id AND tasks.archived = 1').all();
+//Get all tasks for a user
+app.get('/api/tasks/user/all', authenticateToken, (req, res) => {
+    const userId = req.user.id;
+
+    const tasks = db.prepare(`
+        SELECT tasks.*, users.username 
+        FROM tasks 
+        INNER JOIN users 
+        ON tasks.user_id = users.id
+        WHERE tasks.user_id = ?`
+    ).all(userId);
     res.json(tasks);
 });
 
 //Get ALL tasks
-app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
+app.get('/api/tasks/all/all', authenticateToken, requireAdmin, (req, res) => {
     const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id').all();
     res.json(tasks);
 });
 
-
-//GET user tasks
-app.get('/api/tasks', authenticateToken, (req, res) => {
-    const userId = req.user.id;
-    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE users.id = ? AND tasks.archived = 0').all(userId);
-    res.json(tasks);
-});
+//Get all unarchived tasks
+app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
+    const tasks = db.prepare(`
+        SELECT tasks.*, users.username
+        FROM tasks
+        INNER JOIN users
+        ON tasks.user_id = users.id
+        WHERE tasks.archived = 0
+        `).all();
+        res.json(tasks);
+})
 
 //POST new task
 app.post('/api/tasks', authenticateToken, (req, res) => {
@@ -200,6 +221,20 @@ app.put('/api/tasks/:id/restore', authenticateToken, requireAdmin, (req, res) =>
         .get(taskId);
 
     res.status(200).json(updatedTask);
+});
+
+//Delete Task
+app.delete('/api/tasks/:id/delete', authenticateToken, (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+
+    if(!task) {
+        return res.status(404).json({ error: 'Task not found' });
+    }
+
+    db.prepare('DELETE FROM tasks WHERE id = ?').run(taskId);
+
+    res.status(204).send();
 });
 
 //////////////

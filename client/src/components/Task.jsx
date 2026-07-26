@@ -1,7 +1,7 @@
 import { useState} from 'react'
 import './Task.css'
 
-export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask } ) {
+export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
     const isAdmin = user && user.role === 'admin';
@@ -57,11 +57,19 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                     <div className="buttons">
                         {/* Archived task button */}
                         {task.archived === 1 && (
-                            <button 
-                            className='restore'
-                            onClick={() => restoreTask(task.id)}>
-                                Restore
-                            </button>
+                            <>
+                                <button 
+                                className='restore'
+                                onClick={() => restoreTask(task.id)}>
+                                    Restore
+                                </button>
+                                <button
+                                className='delete'
+                                onClick={() => deleteTask(task.id)}>
+                                    X
+                                </button>
+                            </>
+                            
                         )}
 
                         {/* Unarchived task buttons */}
@@ -83,7 +91,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 <button 
                                     className='delete' 
                                     onClick={() => archiveTask(task.id)}>
-                                        X
+                                        ARCHIVE
                                 </button>
                             </>
                             

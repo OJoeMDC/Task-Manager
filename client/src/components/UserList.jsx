@@ -2,9 +2,38 @@ import './UserList.css'
 import User from "./User"
 import { useState, useEffect } from 'react';
 
-function UserList({ user, API_URL, viewArchived }) {
+function UserList({ user, API_URL, viewArchivedUsers }) {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
+
+    //Get users
+    const getUsers = async () => {
+        try {
+            const endpoint = !viewArchivedUsers
+                ? `${API_URL}/api/users`
+                : `${API_URL}/api/users/all`;
+
+            const res = await fetch(endpoint, {
+                method: 'GET',
+                headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        if (!res.ok) {
+            const data = await res.json();
+            setError(data.error || 'Failed to fetch users');
+            return;
+        }
+
+        const data = await res.json();
+        setUsers(data);
+        
+    } catch(err) {
+        console.error(err)
+        setError('Failed to fetch users');
+    }
+}
 
 
 //Archive users
@@ -28,6 +57,7 @@ function UserList({ user, API_URL, viewArchived }) {
         setUsers(prevUsers =>
             prevUsers.filter(user => user.id !== id)
         );
+         await getUsers();
         }
         catch(err) {
             console.error(err);
@@ -55,6 +85,8 @@ function UserList({ user, API_URL, viewArchived }) {
             setUsers(prevUsers =>
                 prevUsers.filter(user => user.id !== id)
             );
+
+            await getUsers();
         } catch (err) {
             console.error(err);
             setError('Failed to restore user');
@@ -82,46 +114,19 @@ function UserList({ user, API_URL, viewArchived }) {
             setUsers(prevUsers =>
                 prevUsers.filter(user => user.id !== id)
             );
+
+            await getUsers();
         } catch (err) {
             console.error(err);
             setError('Failed to delete user');
         }
     }
 
-//Get users
-    const getUsers = async () => {
-        try {
-            const endpoint = !viewArchived
-                ? `${API_URL}/api/users`
-                : `${API_URL}/api/users/all`;
-
-            const res = await fetch(endpoint, {
-                method: 'GET',
-                headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-
-        if (!res.ok) {
-            const data = await res.json();
-            setError(data.error || 'Failed to fetch users');
-            return;
-        }
-
-        const data = await res.json();
-        setUsers(data);
-        
-    } catch(err) {
-        console.error(err)
-        setError('Failed to fetch users');
-    }
-}
-
 
 //Update GET USERS when viewArchived changes
 useEffect(() => {
     getUsers();
-}, [API_URL, viewArchived, restoreUser]);
+}, [API_URL, viewArchivedUsers]);
     
 
     return(

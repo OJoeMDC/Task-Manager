@@ -7,49 +7,20 @@ import useTasks from '../hooks/useTasks';
 
 export default function Admin({ user, API_URL }) {
     const [activeSection, setActiveSection] = useState('users'); // 'users' or 'tasks'
-    const [viewArchived, setViewArchived] = useState(false); // State to toggle between active and archived tasks
+    const [viewArchivedUsers, setViewArchivedUsers] = useState(false);
 
     const {
         tasks,
         editTask,
         setTasks,
+        viewArchived,
+        setViewArchived,
         archiveTask,
         adminArchiveTask,
+        deleteTask,
         restoreTask,
         toggleComplete
     } = useTasks(user);
-
-    //Fetch ALL tasks
-    const fetchAllTasks = async () => {
-        try {
-            const endpoint = !viewArchived
-                ? `${API_URL}/api/tasks/unarchived`
-                : `${API_URL}/api/tasks/all`;
-
-
-            const res = await fetch(endpoint, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            if (!res.ok) {
-                throw new Error('Failed to fetch tasks');
-            }
-
-            const data = await res.json();
-            setTasks(data);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-useEffect(() => {
-  if (activeSection === 'tasks') {
-    fetchAllTasks();
-  }
-}, [viewArchived, activeSection, archiveTask, restoreTask, editTask]);
 
 
     if (!user) {
@@ -73,13 +44,13 @@ useEffect(() => {
                     Manage Users
                 </button>
                 <button className='button' onClick={() => {
-                    setActiveSection('tasks'); 
-                    fetchAllTasks(); // Fetch tasks when switching to the tasks section
+                    setActiveSection('tasks');
                     }}>
                     Manage Tasks
                 </button>
                 <button className={`button ${viewArchived ? 'toggled' : ''}`} onClick={() => {
-                    setViewArchived(!viewArchived); // Toggle between active and archived 
+                    setViewArchived(!viewArchived); // Toggle between active and archived
+                    setViewArchivedUsers(!viewArchivedUsers); //toggle between archived and unarchived users
                 }}>
                     View Archived
                 </button>
@@ -91,16 +62,20 @@ useEffect(() => {
                     user={user}
                     tasks={tasks}
                     archiveTask={adminArchiveTask}
-                     toggleComplete={toggleComplete}
-                      editTask={editTask}
-                       restoreTask={restoreTask}
+                    toggleComplete={toggleComplete}
+                    editTask={editTask}
+                    restoreTask={restoreTask}
+                    deleteTask={deleteTask}
                         />
                 </section>
             )}
 
             {activeSection === 'users' && (
                 <section className='adminSection'>
-                    <UserList API_URL={API_URL} viewArchived={viewArchived} user={user} />
+                    <UserList 
+                    API_URL={API_URL} 
+                    user={user} 
+                    viewArchivedUsers={viewArchivedUsers} />
                 </section>
             )}
         </main>

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 export default function useTasks(user) {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState('');
+    const [viewArchived, setViewArchived] = useState(false);
 
     const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,7 +11,19 @@ export default function useTasks(user) {
     // Fetch user tasks
     const fetchTasks = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/tasks`, {
+            let endpoint;
+
+                if (user.role === 'admin') {
+                    endpoint = viewArchived
+                        ? `${API_URL}/api/tasks/all/all`
+                        : `${API_URL}/api/tasks/all`;
+                } else {
+                    endpoint = viewArchived
+                        ? `${API_URL}/api/tasks/user/all`
+                        : `${API_URL}/api/tasks`;
+                }
+
+            const res = await fetch(endpoint, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -28,13 +41,6 @@ export default function useTasks(user) {
             setError('Failed to fetch tasks');
         }
     };
-
-
-    useEffect(() => {
-        if (user) {
-            fetchTasks();
-        }
-    }, [API_URL, user]);
 
 
     //Create a new Task
@@ -138,6 +144,35 @@ export default function useTasks(user) {
         }
     };
 
+
+    //Delete Task
+    const deleteTask = async (id) => {
+        try {
+            const res = await fetch(`${API_URL}/api/tasks/${id}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                setError(data.error || 'Failed to delete task');
+                return;
+            }
+
+            console.log(`Task with ID ${id} deleted successfully`);
+            setTasks(prevTasks =>
+                prevTasks.filter(task => task.id !== id)
+            );
+        } catch (err) {
+            console.error(err);
+            setError('Failed to delete task');
+        }
+    };
+
+
+
     //Complete Task
     const toggleComplete = (id) => {
     fetch(`${API_URL}/api/tasks/${id}/toggle`, {
@@ -169,6 +204,12 @@ export default function useTasks(user) {
     }
     };
 
+      useEffect(() => {
+        if (user) {
+            fetchTasks();
+        }
+    }, [API_URL, user, viewArchived, restoreTask, deleteTask, archiveTask, adminArchiveTask, toggleComplete, editTask, addTask]);
+
     return {
         tasks,
         setTasks,
@@ -177,6 +218,9 @@ export default function useTasks(user) {
         editTask,
         archiveTask,
         adminArchiveTask,
+        viewArchived,
+        setViewArchived,
+        deleteTask,
         restoreTask,
         toggleComplete,
         addTask,
