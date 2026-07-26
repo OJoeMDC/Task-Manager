@@ -44,25 +44,36 @@ export default function useTasks(user) {
 
 
     //Create a new Task
-    const addTask = (title) => {
+    const addTask = async (title) => {
         console.log("adding task", title, user);
-        
+
         if (!user) return;
 
-        fetch(`${API_URL}/api/tasks`, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
+        try {
+            const res = await fetch(`${API_URL}/api/tasks`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ title })
+        });
 
-        body: JSON.stringify({ title }),
-    })
-    .then(res => res.json())
-    .then (await fetchTasks())
-    .then(newTask => setTasks(prev => [...prev, newTask]))
-    .catch(err => console.error(err));
-    };
+        if (!res.ok) {
+            const data = await res.json();
+            setError(data.error || 'Failed to create task');
+            return;
+        }
+
+        const newTask = await res.json();
+        setTasks(prev => [...prev, newTask])
+
+        await fetchTasks();
+        } catch (err) {
+            console.error(err);
+            setError('Failed to create task');
+        }
+    }
 
     //Archive Task
     const archiveTask = async (id) => {
@@ -183,20 +194,33 @@ export default function useTasks(user) {
 
 
     //Complete Task
-    const toggleComplete = (id) => {
-    fetch(`${API_URL}/api/tasks/${id}/toggle`, {
+    const toggleComplete = async (id) => {
+        try {
+        const res = await fetch(`${API_URL}/api/tasks/${id}/toggle`, {
         method: 'PUT',
         headers: { 
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ toggle: true }),
-    })
-    .then( res => res.json())
-    .then( await fetchTasks() )
-    .then(updatedTask => setTasks(tasks.map(t => t.id === id ? updatedTask : t)))
-    .catch(err => console.error(err))
-    };
+    });
+
+    if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || 'Failed to toggle task status')
+        return;
+    }
+
+    const updatedTask = await res.json();
+    console.log(`Toggle task ${id}'s status successfully`);
+    setTasks(prev => prev.map(task => task.id === id ? updatedTask : task))
+
+    await fetchTasks();
+        } catch (err) {
+            console.error(err);
+            setError('Failed to toggle task status');
+        }
+    }
 
     //Edit Task
     const editTask = async (id, newTitle) => {
