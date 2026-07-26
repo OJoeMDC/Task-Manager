@@ -59,6 +59,7 @@ export default function useTasks(user) {
         body: JSON.stringify({ title }),
     })
     .then(res => res.json())
+    .then (await fetchTasks())
     .then(newTask => setTasks(prev => [...prev, newTask]))
     .catch(err => console.error(err));
     };
@@ -85,6 +86,8 @@ export default function useTasks(user) {
     setTasks(prevTasks => 
         prevTasks.filter(task => task.id !== id)
     );
+
+    await fetchTasks();
     } catch(err) {
         console.error(err);
         setError('Failed to archive task');
@@ -111,6 +114,8 @@ export default function useTasks(user) {
             console.log('Successfully admin archived task with ID:', id)
             const updatedTask = await res.json();
             setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+
+            await fetchTasks();
         } catch (err) {
             console.error(err);
             setError('Failed to archive task');
@@ -138,6 +143,8 @@ export default function useTasks(user) {
             setTasks(prevTasks =>
                 prevTasks.filter(task => task.id !== id)
             );
+
+            await fetchTasks();
         } catch (err) {
             console.error(err);
             setError('Failed to restore task');
@@ -165,6 +172,8 @@ export default function useTasks(user) {
             setTasks(prevTasks =>
                 prevTasks.filter(task => task.id !== id)
             );
+
+            await fetchTasks();
         } catch (err) {
             console.error(err);
             setError('Failed to delete task');
@@ -184,6 +193,7 @@ export default function useTasks(user) {
         body: JSON.stringify({ toggle: true }),
     })
     .then( res => res.json())
+    .then( await fetchTasks() )
     .then(updatedTask => setTasks(tasks.map(t => t.id === id ? updatedTask : t)))
     .catch(err => console.error(err))
     };
@@ -208,7 +218,7 @@ export default function useTasks(user) {
         if (user) {
             fetchTasks();
         }
-    }, [API_URL, user, viewArchived, restoreTask, deleteTask, archiveTask, adminArchiveTask, toggleComplete, editTask, addTask]);
+    }, [API_URL, user]);
 
     return {
         tasks,
