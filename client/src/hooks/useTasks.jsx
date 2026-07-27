@@ -108,7 +108,7 @@ export default function useTasks(user) {
     //Admin archive task
     const adminArchiveTask = async (id) => {
         try {
-            const res = await fetch(`${API_URL}/api/admin/tasks/${id}/`, {
+            const res = await fetch(`${API_URL}/api/admin/tasks/${id}/archive`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -196,7 +196,7 @@ export default function useTasks(user) {
     //Complete Task
     const toggleComplete = async (id) => {
         try {
-        const res = await fetch(`${API_URL}/api/tasks/${id}/toggle`, {
+        const res = await fetch(`${API_URL}/api/tasks/${id}`, {
         method: 'PUT',
         headers: { 
         'Content-Type': 'application/json',

@@ -21,32 +21,6 @@ export default function Tasks({ API_URL, user }) {
   fetchTasks
 } = useTasks(user);
 
-// //Fetch Archived Tasks
-// const fetchArchivedTasks = async () => {
-//         try {
-//             const endpoint = !viewArchived
-//                 ? `${API_URL}/api/tasks/unarchived`
-//                 : `${API_URL}/api/tasks/archived`;
-
-
-//             const res = await fetch(endpoint, {
-//                 method: 'GET',
-//                 headers: {
-//                     Authorization: `Bearer ${localStorage.getItem('token')}`
-//                 }
-//             });
-
-//             if (!res.ok) {
-//                 throw new Error('Failed to fetch tasks');
-//             }
-
-//             const data = await res.json();
-//             setTasks(data);
-//         } catch (err) {
-//             console.error(err);
-//         }
-//     };
-
 if (!user) {
   return (
     <main>

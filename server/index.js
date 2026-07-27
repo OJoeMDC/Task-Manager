@@ -145,8 +145,8 @@ app.post('/api/tasks', authenticateToken, (req, res) => {
     }
 });
 
-//PUT update a task
-app.put('/api/tasks/:id/toggle', authenticateToken, (req, res) => {
+//PUT update task status
+app.put('/api/tasks/:id', authenticateToken, (req, res) => {
     const { title, completed, toggle } = req.body;
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
@@ -169,7 +169,6 @@ app.put('/api/tasks/:id/toggle', authenticateToken, (req, res) => {
 });
 
 
-
 // ARCHIVE a task
 app.put('/api/tasks/:id/archive', authenticateToken, (req, res) => {
     const taskId = parseInt(req.params.id);
@@ -190,7 +189,7 @@ app.put('/api/tasks/:id/archive', authenticateToken, (req, res) => {
 });
 
 //Admin archive task
-app.put('/api/admin/tasks/:id/', authenticateToken, requireAdmin, (req, res) => {
+app.put('/api/admin/tasks/:id/archive', authenticateToken, requireAdmin, (req, res) => {
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
     if (!task) {

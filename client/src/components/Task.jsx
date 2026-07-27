@@ -9,7 +9,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!editValue.trim()) return;
-        onEdit(task.id, editValue);
+        editTask(task.id, editValue);
         setIsEditing(false);
     }
 
