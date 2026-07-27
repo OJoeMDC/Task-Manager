@@ -1,14 +1,14 @@
 import { useState} from 'react'
 import './Task.css'
 
-export default function User( { user, archiveUser, restoreUser, deleteUser } ) {
+export default function User( { user, archiveUser, restoreUser, deleteUser, editUser } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(user.name);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!editValue.trim()) return;
-        onEdit(user.id, editValue);
+        editUser(user.id, editValue);
         setIsEditing(false);
     }
 

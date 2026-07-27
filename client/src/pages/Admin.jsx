@@ -3,11 +3,11 @@ import './Admin.css';
 import TaskList from '../components/TaskList';
 import UserList from '../components/UserList';
 import useTasks from '../hooks/useTasks';
+import userHooks from '../hooks/userHooks';
 
 
 export default function Admin({ user, API_URL }) {
     const [activeSection, setActiveSection] = useState('users'); // 'users' or 'tasks'
-    const [viewArchivedUsers, setViewArchivedUsers] = useState(false);
 
     const {
         tasks,
@@ -21,6 +21,23 @@ export default function Admin({ user, API_URL }) {
         restoreTask,
         toggleComplete
     } = useTasks(user);
+
+    const {
+        users,
+        setUsers,
+        getUsers,
+        archiveUser,
+        restoreUser,
+        editUser,
+        deleteUser,
+        viewArchivedUsers,
+        setViewArchivedUsers
+    } = userHooks();
+
+    //Update GET USERS when viewArchived changes
+useEffect(() => {
+    getUsers();
+}, [API_URL, viewArchivedUsers]);
 
 
     if (!user) {
@@ -75,7 +92,13 @@ export default function Admin({ user, API_URL }) {
                     <UserList 
                     API_URL={API_URL} 
                     user={user} 
-                    viewArchivedUsers={viewArchivedUsers} />
+                    viewArchivedUsers={viewArchivedUsers}
+                    archiveUser={archiveUser}
+                    restoreUser={restoreUser}
+                    deleteUser={deleteUser} 
+                    editUser={editUser}
+                    users={users}
+                    setUsers={setUsers}/>
                 </section>
             )}
         </main>

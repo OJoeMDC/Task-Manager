@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { get } from 'http';
 
 
 const app = express();
@@ -254,13 +255,11 @@ app.get('/api/users/all', authenticateToken, requireAdmin, (req, res) => {
 });
 
 
-
-
 //Create User
 app.post('/api/users', async (req, res) => {
     const displayUsername = req.body.username.trim();
     const normalized = displayUsername.trim().toLowerCase();
-    const existingUser = db.prepare('SELECT * FROM users WHERE username_normalized = ? AND archived = 0').get(normalized);
+    const existingUser = db.prepare('SELECT * FROM users WHERE username_normalized = ?').get(normalized);
     if (existingUser) {
         return res.status(400).json({ error: 'Username already exists' });
     }
@@ -273,6 +272,53 @@ app.post('/api/users', async (req, res) => {
         res.status(201).json(newUser);
     } catch {
         res.status(500).send();
+    }
+});
+
+
+//Edit users
+app.put('/api/users/:id/edit', authenticateToken, requireAdmin, (req, res) => {
+    try{
+        const userId = parseInt(req.params.id, 10);
+        const displayUsername = req.body.username?.trim();
+
+        if (!displayUsername) {
+                return res.status(400).json({
+                    error: 'Username is required'
+                });
+            }
+
+            
+            const normalized = displayUsername.toLowerCase();
+
+            const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+            if (!user) {
+                return res.status(404).json({
+                    error: 'User not found'
+                });
+            }
+
+        const existingUser = db.prepare('SELECT * FROM users WHERE username_normalized = ? AND id != ?').get(normalized, userId);
+
+        if (existingUser) {
+            return res.status(400).json({ error: 'Username already exists' });
+        }
+
+            db.prepare('UPDATE users SET username = ?, username_normalized = ? WHERE id =?').run(displayUsername, normalized, userId);
+
+            const updatedUser = db.prepare(`
+            SELECT id, username, username_normalized, role, archived
+            FROM users
+            WHERE id = ?
+        `).get(userId);
+
+            res.status(200).json(updatedUser);
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({
+            error: 'Failed to update users'
+        });
     }
 });
 
