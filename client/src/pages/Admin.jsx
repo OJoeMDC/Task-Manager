@@ -6,7 +6,7 @@ import useTasks from '../hooks/useTasks';
 import userHooks from '../hooks/userHooks';
 
 
-export default function Admin({ user, API_URL }) {
+export default function Admin({ user, API_URL, showMessage }) {
     const [activeSection, setActiveSection] = useState('users'); // 'users' or 'tasks'
 
     const {
@@ -21,7 +21,7 @@ export default function Admin({ user, API_URL }) {
         restoreTask,
         toggleComplete,
         fetchTasks
-    } = useTasks(user);
+    } = useTasks(user, showMessage);
 
     const {
         users,

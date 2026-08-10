@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './Profile.css';
 
-export default function Profile({ setUser, user }) {
+export default function Profile({ setUser, user, API_URL, showMessage }) {
     const logout = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');

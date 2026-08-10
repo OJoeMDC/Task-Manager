@@ -1,7 +1,7 @@
 import './AccountForm.css';
 import { useState } from 'react';
 
-export default function Register({ setUser, user, API_URL }) {
+export default function Register({ setUser, user, API_URL, showMessage }) {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

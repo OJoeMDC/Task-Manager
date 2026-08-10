@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import './Tasks.css';
 import useTasks from '../hooks/useTasks';
 
-export default function Tasks({ API_URL, user }) {
+export default function Tasks({ API_URL, user, showMessage }) {
 
 
   const {
@@ -19,7 +19,7 @@ export default function Tasks({ API_URL, user }) {
   restoreTask,
   toggleComplete,
   fetchTasks
-} = useTasks(user);
+} = useTasks(user, showMessage);
 
 useEffect(() => {
   if (user) {
@@ -52,6 +52,7 @@ if (!user) {
           deleteTask={deleteTask}
           toggleComplete={toggleComplete}
           editTask={editTask}
+          restoreTask={restoreTask}
           user={user}/>
         </div>
       </main>

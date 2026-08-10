@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 
-export default function useTasks(user) {
+export default function useTasks(user, showMessage) {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState('');
     const [viewArchived, setViewArchived] = useState(false);
-
     const API_URL = import.meta.env.VITE_API_URL;
 
 
@@ -67,6 +66,7 @@ export default function useTasks(user) {
 
         const newTask = await res.json();
         setTasks(prev => [...prev, newTask])
+        showMessage('Task created successfully');
 
         await fetchTasks();
         } catch (err) {
@@ -97,6 +97,7 @@ export default function useTasks(user) {
     setTasks(prevTasks => 
         prevTasks.filter(task => task.id !== id)
     );
+    showMessage('Task archived successfully');
 
     await fetchTasks();
     } catch(err) {
@@ -125,8 +126,9 @@ export default function useTasks(user) {
             console.log('Successfully admin archived task with ID:', id)
             const updatedTask = await res.json();
             setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
-
             await fetchTasks();
+            showMessage('Task archived successfully');
+
         } catch (err) {
             console.error(err);
             setError('Failed to archive task');
@@ -156,6 +158,8 @@ export default function useTasks(user) {
             );
 
             await fetchTasks();
+            showMessage('Task restored successfully');
+
         } catch (err) {
             console.error(err);
             setError('Failed to restore task');
@@ -185,6 +189,8 @@ export default function useTasks(user) {
             );
 
             await fetchTasks();
+            showMessage('Task deleted successfully');
+
         } catch (err) {
             console.error(err);
             setError('Failed to delete task');
@@ -216,6 +222,8 @@ export default function useTasks(user) {
     setTasks(prev => prev.map(task => task.id === id ? updatedTask : task))
 
     await fetchTasks();
+    showMessage('Task status changed');
+
         } catch (err) {
             console.error(err);
             setError('Failed to toggle task status');
@@ -235,6 +243,7 @@ export default function useTasks(user) {
     if (res.ok) {
         const updated = await res.json();
         setTasks(prev => prev.map(t => t.id === id ? updated : t));
+        showMessage('Task updated successfully');
     }
     };
 

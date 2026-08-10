@@ -5,6 +5,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
     const isAdmin = user && user.role === 'admin';
+    const isArchiving = task.archived === 1;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -88,10 +89,11 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                         Edit
                                 </button>
 
-                                <button 
+                                <button
+                                    disabled={isArchiving}
                                     className='delete' 
                                     onClick={() => archiveTask(task.id)}>
-                                        ARCHIVE
+                                        {isArchiving ? 'Archiving...' : 'Archive'}
                                 </button>
                             </>
                             
