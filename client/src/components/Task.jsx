@@ -66,7 +66,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 <button
                                 className='delete'
                                 onClick={() => deleteTask(task.id)}>
-                                    X
+                                    DELETE
                                 </button>
                             </>
                             
@@ -79,7 +79,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     type="checkbox" 
                                     className='complete' 
                                     onClick={() => toggleComplete(task.id)}>
-                                        ✓
+                                        Complete
                                 </button>
 
                                 <button 

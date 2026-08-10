@@ -19,7 +19,8 @@ export default function Admin({ user, API_URL }) {
         adminArchiveTask,
         deleteTask,
         restoreTask,
-        toggleComplete
+        toggleComplete,
+        fetchTasks
     } = useTasks(user);
 
     const {
@@ -38,6 +39,12 @@ export default function Admin({ user, API_URL }) {
 useEffect(() => {
     getUsers();
 }, [API_URL, viewArchivedUsers]);
+
+useEffect(() => {
+    if (user) {
+        fetchTasks();
+    }
+}, [user, viewArchived]);
 
 
     if (!user) {

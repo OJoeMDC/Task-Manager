@@ -21,6 +21,12 @@ export default function Tasks({ API_URL, user }) {
   fetchTasks
 } = useTasks(user);
 
+useEffect(() => {
+  if (user) {
+    fetchTasks();
+  }
+}, [user, viewArchived]);
+
 if (!user) {
   return (
     <main>
