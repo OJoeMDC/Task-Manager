@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function userHooks() {
+export default function userHooks(showMessage) {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
     const [viewArchivedUsers, setViewArchivedUsers] = useState(false);
@@ -55,6 +55,7 @@ const editUser = async (id, newUsername) => {
         }
 
         const updatedUser = await res.json();
+        showMessage(`Successfully edited user ${id}`);
 
         console.log(`Successfull edited user ${id}`);
          setUsers(prev =>
@@ -92,6 +93,8 @@ const editUser = async (id, newUsername) => {
             prevUsers.filter(user => user.id !== id)
         );
          await getUsers();
+         showMessage(`User with ID ${id} archived successfully`);
+
         }
         catch(err) {
             console.error(err);
@@ -121,6 +124,8 @@ const editUser = async (id, newUsername) => {
             );
 
             await getUsers();
+            showMessage(`User with ID ${id} restored successfully`);
+
         } catch (err) {
             console.error(err);
             setError('Failed to restore user');
@@ -150,6 +155,8 @@ const editUser = async (id, newUsername) => {
             );
 
             await getUsers();
+            showMessage(`User with ID ${id} deleted successfully`);
+
         } catch (err) {
             console.error(err);
             setError('Failed to delete user');

@@ -33,7 +33,7 @@ export default function Admin({ user, API_URL, showMessage }) {
         deleteUser,
         viewArchivedUsers,
         setViewArchivedUsers
-    } = userHooks();
+    } = userHooks(showMessage);
 
     //Update GET USERS when viewArchived changes
 useEffect(() => {
