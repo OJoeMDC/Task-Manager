@@ -5,12 +5,20 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
     const isAdmin = user && user.role === 'admin';
-    const isArchiving = task.archived === 1;
+    const [isLoading, setIsLoading] = useState(null);
+    const handleAction = async (actionName, action) => {
+        setIsLoading(actionName);
+        try{
+            await action();
+        } finally {
+            setIsLoading(null);
+        }
+    };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!editValue.trim()) return;
-        editTask(task.id, editValue);
+        await handleAction('save', () => editTask(task.id, editValue));
         setIsEditing(false);
     }
 
@@ -34,13 +42,15 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                             />
 
                             <div className="buttons">
-                                <button 
+                                <button
+                                disabled={isLoading !== null}
                                 className='save'
                                 type='submit'>
-                                    Save
+                                    {isLoading === 'save' ? 'Saving...' : 'Save'}
                                 </button>
 
                                 <button 
+                                disabled={isLoading !== null}
                                 className='cancel' 
                                 onClick={handleCancel}>
                                     Cancel
@@ -60,14 +70,20 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                         {task.archived === 1 && (
                             <>
                                 <button 
+                                disabled={isLoading !== null}
                                 className='restore'
-                                onClick={() => restoreTask(task.id)}>
-                                    Restore
+                                onClick={() =>
+                                    handleAction('restore', () => restoreTask(task.id))
+                                }>
+                                    {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
                                 </button>
                                 <button
+                                disabled={isLoading !== null}
                                 className='delete'
-                                onClick={() => deleteTask(task.id)}>
-                                    DELETE
+                                onClick={() =>
+                                    handleAction('delete', () => deleteTask(task.id))
+                                }>
+                                    {isLoading === 'delete' ? 'Deleting...' : 'Delete'}
                                 </button>
                             </>
                             
@@ -76,24 +92,31 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                         {/* Unarchived task buttons */}
                         {task.archived === 0 && (
                             <>
-                                <button 
+                                <button
+                                    disabled={isLoading !== null} 
                                     type="checkbox" 
                                     className='complete' 
-                                    onClick={() => toggleComplete(task.id)}>
-                                        Complete
+                                    onClick={() => {
+                                        handleAction('complete', () => toggleComplete(task.id));
+                                    }}>
+                                        {isLoading === 'complete' ? 'Toggling...' : 'Complete'}
                                 </button>
 
-                                <button 
+                                <button
+                                    disabled={isLoading !== null}
+                                    type="button" 
                                     className='edit'
-                                    onClick={(() => setIsEditing(true))}>
+                                    onClick={() => setIsEditing(true)}>
                                         Edit
                                 </button>
 
                                 <button
-                                    disabled={isArchiving}
+                                    disabled={isLoading !== null}
                                     className='delete' 
-                                    onClick={() => archiveTask(task.id)}>
-                                        {isArchiving ? 'Archiving...' : 'Archive'}
+                                    onClick={() => {
+                                        handleAction('archive', () => archiveTask(task.id));
+                                    }}>
+                                        {isLoading === 'archive' ? 'Archiving...' : 'Archive'}
                                 </button>
                             </>
                             
