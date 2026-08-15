@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function useTasks(user, showMessage) {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState('');
     const [viewArchived, setViewArchived] = useState(false);
     const API_URL = import.meta.env.VITE_API_URL;
+    const location = useLocation();
+    const isAdminPage = location.pathname === '/admin'; 
 
 
     // Fetch user tasks
@@ -12,7 +15,7 @@ export default function useTasks(user, showMessage) {
         try {
             let endpoint;
 
-                if (user.role === 'admin') {
+                if (user.role === 'admin' && isAdminPage) {
                     endpoint = viewArchived
                         ? `${API_URL}/api/tasks/all/all`
                         : `${API_URL}/api/tasks/all`;
