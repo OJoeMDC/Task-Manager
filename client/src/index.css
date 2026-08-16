@@ -92,6 +92,10 @@ body,
     width: fit-content;
 }
 
+button.secondary {
+    scale: 0.8;
+}
+
 button.toggled {
     background-color: var(--warning);
 }

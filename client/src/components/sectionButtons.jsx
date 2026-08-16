@@ -6,54 +6,59 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
 
     return (
         <section className='sectionButtons'>
+            {/* Main Buttons */}
+            <section className='mainButtons'>
+                {/* Show Manage Users button only if the user is an admin and is on the admin page */}
+                {user.role === 'admin' && isAdminPage && (
+                    <button 
+                    className={`button ${activeSection === 'users' ? 'active' : ''}`}
+                    onClick={() => {
+                        setActiveSection('users');
+                        localStorage.setItem('activeSection', 'users'); // Store the active section in localStorage
+                    }}>
+                        Manage Users
+                    </button>
+                )}
 
 
-            {/* View Archived button for tasks */}
-            <button className={`button ${viewArchived ? 'toggled' : ''}`} onClick={() => {
-                setViewArchived(!viewArchived); // Toggle between active and archived
-                setViewCompleted(false); // Reset viewCompleted when toggling archived
-                {user.role == 'admin' && isAdminPage && setViewArchivedUsers(!viewArchivedUsers);} //toggle between archived and unarchived users
-            }}>
-                View Archived
-            </button>
+                {/* Show Manage Tasks button only if the user is an admin and is on the admin page */}
+                {user.role === 'admin' && isAdminPage && (
+                    <button 
+                    className={`button ${activeSection === 'tasks' ? 'active' : ''}`}
+                    onClick={() => {
+                        setActiveSection('tasks');
+                        localStorage.setItem('activeSection', 'tasks'); // Store the active section in localStorage
+                    }}>
+                        Manage Tasks
+                    </button>
+                )}
+            </section>
 
 
-            
-
-            {/* Show Manage Users button only if the user is an admin and is on the admin page */}
-            {user.role === 'admin' && isAdminPage && (
-                <button 
-                className={`button ${activeSection === 'users' ? 'active' : ''}`}
-                onClick={() => {
-                    setActiveSection('users');
-                    localStorage.setItem('activeSection', 'users'); // Store the active section in localStorage
+            {/* Secondary Buttons */}
+            <section className='secondaryButtons'>
+                
+                {/* View Archived button for tasks */}
+                <button className={`button ${viewArchived ? 'toggled' : ''} secondary`} onClick={() => {
+                    setViewArchived(!viewArchived); // Toggle between active and archived
+                    setViewCompleted(false); // Reset viewCompleted when toggling archived
+                    {user.role == 'admin' && isAdminPage && setViewArchivedUsers(!viewArchivedUsers);} //toggle between archived and unarchived users
                 }}>
-                    Manage Users
+                    View Archived
                 </button>
-            )}
+                {/* Show Completed Tasks */}
 
-
-            {/* Show Manage Tasks button only if the user is an admin and is on the admin page */}
-            {user.role === 'admin' && isAdminPage && (
-                <button 
-                className={`button ${activeSection === 'tasks' ? 'active' : ''}`}
-                onClick={() => {
-                    setActiveSection('tasks');
-                    localStorage.setItem('activeSection', 'tasks'); // Store the active section in localStorage
+                
+                {activeSection === 'tasks' && (
+                    <button className={`button ${viewCompleted ? 'toggled' : ''} secondary`} onClick={() => {
+                    setViewCompleted(!viewCompleted); // Toggle between active and completed
+                    setViewArchived(false); // Reset viewArchived when toggling completed
                 }}>
-                    Manage Tasks
+                    Show Completed Tasks
                 </button>
-            )}
+                )}
 
-            {/* Show Completed Tasks */}
-            {activeSection === 'tasks' && (
-                <button className={`button ${viewCompleted ? 'toggled' : ''}`} onClick={() => {
-                setViewCompleted(!viewCompleted); // Toggle between active and completed
-                setViewArchived(false); // Reset viewArchived when toggling completed
-            }}>
-                Show Completed Tasks
-            </button>
-            )}
+            </section>
             
         </section>
     );
