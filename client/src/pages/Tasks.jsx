@@ -14,6 +14,8 @@ export default function Tasks({ API_URL, user, showMessage }) {
   editTask,
   viewArchived,
   setViewArchived,
+  viewCompleted,
+  setViewCompleted,
   deleteTask,
   addTask,
   archiveTask,
@@ -26,7 +28,7 @@ useEffect(() => {
   if (user) {
     fetchTasks();
   }
-}, [user, viewArchived]);
+}, [user, viewArchived, viewCompleted]);
 
 if (!user) {
   return (
@@ -47,6 +49,8 @@ if (!user) {
           <SectionButtons
             viewArchived={viewArchived}
             setViewArchived={setViewArchived}
+            viewCompleted={viewCompleted}
+            setViewCompleted={setViewCompleted}
             user={user}
           />
 

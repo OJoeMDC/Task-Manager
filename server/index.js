@@ -87,6 +87,7 @@ try {
         ON tasks.user_id = users.id 
         WHERE tasks.user_id = ?
         AND tasks.archived = 0
+        AND tasks.completed = 0
         `).all(userId);
     res.json(tasks);
 });
@@ -119,9 +120,66 @@ app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
         INNER JOIN users
         ON tasks.user_id = users.id
         WHERE tasks.archived = 0
+        AND tasks.completed = 0
         `).all();
         res.json(tasks);
 })
+
+//Get user archived tasks
+app.get('/api/tasks/user/archived', authenticateToken, (req, res) => {
+    const userId = req.user.id;
+
+    const tasks = db.prepare(`
+        SELECT tasks.*, users.username
+        FROM tasks
+        INNER JOIN users
+        ON tasks.user_id = users.id
+        WHERE tasks.user_id = ?
+        AND tasks.archived = 1
+        `).all(userId);
+    res.json(tasks);
+});
+
+//Get all archived tasks
+app.get('/api/tasks/all/archived', authenticateToken, requireAdmin, (req, res) => {
+    const tasks = db.prepare(`
+        SELECT tasks.*, users.username
+        FROM tasks
+        INNER JOIN users
+        ON tasks.user_id = users.id
+        WHERE tasks.archived = 1
+        `).all();
+        res.json(tasks);
+})
+
+//Get completed tasks
+app.get('/api/tasks/completed', authenticateToken, (req, res) => {
+    const userId = req.user.id;
+
+    const tasks = db.prepare(`
+        SELECT tasks.*, users.username 
+        FROM tasks 
+        INNER JOIN users 
+        ON tasks.user_id = users.id
+        WHERE tasks.user_id = ?
+        AND tasks.completed = 1
+        AND tasks.archived = 0
+        `).all(userId);
+    res.json(tasks);
+});
+
+//Get all completed tasks
+app.get('/api/tasks/all/completed', authenticateToken, requireAdmin, (req, res) => {
+    const tasks = db.prepare(`
+        SELECT tasks.*, users.username 
+        FROM tasks 
+        INNER JOIN users 
+        ON tasks.user_id = users.id
+        WHERE tasks.completed = 1
+        AND tasks.archived = 0
+        `).all();
+    res.json(tasks);
+});
 
 //POST new task
 app.post('/api/tasks', authenticateToken, (req, res) => {
@@ -206,7 +264,7 @@ app.put('/api/admin/tasks/:id/archive', authenticateToken, requireAdmin, (req, r
     res.status(200).json(updatedTask);
 });
 
-//restore task
+//Restore task
 app.put('/api/tasks/:id/restore', authenticateToken, requireAdmin, (req, res) => {
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
@@ -251,6 +309,12 @@ app.get('/api/users', authenticateToken, requireAdmin, (req, res) => {
 //Get ALL users
 app.get('/api/users/all', authenticateToken, requireAdmin, (req, res) => {
     const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users').all();
+    res.json(users);
+});
+
+//Get archived users
+app.get('/api/users/archived', authenticateToken, requireAdmin, (req, res) => {
+    const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users WHERE archived = 1').all();
     res.json(users);
 });
 

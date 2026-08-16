@@ -11,7 +11,7 @@ export default function userHooks(showMessage) {
         try {
             const endpoint = !viewArchivedUsers
                 ? `${API_URL}/api/users`
-                : `${API_URL}/api/users/all`;
+                : `${API_URL}/api/users/archived`;
 
             const res = await fetch(endpoint, {
                 method: 'GET',

@@ -5,6 +5,7 @@ export default function useTasks(user, showMessage) {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState('');
     const [viewArchived, setViewArchived] = useState(false);
+    const [viewCompleted, setViewCompleted] = useState(false);
     const API_URL = import.meta.env.VITE_API_URL;
     const location = useLocation();
     const isAdminPage = location.pathname === '/admin'; 
@@ -17,12 +18,16 @@ export default function useTasks(user, showMessage) {
 
                 if (user.role === 'admin' && isAdminPage) {
                     endpoint = viewArchived
-                        ? `${API_URL}/api/tasks/all/all`
+                        ? `${API_URL}/api/tasks/all/archived`
                         : `${API_URL}/api/tasks/all`;
                 } else {
                     endpoint = viewArchived
-                        ? `${API_URL}/api/tasks/user/all`
+                        ? `${API_URL}/api/tasks/user/archived`
                         : `${API_URL}/api/tasks`;
+                }
+
+                if (viewCompleted) {
+                    endpoint = `${API_URL}/api/tasks/completed`;
                 }
 
             const res = await fetch(endpoint, {
@@ -222,7 +227,7 @@ export default function useTasks(user, showMessage) {
 
     const updatedTask = await res.json();
     console.log(`Toggle task ${id}'s status successfully`);
-    setTasks(prev => prev.map(task => task.id === id ? updatedTask : task))
+    setTasks(prev => prev.filter(task => task.id !== id));
 
     await fetchTasks();
     showMessage('Task status changed');
@@ -250,11 +255,13 @@ export default function useTasks(user, showMessage) {
     }
     };
 
+
+    //Update hook when user, viewArchived, or viewCompleted changes
       useEffect(() => {
         if (user) {
             fetchTasks();
         }
-    }, [API_URL, user]);
+    }, [API_URL, user, viewCompleted]);
 
     return {
         tasks,
@@ -266,6 +273,8 @@ export default function useTasks(user, showMessage) {
         adminArchiveTask,
         viewArchived,
         setViewArchived,
+        viewCompleted,
+        setViewCompleted,
         deleteTask,
         restoreTask,
         toggleComplete,

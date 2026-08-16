@@ -18,6 +18,8 @@ export default function Admin({ user, API_URL, showMessage }) {
         setTasks,
         viewArchived,
         setViewArchived,
+        viewCompleted,
+        setViewCompleted,
         archiveTask,
         adminArchiveTask,
         deleteTask,
@@ -41,7 +43,7 @@ export default function Admin({ user, API_URL, showMessage }) {
     //Update GET USERS when viewArchived changes
 useEffect(() => {
     getUsers();
-}, [API_URL, viewArchivedUsers]);
+}, [API_URL, viewArchivedUsers, viewArchived, viewCompleted]);
 
 useEffect(() => {
     if (user) {
@@ -73,6 +75,8 @@ useEffect(() => {
                 setViewArchived={setViewArchived}
                 viewArchivedUsers={viewArchivedUsers}
                 setViewArchivedUsers={setViewArchivedUsers}
+                viewCompleted={viewCompleted}
+                setViewCompleted={setViewCompleted}
                 user={user}
             />
 

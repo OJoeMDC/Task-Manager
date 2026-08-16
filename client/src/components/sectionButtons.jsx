@@ -1,12 +1,24 @@
 import React from 'react';
 import './sectionButtons.css';
 
-export default function SectionButtons({ activeSection, setActiveSection, viewArchived, setViewArchived, viewArchivedUsers, setViewArchivedUsers, user }) {
+export default function SectionButtons({ activeSection, setActiveSection, viewArchived, setViewArchived, viewCompleted, setViewCompleted, viewArchivedUsers, setViewArchivedUsers, user }) {
     const isAdminPage = location.pathname === '/admin'; 
 
     return (
         <section className='sectionButtons'>
 
+
+            {/* View Archived button for tasks */}
+            <button className={`button ${viewArchived ? 'toggled' : ''}`} onClick={() => {
+                setViewArchived(!viewArchived); // Toggle between active and archived
+                setViewCompleted(false); // Reset viewCompleted when toggling archived
+                {user.role == 'admin' && isAdminPage && setViewArchivedUsers(!viewArchivedUsers);} //toggle between archived and unarchived users
+            }}>
+                View Archived
+            </button>
+
+
+            
 
             {/* Show Manage Users button only if the user is an admin and is on the admin page */}
             {user.role === 'admin' && isAdminPage && (
@@ -33,14 +45,16 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
                 </button>
             )}
 
-
-            {/* View Archived button for tasks */}
-            <button className={`button ${viewArchived ? 'toggled' : ''}`} onClick={() => {
-                setViewArchived(!viewArchived); // Toggle between active and archived
-                {user.role == 'admin' && isAdminPage && setViewArchivedUsers(!viewArchivedUsers);} //toggle between archived and unarchived users
+            {/* Show Completed Tasks */}
+            {activeSection === 'tasks' && (
+                <button className={`button ${viewCompleted ? 'toggled' : ''}`} onClick={() => {
+                setViewCompleted(!viewCompleted); // Toggle between active and completed
+                setViewArchived(false); // Reset viewArchived when toggling completed
             }}>
-                View Archived
+                Show Completed Tasks
             </button>
+            )}
+            
         </section>
     );
 }
