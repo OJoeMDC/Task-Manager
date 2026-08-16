@@ -6,6 +6,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     const [editValue, setEditValue] = useState(task.title);
     const isAdmin = user && user.role === 'admin';
     const [isLoading, setIsLoading] = useState(null);
+    const isAdminPage = location.pathname === '/admin'; 
     const handleAction = async (actionName, action) => {
         setIsLoading(actionName);
         try{
@@ -63,8 +64,8 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
 
     return (
         <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''} ${task.archived === 1 ? 'archived' : ''}`}>
-                   <span>{task.title}</span>
-                   {isAdmin && <span>{task.username}</span>}
+                   <span>Task Name: {task.title}</span>
+                   {isAdminPage && <span>User: {task.username}</span>}
                     <div className="buttons">
                         {/* Archived task button */}
                         {task.archived === 1 && (

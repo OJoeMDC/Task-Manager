@@ -149,3 +149,13 @@ a.button {
     color: var(--warning);
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+    .page {
+        padding: 40px 0px 0px 0px;
+    }
+
+    .button {
+        padding: 8px;
+    }
+}

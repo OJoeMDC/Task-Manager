@@ -67,10 +67,15 @@
 @media (max-width: 768px) {
     .list-item {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
     }
 
     .buttons {
         margin-top: 8px;
+    }
+
+    .delete, .edit, .complete, .save, .cancel, .restore {
+        padding: 6px;
+        font-size: 12px;
     }
 }
