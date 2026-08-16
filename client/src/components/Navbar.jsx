@@ -14,8 +14,12 @@ function Navbar({ user, setUser }) {
             <div className='links'>
                 {user ? (
                     <>
+                        {user.role === 'admin' && (
+                            <Link className='link' to='/admin'>Admin</Link>
+                        )}
                         <Link className='link' to='/tasks'>Tasks</Link>
                         <Link className='link' to='/profile'>Profile</Link>
+                        <button className='link' onClick={logout}>Logout</button>
                     </>
                 ) : (
                     <>

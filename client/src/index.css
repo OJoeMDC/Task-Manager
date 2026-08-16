@@ -121,10 +121,27 @@ a.button {
 }
 
 .link {
+    border: none;
     text-decoration: none;
+    background-color: transparent;
+
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+    padding: 0px;
+    margin: 0px;
+
+    text-transform: uppercase;
+
     color: var(--text);
+    font: inherit;
+
+    width: fit-content;
+    height: fit-content;
 }
 
 .link:hover {
     color: var(--warning);
+    cursor: pointer;
 }

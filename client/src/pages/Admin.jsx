@@ -7,7 +7,9 @@ import userHooks from '../hooks/userHooks';
 
 
 export default function Admin({ user, API_URL, showMessage }) {
-    const [activeSection, setActiveSection] = useState('users'); // 'users' or 'tasks'
+    const [activeSection, setActiveSection] = useState(
+        localStorage.getItem('activeSection') || 'users'
+    ); // 'users' or 'tasks'
 
     const {
         tasks,
@@ -64,12 +66,20 @@ useEffect(() => {
             <p>Your role is: {user?.role}</p>
 
             <section className='adminButtons'>
-                <button className='button' onClick={() => setActiveSection('users')}>
+                <button 
+                className={`button ${activeSection === 'users' ? 'active' : ''}`}
+                onClick={() => {
+                    setActiveSection('users');
+                    localStorage.setItem('activeSection', 'users'); // Store the active section in localStorage
+                }}>
                     Manage Users
                 </button>
-                <button className='button' onClick={() => {
+                <button 
+                className={`button ${activeSection === 'tasks' ? 'active' : ''}`}
+                onClick={() => {
                     setActiveSection('tasks');
-                    }}>
+                    localStorage.setItem('activeSection', 'tasks'); // Store the active section in localStorage
+                }}>
                     Manage Tasks
                 </button>
                 <button className={`button ${viewArchived ? 'toggled' : ''}`} onClick={() => {
