@@ -204,7 +204,7 @@ app.post('/api/tasks', authenticateToken, (req, res) => {
     }
 });
 
-//PUT update task status
+//PUT update task
 app.put('/api/tasks/:id', authenticateToken, (req, res) => {
     const { title, completed, toggle } = req.body;
     const taskId = parseInt(req.params.id);
@@ -220,6 +220,28 @@ app.put('/api/tasks/:id', authenticateToken, (req, res) => {
             : task.completed,
             taskId,
             req.user.id
+        );
+    }
+
+    const updatedTask = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE tasks.id = ?').get(taskId);
+    res.status(200).json(updatedTask);
+});
+
+//PUT update task for another user as admin
+app.put('/api/admin/tasks/:id', authenticateToken, requireAdmin, (req, res) => {
+    const { title, completed, toggle } = req.body;
+    const taskId = parseInt(req.params.id);
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+    if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
+
+    if (toggle) {
+        db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ?').run(taskId);
+    } else {
+        db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ?').run(
+            title ?? task.title,
+            completed !== undefined ? (completed ? 1 : 0)
+            : task.completed,
+            taskId
         );
     }
 

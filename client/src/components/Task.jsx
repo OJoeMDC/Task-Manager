@@ -1,12 +1,18 @@
 import { useState} from 'react'
+import { useLocation } from 'react-router-dom';
 import './Task.css'
 
-export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask } ) {
+
+export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
     const isAdmin = user && user.role === 'admin';
     const [isLoading, setIsLoading] = useState(null);
-    const isAdminPage = location.pathname === '/admin'; 
+    const location = useLocation();
+    const isAdminPage = location.pathname === '/admin';
+    console.log(isAdminPage);
+    console.log("pathname:", location.pathname);
+
     const handleAction = async (actionName, action) => {
         setIsLoading(actionName);
         try{
@@ -19,7 +25,9 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!editValue.trim()) return;
-        await handleAction('save', () => editTask(task.id, editValue));
+        await handleAction('save', () => isAdminPage
+            ? adminEditTask(task.id, editValue)
+            : editTask(task.id, editValue));
         setIsEditing(false);
     }
 
@@ -98,7 +106,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     type="checkbox" 
                                     className='complete' 
                                     onClick={() => {
-                                        handleAction('complete', () => toggleComplete(task.id));
+                                        handleAction('complete', () => ( isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
                                     }}>
                                         {isLoading === 'complete' ? 'Toggling...' : 'Complete'}
                                 </button>
@@ -107,7 +115,9 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     disabled={isLoading !== null}
                                     type="button" 
                                     className='edit'
-                                    onClick={() => setIsEditing(true)}>
+                                    onClick={() => {
+                                        console.log("Edit clicked for task ID:", task.id);
+                                        setIsEditing(true)}}>
                                         Edit
                                 </button>
 
@@ -115,7 +125,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     disabled={isLoading !== null}
                                     className='delete' 
                                     onClick={() => {
-                                        handleAction('archive', () => archiveTask(task.id));
+                                        handleAction('archive', () => ( isAdminPage ? adminArchiveTask(task.id) : archiveTask(task.id) ));
                                     }}>
                                         {isLoading === 'archive' ? 'Archiving...' : 'Archive'}
                                 </button>

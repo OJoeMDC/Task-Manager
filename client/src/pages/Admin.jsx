@@ -5,9 +5,12 @@ import UserList from '../components/UserList';
 import useTasks from '../hooks/useTasks';
 import userHooks from '../hooks/userHooks';
 import SectionButtons from '../components/sectionButtons';
+import { useLocation } from 'react-router-dom';
 
 
 export default function Admin({ user, API_URL, showMessage }) {
+    const location = useLocation();
+    const isAdminPage = location.pathname === '/admin';
     const [activeSection, setActiveSection] = useState(
         localStorage.getItem('activeSection') || 'users'
     ); // 'users' or 'tasks'
@@ -25,6 +28,8 @@ export default function Admin({ user, API_URL, showMessage }) {
         deleteTask,
         restoreTask,
         toggleComplete,
+        adminToggleComplete,
+        adminEditTask,
         fetchTasks
     } = useTasks(user, showMessage);
 
@@ -87,6 +92,8 @@ useEffect(() => {
                     tasks={tasks}
                     archiveTask={adminArchiveTask}
                     toggleComplete={toggleComplete}
+                    adminToggleComplete={adminToggleComplete}
+                    adminEditTask={adminEditTask}
                     editTask={editTask}
                     restoreTask={restoreTask}
                     deleteTask={deleteTask}

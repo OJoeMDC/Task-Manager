@@ -2,7 +2,7 @@ import './TaskList.css'
 import Task from "./Task"
 import useTasks from '../hooks/useTasks';
 
-function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreTask, deleteTask }) {
+function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask }) {
     
 
     return(
@@ -16,7 +16,10 @@ function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreT
                 <Task
                 key={task.id}
                 task={task}
-                archiveTask={archiveTask} 
+                archiveTask={archiveTask}
+                adminArchiveTask={adminArchiveTask}
+                adminToggleComplete={adminToggleComplete}
+                adminEditTask={adminEditTask}
                 deleteTask={deleteTask}
                 toggleComplete={toggleComplete}
                 editTask={editTask}

@@ -22,7 +22,7 @@ export default function useTasks(user, showMessage) {
                         : `${API_URL}/api/tasks/all`;
                 } else {
                     endpoint = viewArchived
-                        ? `${API_URL}/api/tasks/user/archived`
+                        ? `${API_URL}/api/tasks/user/all`
                         : `${API_URL}/api/tasks`;
                 }
 
@@ -209,15 +209,16 @@ export default function useTasks(user, showMessage) {
 
     //Complete Task
     const toggleComplete = async (id) => {
+        console.log("toggleComplete called for task ID:", id);
         try {
-        const res = await fetch(`${API_URL}/api/tasks/${id}`, {
-        method: 'PUT',
-        headers: { 
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+            const res = await fetch(`${API_URL}/api/tasks/${id}`, {
+            method: 'PUT',
+            headers: { 
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ toggle: true }),
-    });
+        });
 
     if (!res.ok) {
         const data = await res.json();
@@ -238,6 +239,38 @@ export default function useTasks(user, showMessage) {
         }
     }
 
+    //admin toggle complete task
+    const adminToggleComplete = async (id) => {
+        console.log("adminToggleComplete called for task ID:", id);
+        try {
+            const res = await fetch(`${API_URL}/api/admin/tasks/${id}`, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ toggle: true }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                setError(data.error || 'Failed to toggle task status');
+                return;
+            }
+
+            const updatedTask = await res.json();
+            console.log(`Admin toggled task ${id}'s status successfully`);
+            setTasks(prev => prev.filter(task => task.id !== id));
+
+            await fetchTasks();
+            showMessage('Task status changed');
+
+        } catch (err) {
+            console.error(err);
+            setError('Failed to toggle task status');
+        }
+    };
+
     //Edit Task
     const editTask = async (id, newTitle) => {
     const res = await fetch(`${API_URL}/api/tasks/${id}`, {
@@ -253,6 +286,23 @@ export default function useTasks(user, showMessage) {
         setTasks(prev => prev.map(t => t.id === id ? updated : t));
         showMessage('Task updated successfully');
     }
+    };
+
+    //admin edit task
+    const adminEditTask = async (id, newTitle) => {
+        const res = await fetch(`${API_URL}/api/admin/tasks/${id}`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ title: newTitle })
+        });
+        if (res.ok) {
+            const updated = await res.json();
+            setTasks(prev => prev.map(t => t.id === id ? updated : t));
+            showMessage('Task updated successfully');
+        }
     };
 
 
@@ -271,6 +321,8 @@ export default function useTasks(user, showMessage) {
         editTask,
         archiveTask,
         adminArchiveTask,
+        adminEditTask,
+        adminToggleComplete,
         viewArchived,
         setViewArchived,
         viewCompleted,
