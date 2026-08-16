@@ -49,7 +49,7 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
                 {/* Show Completed Tasks */}
 
                 
-                {activeSection === 'tasks' && (
+                {(!isAdminPage || activeSection === 'tasks') && (
                     <button className={`button ${viewCompleted ? 'toggled' : ''} secondary`} onClick={() => {
                     setViewCompleted(!viewCompleted); // Toggle between active and completed
                     setViewArchived(false); // Reset viewArchived when toggling completed
