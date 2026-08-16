@@ -4,6 +4,7 @@ import TaskList from '../components/TaskList';
 import UserList from '../components/UserList';
 import useTasks from '../hooks/useTasks';
 import userHooks from '../hooks/userHooks';
+import SectionButtons from '../components/sectionButtons';
 
 
 export default function Admin({ user, API_URL, showMessage }) {
@@ -65,30 +66,15 @@ useEffect(() => {
             <p>Welcome, {user?.username}</p>
             <p>Your role is: {user?.role}</p>
 
-            <section className='adminButtons'>
-                <button 
-                className={`button ${activeSection === 'users' ? 'active' : ''}`}
-                onClick={() => {
-                    setActiveSection('users');
-                    localStorage.setItem('activeSection', 'users'); // Store the active section in localStorage
-                }}>
-                    Manage Users
-                </button>
-                <button 
-                className={`button ${activeSection === 'tasks' ? 'active' : ''}`}
-                onClick={() => {
-                    setActiveSection('tasks');
-                    localStorage.setItem('activeSection', 'tasks'); // Store the active section in localStorage
-                }}>
-                    Manage Tasks
-                </button>
-                <button className={`button ${viewArchived ? 'toggled' : ''}`} onClick={() => {
-                    setViewArchived(!viewArchived); // Toggle between active and archived
-                    setViewArchivedUsers(!viewArchivedUsers); //toggle between archived and unarchived users
-                }}>
-                    View Archived
-                </button>
-            </section>
+            <SectionButtons
+                activeSection={activeSection}
+                setActiveSection={setActiveSection}
+                viewArchived={viewArchived}
+                setViewArchived={setViewArchived}
+                viewArchivedUsers={viewArchivedUsers}
+                setViewArchivedUsers={setViewArchivedUsers}
+                user={user}
+            />
 
             {activeSection === 'tasks' && (
                 <section className='adminSection'>

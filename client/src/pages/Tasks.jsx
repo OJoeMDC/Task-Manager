@@ -3,6 +3,7 @@ import TaskInput from '../components/TaskInput';
 import { useState, useEffect } from 'react';
 import './Tasks.css';
 import useTasks from '../hooks/useTasks';
+import SectionButtons from '../components/sectionButtons';
 
 export default function Tasks({ API_URL, user, showMessage }) {
 
@@ -41,11 +42,14 @@ if (!user) {
         <h1>{user.username}'s Tasks</h1>
         <div className='tasks'>
           <TaskInput onAdd={addTask}/>
-          <button className={`button ${viewArchived ? 'toggled' : ''}`} onClick={() => {
-                    setViewArchived(!viewArchived); // Toggle between active and archived 
-                }}>
-                    View Archived
-                </button>
+
+
+          <SectionButtons
+            viewArchived={viewArchived}
+            setViewArchived={setViewArchived}
+            user={user}
+          />
+
           <TaskList 
           tasks={tasks} 
           archiveTask={archiveTask}
