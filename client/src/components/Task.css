@@ -62,3 +62,15 @@
 .restore {
     background-color: var(--success);
 }
+
+
+@media (max-width: 768px) {
+    .list-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .buttons {
+        margin-top: 8px;
+    }
+}

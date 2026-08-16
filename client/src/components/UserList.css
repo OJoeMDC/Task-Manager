@@ -19,3 +19,14 @@ header {
     list-style: none;
     margin: 12px;
 }
+
+@media (max-width: 768px) {
+    .userlist {
+        width: 80vw;
+    }
+
+    .list {
+        margin: 8px;
+        
+    }
+}
