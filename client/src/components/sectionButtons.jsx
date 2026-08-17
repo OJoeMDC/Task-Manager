@@ -54,7 +54,7 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
                     setViewCompleted(!viewCompleted); // Toggle between active and completed
                     setViewArchived(false); // Reset viewArchived when toggling completed
                 }}>
-                    Show Completed Tasks
+                    View Completed
                 </button>
                 )}
 

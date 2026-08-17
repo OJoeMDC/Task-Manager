@@ -10,8 +10,6 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     const [isLoading, setIsLoading] = useState(null);
     const location = useLocation();
     const isAdminPage = location.pathname === '/admin';
-    console.log(isAdminPage);
-    console.log("pathname:", location.pathname);
 
     const handleAction = async (actionName, action) => {
         setIsLoading(actionName);

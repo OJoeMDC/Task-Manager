@@ -17,18 +17,17 @@ export default function useTasks(user, showMessage) {
             let endpoint;
 
                 if (user.role === 'admin' && isAdminPage) {
-                    endpoint = viewArchived
-                        ? `${API_URL}/api/tasks/all/archived`
-                        : `${API_URL}/api/tasks/all`;
-                } else {
-                    endpoint = viewArchived
-                        ? `${API_URL}/api/tasks/user/all`
-                        : `${API_URL}/api/tasks`;
+                    if (viewArchived) {
+                        endpoint = `${API_URL}/api/tasks/all/archived`;
+                    }
+                    else if (viewCompleted) {
+                        endpoint = `${API_URL}/api/tasks/all/completed`;
+                    }
+                    else {
+                        endpoint = `${API_URL}/api/tasks/all`;
+                    }
                 }
-
-                if (viewCompleted) {
-                    endpoint = `${API_URL}/api/tasks/completed`;
-                }
+            console.log('fetching endpoint:', endpoint);
 
             const res = await fetch(endpoint, {
                 method: "GET",

@@ -92,6 +92,7 @@ useEffect(() => {
                     tasks={tasks}
                     archiveTask={adminArchiveTask}
                     toggleComplete={toggleComplete}
+                    adminArchiveTask={adminArchiveTask}
                     adminToggleComplete={adminToggleComplete}
                     adminEditTask={adminEditTask}
                     editTask={editTask}
