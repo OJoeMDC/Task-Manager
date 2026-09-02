@@ -3,7 +3,7 @@ import './Task.css'
 
 export default function User( { user, archiveUser, restoreUser, deleteUser, editUser } ) {
     const [isEditing, setIsEditing] = useState(false);
-    const [editValue, setEditValue] = useState(user.name);
+    const [editValue, setEditValue] = useState(user.username);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -13,7 +13,7 @@ export default function User( { user, archiveUser, restoreUser, deleteUser, edit
     }
 
     const handleCancel = () => {
-        setEditValue(user.name);
+        setEditValue(user.username);
         setIsEditing(false);
     }
 
