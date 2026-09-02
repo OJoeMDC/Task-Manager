@@ -36,8 +36,9 @@ export default function userHooks(showMessage) {
 }
 
 //Edit User
-const editUser = async (id, newUsername) => {
+const editUser = async (id, newUsername, role) => {
     try {
+        console.log(`Editing user with ID ${id} to new username: ${newUsername} and role: ${role}`);
         const res = await fetch(`${API_URL}/api/users/${id}/edit`, {
             method: 'PUT',
             headers: {
@@ -45,7 +46,9 @@ const editUser = async (id, newUsername) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                username: newUsername})
+                username: newUsername,
+                role: role
+            })
         });
 
         if (!res.ok) {
@@ -57,7 +60,7 @@ const editUser = async (id, newUsername) => {
         const updatedUser = await res.json();
         showMessage(`Successfully edited user ${id}`);
 
-        console.log(`Successfull edited user ${id}`);
+        console.log(`Successfully edited user ${id}`);
          setUsers(prev =>
             prev.map(user =>
                 user.id === id ? updatedUser : user

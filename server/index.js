@@ -367,6 +367,7 @@ app.put('/api/users/:id/edit', authenticateToken, requireAdmin, (req, res) => {
     try{
         const userId = parseInt(req.params.id, 10);
         const displayUsername = req.body.username?.trim();
+        const role = req.body.role?.trim();
 
         if (!displayUsername) {
                 return res.status(400).json({
@@ -390,9 +391,13 @@ app.put('/api/users/:id/edit', authenticateToken, requireAdmin, (req, res) => {
             return res.status(400).json({ error: 'Username already exists' });
         }
 
-            db.prepare('UPDATE users SET username = ?, username_normalized = ? WHERE id =?').run(displayUsername, normalized, userId);
+        if (!role || !['user', 'admin'].includes(role)) {
+            return res.status(400).json({ error: 'Invalid role' });
+        }
 
-            const updatedUser = db.prepare(`
+        db.prepare('UPDATE users SET username = ?, username_normalized = ?, role = ? WHERE id =?').run(displayUsername, normalized, role, userId);
+
+        const updatedUser = db.prepare(`
             SELECT id, username, username_normalized, role, archived
             FROM users
             WHERE id = ?

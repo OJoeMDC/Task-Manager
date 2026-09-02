@@ -4,11 +4,12 @@ import './Task.css'
 export default function User( { user, archiveUser, restoreUser, deleteUser, editUser } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(user.username);
+    const [newRole, setNewRole] = useState(user.role);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!editValue.trim()) return;
-        editUser(user.id, editValue);
+        editUser(user.id, editValue, newRole);
         setIsEditing(false);
     }
 
@@ -33,16 +34,28 @@ export default function User( { user, archiveUser, restoreUser, deleteUser, edit
                             />
 
                             <div className="buttons">
+
                                 <button 
                                 className='save'
                                 type='submit'>
                                     Save
                                 </button>
+
                                 <button 
                                 className='cancel' 
                                 onClick={handleCancel}>
                                     Cancel
                                 </button>
+
+                                <button
+                                className='role'
+                                onClick={() => {
+                                    setNewRole(user.role === 'user' ? 'admin' : 'user');
+                                }}>
+                                    {user.role === 'user' ? 'Make Admin' : 'Make User'}
+
+                                </button>
+
                             </div>
                         </form>
                 </li>
@@ -52,6 +65,7 @@ export default function User( { user, archiveUser, restoreUser, deleteUser, edit
     return (
         <li key={user.id} className={`list-item ${user.archived === 1 ? 'archived' : ''}`}>
                    <span>{user.username}</span>
+                   <span>Role: {user.role}</span>
                     <div className="buttons">
                         {/* Delete button if they're not already archived */}
                         {user.archived === 0 && (
