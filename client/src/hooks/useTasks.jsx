@@ -27,6 +27,17 @@ export default function useTasks(user, showMessage) {
                         endpoint = `${API_URL}/api/tasks/all`;
                     }
                 }
+                else {
+                    if (viewArchived) {
+                        endpoint = `${API_URL}/api/tasks/archived`;
+                    }
+                    else if (viewCompleted) {
+                        endpoint = `${API_URL}/api/tasks/completed`;
+                    }
+                    else {
+                        endpoint = `${API_URL}/api/tasks`;
+                    }
+                }
             console.log('fetching endpoint:', endpoint);
 
             const res = await fetch(endpoint, {
