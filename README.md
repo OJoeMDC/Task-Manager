@@ -162,9 +162,7 @@ sql
 
 ## To Do:
 
-- **Admin account CRUD controls**
 - **Jest testing**
-- **Move deleted projects to archive instead**
 - **Group Management / Owners**
 - **Task assignment to accounts**
 - **Password reset**
