@@ -162,7 +162,7 @@ sql
 
 ## To Do:
 
-- **Jest testing(In progress)**
+- **Jest testing**
 - **Group Management / Owners**
 - **Task assignment to accounts**
 - **Password reset**
