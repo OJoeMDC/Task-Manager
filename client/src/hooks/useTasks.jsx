@@ -61,8 +61,8 @@ export default function useTasks(user, showMessage) {
 
 
     //Create a new Task
-    const addTask = async (title) => {
-        console.log("adding task", title, user);
+    const addTask = async ({ title, dueDate }) => {
+        console.log("adding task", title, dueDate, user);
 
         if (!user) return;
 
@@ -73,7 +73,7 @@ export default function useTasks(user, showMessage) {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
-            body: JSON.stringify({ title })
+            body: JSON.stringify({ title, dueDate })
         });
 
         if (!res.ok) {
@@ -282,14 +282,14 @@ export default function useTasks(user, showMessage) {
     };
 
     //Edit Task
-    const editTask = async (id, newTitle) => {
+    const editTask = async (id, newTitle, newDueDate) => {
     const res = await fetch(`${API_URL}/api/tasks/${id}`, {
         method: 'PUT',
         headers: { 
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ title: newTitle })
+        body: JSON.stringify({ title: newTitle, dueDate: newDueDate })
     });
     if (res.ok) {
         const updated = await res.json();
@@ -299,14 +299,14 @@ export default function useTasks(user, showMessage) {
     };
 
     //admin edit task
-    const adminEditTask = async (id, newTitle) => {
+    const adminEditTask = async (id, newTitle, newDueDate) => {
         const res = await fetch(`${API_URL}/api/admin/tasks/${id}`, {
             method: 'PUT',
             headers: { 
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
-            body: JSON.stringify({ title: newTitle })
+            body: JSON.stringify({ title: newTitle, dueDate: newDueDate })
         });
         if (res.ok) {
             const updated = await res.json();
