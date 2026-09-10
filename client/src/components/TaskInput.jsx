@@ -3,12 +3,14 @@ import './TaskInput.css'
 
 function TaskInput({ onAdd }) {
     const [title, setTitle] = useState('');
+    const [dueDate, setDueDate] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault()
         if(!title.trim()) return
-        onAdd(title)
+        onAdd({ title, dueDate })
         setTitle('')
+        setDueDate('')
     }
 
     return (
@@ -19,6 +21,11 @@ function TaskInput({ onAdd }) {
                 placeholder='Enter a new task'
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                />
+                <input
+                type='date'
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
                 />
                 <button type='submit'>Add</button>
             </form>

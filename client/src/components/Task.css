@@ -1,20 +1,40 @@
 .list-item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    gap: 12px;
     padding: 8px;
+}
+
+.admin-task {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+}
+
+.list-item b {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.list-item > span {
+    text-align: left;
 }
 
 .list-item.completed span {
     text-decoration: line-through;
     opacity: 0.5;
     color: var(--success);
+    text-align: left;
 }
 
 .list-item.archived span {
     text-decoration: line-through;
     opacity: 0.5;
     color: var(--warning);
+    text-align: left;
 }
 
 .buttons {
@@ -61,6 +81,17 @@
 
 .restore {
     background-color: var(--success);
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.overdue {
+    color: var(--primary);
+    font-weight: bold;
 }
 
 
