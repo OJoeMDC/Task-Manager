@@ -6,6 +6,7 @@ import './Task.css'
 export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask } ) {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
+    const [editDueDate, setEditDueDate] = useState(task.due_date || '');
     const isAdmin = user && user.role === 'admin';
     const [isLoading, setIsLoading] = useState(null);
     const location = useLocation();
@@ -24,20 +25,23 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
         e.preventDefault();
         if (!editValue.trim()) return;
         await handleAction('save', () => isAdminPage
-            ? adminEditTask(task.id, editValue)
-            : editTask(task.id, editValue));
+            ? adminEditTask(task.id, editValue, editDueDate)
+            : editTask(task.id, editValue, editDueDate));
         setIsEditing(false);
     }
 
     const handleCancel = () => {
         setEditValue(task.title);
+        setEditDueDate(task.due_date || '');
         setIsEditing(false);
     }
 
+
+    // Task Buttons if currently editing
     if (isEditing) {
     return (
         <li key={task.id} className='list-item'>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} className='edit-form'>
                             <input 
                                 type='text' 
                                 value={editValue} 
@@ -46,6 +50,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     if(e.key === 'Escape') handleCancel();
                                 }}
                                 autoFocus
+                            />
+
+                            <input
+                            type='date'
+                            value={editDueDate}
+                            onChange={e => setEditDueDate(e.target.value)}
                             />
 
                             <div className="buttons">
@@ -68,10 +78,16 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     )
     }
 
+
+   // Normal Task Buttons if not editing 
     return (
-        <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''} ${task.archived === 1 ? 'archived' : ''}`}>
-                   <span>Task Name: {task.title}</span>
-                   {isAdminPage && <span>User: {task.username}</span>}
+        <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''} ${task.archived === 1 ? 'archived' : ''} ${isAdminPage ? 'admin-task' : ''}`}>
+                   <span><b>Task Name:</b> {task.title}</span>
+                   <span
+                   className={`${task.due_date && new Date(task.due_date) <= new Date() && task.completed === 0 ? 'overdue' : ''}`}>
+                       <b>Due date:</b> {task.due_date || "No due date"}
+                   </span>
+                   {isAdminPage && <span><b>User:</b> {task.username}</span>}
                     <div className="buttons">
                         {/* Archived task button */}
                         {task.archived === 1 && (

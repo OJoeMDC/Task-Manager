@@ -60,20 +60,16 @@ db.exec(`
     )
     `);
 
-    //Add user_id column to tasks table if it doesn't exist
-    try {
-  db.prepare('ALTER TABLE tasks ADD COLUMN archived INTEGER DEFAULT 0').run();
-  console.log('Added archived column');
+ //add due date column to task if not exists
+ try {
+    db.prepare('ALTER TABLE tasks ADD COLUMN due_date TEXT').run();
+    console.log('Added due_date column to tasks table');
 } catch (err) {
-  console.log('Migration skipped:', err.message);
-}
-
-//Add archive column to users table if not exist
-try {
-    db.prepare('ALTER TABLE users ADD COLUMN archived INTEGER DEFAULT 0').run();
-    console.log('Added archived column to users table');
-} catch (err) {
-    console.log('Migration skipped:', err.message);
+    if (err.message.includes('duplicate column name: due_date')) {
+        console.log('due_date column already exists in tasks table');
+    } else {
+        console.error('Error adding due_date column to tasks table:', err);
+    }
 }
 
  //GET all tasks for a user
@@ -186,12 +182,17 @@ app.post('/api/tasks', authenticateToken, (req, res) => {
     try {
         console.log('POST body:', req.body);
 
-        const { title, completed} = req.body;
+        const { title, completed, dueDate } = req.body;
         const userId = req.user.id;
 
+        console.log("title:", title);
+        console.log("completed:", completed);
+        console.log("userId:", userId);
+        console.log("dueDate:", dueDate);
+
         const result = db.prepare(
-            'INSERT INTO tasks (title, completed, user_id) VALUES (?, ?, ?)'
-        ).run(title, completed ? 1 : 0, userId);
+            'INSERT INTO tasks (title, completed, user_id, due_date) VALUES (?, ?, ?, ?)'
+        ).run(title, completed ? 1 : 0, userId, dueDate || null);
 
         const newTask = db.prepare(
             'SELECT * FROM tasks WHERE id = ?'
@@ -206,7 +207,7 @@ app.post('/api/tasks', authenticateToken, (req, res) => {
 
 //PUT update task
 app.put('/api/tasks/:id', authenticateToken, (req, res) => {
-    const { title, completed, toggle } = req.body;
+    const { title, completed, toggle, dueDate } = req.body;
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
     if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
@@ -214,10 +215,11 @@ app.put('/api/tasks/:id', authenticateToken, (req, res) => {
     if (toggle) {
         db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ? AND user_id = ?').run(taskId, req.user.id);
     } else {
-        db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ? AND user_id = ?').run(
+        db.prepare('UPDATE tasks SET title = ?, completed = ?, due_date = ? WHERE id = ? AND user_id = ?').run(
             title ?? task.title,
             completed !== undefined ? (completed ? 1 : 0)
             : task.completed,
+            dueDate ?? task.due_date,
             taskId,
             req.user.id
         );
@@ -229,7 +231,7 @@ app.put('/api/tasks/:id', authenticateToken, (req, res) => {
 
 //PUT update task for another user as admin
 app.put('/api/admin/tasks/:id', authenticateToken, requireAdmin, (req, res) => {
-    const { title, completed, toggle } = req.body;
+    const { title, completed, toggle, dueDate } = req.body;
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
     if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
@@ -237,10 +239,11 @@ app.put('/api/admin/tasks/:id', authenticateToken, requireAdmin, (req, res) => {
     if (toggle) {
         db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ?').run(taskId);
     } else {
-        db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ?').run(
+        db.prepare('UPDATE tasks SET title = ?, completed = ?, due_date = ? WHERE id = ?').run(
             title ?? task.title,
             completed !== undefined ? (completed ? 1 : 0)
             : task.completed,
+            dueDate ?? task.due_date,
             taskId
         );
     }
