@@ -166,3 +166,4 @@ sql
 - **Task assignment to accounts**
 - **Password reset**
 - **Due Dates for Tasks**
+- **Individual Task cards, like amazon shop items**
