@@ -1,0 +1,9 @@
+h1 {
+    justify-content: center;
+    text-align: center;
+
+    padding: 12px;
+
+    color: var(--text);
+    border: 4px solid var(--border);
+}

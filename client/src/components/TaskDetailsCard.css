@@ -1,0 +1,82 @@
+.task-details-card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: left;
+    text-align: left;
+    padding: 8px;
+    margin-top: 48px;
+}
+
+.immutable-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: left;
+    text-align: left;
+    padding: 8px;
+
+    background-color: var(--surface);
+    box-shadow: 6px 6px 0 black;
+}
+
+.task-details-card {
+    width: 260px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    justify-content: left;
+    text-align: left;
+
+    padding: 8px;
+    margin-top: 12px;
+
+    background-color: var(--surface);
+    box-shadow: 6px 6px 0 black;
+}
+
+.task-item {
+    width: 100%;
+    height: 45px;
+
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+
+    padding: 8px;
+    margin: 4px;
+
+    background-color: var(--surface);
+}
+
+.task-item:hover {
+    background-color: var(--success);
+    color: black;
+    cursor: pointer;
+}
+
+.task-details-card-buttons {
+    display: flex;
+    flex-direction: row;
+    padding: 8px;
+    margin-top: 12px;
+    gap: 12px;
+}
+
+.detail-field input {
+    width: auto;
+    height: 45px;
+    flex: 1;
+    
+    padding: 8px;
+    margin: 4px;
+
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: var(--success);
+    color: black;
+    font: inherit;
+}

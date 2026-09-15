@@ -82,6 +82,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
    // Normal Task Buttons if not editing 
     return (
         <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''} ${task.archived === 1 ? 'archived' : ''} ${isAdminPage ? 'admin-task' : ''}`}>
+                    {isAdminPage && <span>ID: {task.id}</span>}
                    <span><b>Task Name:</b> {task.title}</span>
                    <span
                    className={`${task.due_date && new Date(task.due_date) <= new Date() && task.completed === 0 ? 'overdue' : ''}`}>
