@@ -1,6 +1,6 @@
 .list-item {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
+    grid-template-columns: 0.2fr 1fr 1fr auto;
     align-items: center;
     gap: 12px;
     padding: 8px;

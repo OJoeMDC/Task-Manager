@@ -26,12 +26,14 @@ function TaskDetails({ API_URL, user, showMessage }) {
     fetchTasks
     } = useTasks(user, showMessage);
 
+    const task = tasks.find((task) => task.id === parseInt(id));
+
     //Fetch the task ID from the URL parameters
     useEffect(() => {
     if (user) {
         fetchTasks();
     }
-    }, [user, viewArchived, viewCompleted]);
+    }, [user]);
 
     //Display login if no user is logged in
     if (!user) {
@@ -43,8 +45,6 @@ function TaskDetails({ API_URL, user, showMessage }) {
             </main>
         )
     };
-
-    const task = tasks.find((task) => task.id === parseInt(id));
 
     if (!task) {
         return (
@@ -59,7 +59,15 @@ function TaskDetails({ API_URL, user, showMessage }) {
   return (
     <div>
         <h1>Task Details</h1>
-            <TaskDetailsCard task={task} user={user} />
+            <TaskDetailsCard
+            task={task}
+            user={user}
+            showMessage={showMessage}
+            editTask={editTask}
+            deleteTask={deleteTask}
+            archiveTask={archiveTask}
+            toggleComplete={toggleComplete}
+             />
     </div>
   );
 }

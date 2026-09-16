@@ -1,77 +1,34 @@
 import { useState } from 'react';
 import './TaskDetailsCard.css'
-import useTasks from '../hooks/useTasks';
 
-export default function TaskDetailsCard({ task, user }) {
-    const [isEditing, setIsEditing] = useState(false);
+export default function TaskDetailsCard({ task, user, showMessage, editTask, deleteTask, archiveTask, toggleComplete }) {
     const [editingField, setEditingField] = useState(null);
     const [editValue, setEditValue] = useState(task.title);
     const [editDueDate, setEditDueDate] = useState(task.due_date || '');
-    const isAdmin = user && user.role === 'admin';
+    const [isLoading, setIsLoading] = useState(null);
+
+    const handleAction = async (actionName, action) => {
+        setIsLoading(actionName);
+        try{
+            await action();
+        } finally {
+            setIsLoading(null);
+        }
+    };
 
     const handleCancel = () => {
         setEditValue(task.title);
         setEditDueDate(task.due_date || '');
-        setIsEditing(false);
         setEditingField(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!editValue.trim()) return;
-        await handleAction('save', () => isAdminPage
-            ? adminEditTask(task.id, editValue, editDueDate)
-            : editTask(task.id, editValue, editDueDate));
-        setIsEditing(false);
+        await handleAction('save', () => editTask(task.id, editValue, editDueDate));
+        setEditingField(null);
     }
 
-
-    const {
-      tasks,
-      setTasks,
-      editTask,
-      viewArchived,
-      setViewArchived,
-      viewCompleted,
-      setViewCompleted,
-      deleteTask,
-      addTask,
-      archiveTask,
-      restoreTask,
-      toggleComplete,
-      fetchTasks
-    } = useTasks(user);
-
-
-    //Buttons if editing
-    if (isEditing) {
-    return(
-        <div className="task-details-card-container">
-            <form onSubmit={handleSubmit} className='edit-form'>
-                <input 
-                    type='text' 
-                    value={editValue} 
-                    onChange={e => setEditValue(e.target.value)}
-                    onKeyDown={e => {
-                        if(e.key === 'Escape') handleCancel();
-                    }}
-                    autoFocus
-                />
-
-                <input
-                type='date'
-                value={editDueDate}
-                onChange={e => setEditDueDate(e.target.value)}
-                />
-
-                <button type='submit'>Save</button>
-                <button type='button' onClick={handleCancel}>Cancel</button>
-            </form>
-        </div>
-    )
-}
-
-    //Buttons it not editing
     return (
         <div className="task-details-card-container">
         {/* Display the task ID as immutable information */}
@@ -94,6 +51,7 @@ export default function TaskDetailsCard({ task, user }) {
                             onChange={(e) => setEditValue(e.target.value)}
                             onKeyDown={e => {
                                         if(e.key === 'Escape') handleCancel();
+                                        if(e.key === 'Enter') handleSubmit(e);
                                     }}
                                     autoFocus
                         />
@@ -120,6 +78,7 @@ export default function TaskDetailsCard({ task, user }) {
                         onChange={(e) => setEditDueDate(e.target.value)}
                         onKeyDown={e => {
                                     if(e.key === 'Escape') handleCancel();
+                                    if(e.key === 'Enter') handleSubmit(e);
                                 }}
                                 autoFocus
                         />
@@ -136,7 +95,7 @@ export default function TaskDetailsCard({ task, user }) {
                 <button className="delete button" onClick={() => deleteTask(task.id)}>
                     Archive
                 </button>
-                <button className="complete button" onClick={() => archiveTask(task.id)}>
+                <button className="complete button" onClick={() => handleAction('complete', () => ( toggleComplete(task.id) ))}>
                     Mark Complete
                 </button>
             </div>

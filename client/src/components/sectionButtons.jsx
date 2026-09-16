@@ -44,7 +44,7 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
                     setViewCompleted(false); // Reset viewCompleted when toggling archived
                     {user.role == 'admin' && isAdminPage && setViewArchivedUsers(!viewArchivedUsers);} //toggle between archived and unarchived users
                 }}>
-                    View Archived
+                    Archived
                 </button>
                 {/* Show Completed Tasks */}
 
@@ -54,7 +54,7 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
                     setViewCompleted(!viewCompleted); // Toggle between active and completed
                     setViewArchived(false); // Reset viewArchived when toggling completed
                 }}>
-                    View Completed
+                    Completed
                 </button>
                 )}
 
