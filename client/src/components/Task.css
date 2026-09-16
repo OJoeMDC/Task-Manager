@@ -6,6 +6,11 @@
     padding: 8px;
 }
 
+.list-item:hover {
+    background-color: var(--border);
+    cursor: pointer;
+}
+
 .admin-task {
     display: grid;
     grid-template-columns: 0.2fr 1fr 1fr 1fr auto;

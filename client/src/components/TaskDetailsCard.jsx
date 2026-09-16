@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './TaskDetailsCard.css'
 
-export default function TaskDetailsCard({ task, user, showMessage, editTask, deleteTask, archiveTask, toggleComplete }) {
+export default function TaskDetailsCard({ task, user, showMessage, editTask, deleteTask, archiveTask, toggleComplete, restoreTask }) {
     const [editingField, setEditingField] = useState(null);
     const [editValue, setEditValue] = useState(task.title);
     const [editDueDate, setEditDueDate] = useState(task.due_date || '');
@@ -92,12 +92,25 @@ export default function TaskDetailsCard({ task, user, showMessage, editTask, del
                 )}
             </div>
             <div className="task-details-card-buttons">
-                <button className="delete button" onClick={() => deleteTask(task.id)}>
-                    Archive
-                </button>
-                <button className="complete button" onClick={() => handleAction('complete', () => ( toggleComplete(task.id) ))}>
-                    Mark Complete
-                </button>
+                {task.archived === 1 ? (
+                    <button className="restore button" onClick={() => restoreTask(task.id)}>
+                        Restore
+                    </button>
+                ) : (
+                    <button className="delete button" onClick={() => archiveTask(task.id)}>
+                        Archive
+                    </button>
+                )}
+
+                {task.completed === 1 ? (
+                    <button className="incomplete button" onClick={() => handleAction('incomplete', () => ( toggleComplete(task.id) ))}>
+                        Mark Incomplete
+                    </button>
+                ) : (
+                    <button className="complete button" onClick={() => handleAction('complete', () => ( toggleComplete(task.id) ))}>
+                        Mark Complete
+                    </button>
+                )}
             </div>
         </div>
     );

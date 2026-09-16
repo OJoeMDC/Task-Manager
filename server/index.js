@@ -102,6 +102,27 @@ app.get('/api/tasks/user/all', authenticateToken, (req, res) => {
     res.json(tasks);
 });
 
+//Get specific task for details page
+app.get('/api/tasks/task/:id', authenticateToken, (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const userId = req.user.id;
+
+    const task = db.prepare(`
+        SELECT tasks.*, users.username 
+        FROM tasks 
+        INNER JOIN users 
+        ON tasks.user_id = users.id
+        WHERE tasks.id = ?
+        AND tasks.user_id = ?`
+    ).get(taskId, userId);
+
+    if (!task) {
+        return res.status(404).json({ error: 'Task not found' });
+    }
+
+    res.json(task);
+});
+
 //Get ALL tasks
 app.get('/api/tasks/all/all', authenticateToken, requireAdmin, (req, res) => {
     const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id').all();
@@ -149,7 +170,7 @@ app.get('/api/tasks/all/archived', authenticateToken, requireAdmin, (req, res) =
 })
 
 //Get completed tasks
-app.get('/api/tasks/completed', authenticateToken, (req, res) => {
+app.get('/api/tasks/user/completed', authenticateToken, (req, res) => {
     const userId = req.user.id;
 
     const tasks = db.prepare(`
@@ -206,7 +227,7 @@ app.post('/api/tasks', authenticateToken, (req, res) => {
 });
 
 //PUT update task
-app.put('/api/tasks/:id', authenticateToken, (req, res) => {
+app.put('/api/tasks/:id/update', authenticateToken, (req, res) => {
     const { title, completed, toggle, dueDate } = req.body;
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
@@ -230,7 +251,7 @@ app.put('/api/tasks/:id', authenticateToken, (req, res) => {
 });
 
 //PUT update task for another user as admin
-app.put('/api/admin/tasks/:id', authenticateToken, requireAdmin, (req, res) => {
+app.put('/api/admin/tasks/:id/update', authenticateToken, requireAdmin, (req, res) => {
     const { title, completed, toggle, dueDate } = req.body;
     const taskId = parseInt(req.params.id);
     const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);

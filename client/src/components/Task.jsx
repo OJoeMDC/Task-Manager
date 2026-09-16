@@ -1,9 +1,10 @@
 import { useState} from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Task.css'
 
 
 export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask } ) {
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
     const [editDueDate, setEditDueDate] = useState(task.due_date || '');
@@ -40,7 +41,11 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     // Task Buttons if currently editing
     if (isEditing) {
     return (
-        <li key={task.id} className='list-item'>
+        <li 
+        key={task.id}
+        className='list-item'
+        onClick={() => navigate(`/tasks/${task.id}`)}
+        >
                         <form onSubmit={handleSubmit} className='edit-form'>
                             <input 
                                 type='text' 
@@ -58,7 +63,10 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                             onChange={e => setEditDueDate(e.target.value)}
                             />
 
-                            <div className="buttons">
+                            <div 
+                            className="buttons"
+                            onClick={e => e.stopPropagation()} // Prevent click from propagating to the li
+                            >
                                 <button
                                 disabled={isLoading !== null}
                                 className='save'
@@ -81,15 +89,26 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
 
    // Normal Task Buttons if not editing 
     return (
-        <li key={task.id} className={`list-item ${task.completed === 1 ? 'completed' : ''} ${task.archived === 1 ? 'archived' : ''} ${isAdminPage ? 'admin-task' : ''}`}>
+        <li 
+        key={task.id} 
+        className={`list-item ${task.completed === 1 ?'completed' : ''} ${task.archived === 1 ? 'archived' : ''} ${isAdminPage ? 'admin-task' : ''}`}
+        onClick={() => navigate(`/tasks/${task.id}`)}
+        >
                     <span>ID: {task.id}</span>
                    <span><b>Task Name:</b> {task.title}</span>
                    <span
                    className={`${task.due_date && new Date(task.due_date) <= new Date() && task.completed === 0 ? 'overdue' : ''}`}>
                        <b>Due date:</b> {task.due_date || "No due date"}
                    </span>
+
+
                    {isAdminPage && <span><b>User:</b> {task.username}</span>}
-                    <div className="buttons">
+                    <div 
+                    className="buttons"
+                    onClick={e => e.stopPropagation()} // Prevent click from propagating to the li
+                    >
+
+
                         {/* Archived task button */}
                         {task.archived === 1 && (
                             <>
@@ -113,8 +132,22 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                             
                         )}
 
+                        {/* Completed task button */}
+                        {task.completed === 1 && (
+                            <>
+                                <button 
+                                disabled={isLoading !== null}
+                                className='restore'
+                                onClick={() =>
+                                    handleAction('restore', () => toggleComplete(task.id))
+                                }>
+                                    {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
+                                </button>
+                            </>
+                        )}
+
                         {/* Unarchived task buttons */}
-                        {task.archived === 0 && (
+                        {task.archived === 0 && task.completed === 0 &&(
                             <>
                                 <button
                                     disabled={isLoading !== null} 

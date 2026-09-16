@@ -12,21 +12,25 @@ function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreT
         </header>
         
         <ul className='list'>
-            {tasks.map((task) => (
-                <Task
-                key={task.id}
-                task={task}
-                archiveTask={archiveTask}
-                adminArchiveTask={adminArchiveTask}
-                adminToggleComplete={adminToggleComplete}
-                adminEditTask={adminEditTask}
-                deleteTask={deleteTask}
-                toggleComplete={toggleComplete}
-                editTask={editTask}
-                user={user}
-                restoreTask={restoreTask}
-                />
-            ))}
+            {tasks.length === 0 ? (
+                <p>No tasks to display</p>
+            ) : (
+                tasks.map((task) => (
+                    <Task
+                    key={task.id}
+                    task={task}
+                    archiveTask={archiveTask}
+                    adminArchiveTask={adminArchiveTask}
+                    adminToggleComplete={adminToggleComplete}
+                    adminEditTask={adminEditTask}
+                    deleteTask={deleteTask}
+                    toggleComplete={toggleComplete}
+                    editTask={editTask}
+                    user={user}
+                    restoreTask={restoreTask}
+                    />
+                ))
+            )}
         </ul>
         </div>
     )

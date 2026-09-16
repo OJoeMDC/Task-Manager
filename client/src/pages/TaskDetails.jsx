@@ -1,17 +1,17 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useTasks from '../hooks/useTasks';
-import Task from '../components/Task';
 import TaskDetailsCard from '../components/TaskDetailsCard';
 import './TaskDetails.css'
 
-function TaskDetails({ API_URL, user, showMessage }) {
+function TaskDetails({user, showMessage }) {
 
     const { id } = useParams();
 
     // useTasks hooks
     const {
     tasks,
+    singleTask,
     setTasks,
     editTask,
     viewArchived,
@@ -23,17 +23,18 @@ function TaskDetails({ API_URL, user, showMessage }) {
     archiveTask,
     restoreTask,
     toggleComplete,
-    fetchTasks
-    } = useTasks(user, showMessage);
+    fetchTasks,
+    fetchSingleTask
+    } = useTasks(user, showMessage, id);
 
-    const task = tasks.find((task) => task.id === parseInt(id));
+    const task = singleTask;
 
     //Fetch the task ID from the URL parameters
     useEffect(() => {
     if (user) {
-        fetchTasks();
+        fetchSingleTask(id);
     }
-    }, [user]);
+    }, [user, id]);
 
     //Display login if no user is logged in
     if (!user) {
@@ -58,7 +59,8 @@ function TaskDetails({ API_URL, user, showMessage }) {
 
   return (
     <div>
-        <h1>Task Details</h1>
+        <div>
+            <h1>Task Details</h1>
             <TaskDetailsCard
             task={task}
             user={user}
@@ -67,7 +69,16 @@ function TaskDetails({ API_URL, user, showMessage }) {
             deleteTask={deleteTask}
             archiveTask={archiveTask}
             toggleComplete={toggleComplete}
-             />
+            restoreTask={restoreTask}
+            />
+        </div>
+        <div>
+            <button
+            className='button'
+            onClick={() => window.history.back()}>
+                Back to Tasks
+            </button>
+        </div>
     </div>
   );
 }
