@@ -14,15 +14,13 @@ function TaskDetails({user, showMessage }) {
     singleTask,
     setTasks,
     editTask,
-    viewArchived,
-    setViewArchived,
-    viewCompleted,
-    setViewCompleted,
     deleteTask,
-    addTask,
     archiveTask,
     restoreTask,
     toggleComplete,
+    adminToggleComplete,
+    adminEditTask,
+    adminArchiveTask,
     fetchTasks,
     fetchSingleTask
     } = useTasks(user, showMessage, id);
@@ -70,6 +68,9 @@ function TaskDetails({user, showMessage }) {
             archiveTask={archiveTask}
             toggleComplete={toggleComplete}
             restoreTask={restoreTask}
+            adminArchiveTask={adminArchiveTask}
+            adminToggleComplete={adminToggleComplete}
+            adminEditTask={adminEditTask}
             />
         </div>
         <div>

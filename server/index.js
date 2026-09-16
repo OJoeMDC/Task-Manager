@@ -123,6 +123,25 @@ app.get('/api/tasks/task/:id', authenticateToken, (req, res) => {
     res.json(task);
 });
 
+//Admin Get specific task for details page
+app.get('/api/admin/tasks/:id', authenticateToken, requireAdmin, (req, res) => {
+    const taskId = parseInt(req.params.id);
+
+    const task = db.prepare(`
+        SELECT tasks.*, users.username 
+        FROM tasks 
+        INNER JOIN users 
+        ON tasks.user_id = users.id
+        WHERE tasks.id = ?`
+    ).get(taskId);
+
+    if (!task) {
+        return res.status(404).json({ error: 'Task not found' });
+    }
+
+    res.json(task);
+});
+
 //Get ALL tasks
 app.get('/api/tasks/all/all', authenticateToken, requireAdmin, (req, res) => {
     const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id').all();

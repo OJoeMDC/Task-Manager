@@ -154,7 +154,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     type="checkbox" 
                                     className='complete' 
                                     onClick={() => {
-                                        handleAction('complete', () => ( isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
+                                        handleAction('complete', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
                                     }}>
                                         {isLoading === 'complete' ? 'Toggling...' : 'Complete'}
                                 </button>
@@ -173,7 +173,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     disabled={isLoading !== null}
                                     className='delete' 
                                     onClick={() => {
-                                        handleAction('archive', () => ( isAdminPage ? adminArchiveTask(task.id) : archiveTask(task.id) ));
+                                        handleAction('archive', () => ( isAdmin ? adminArchiveTask(task.id) : archiveTask(task.id) ));
                                     }}>
                                         {isLoading === 'archive' ? 'Archiving...' : 'Archive'}
                                 </button>
