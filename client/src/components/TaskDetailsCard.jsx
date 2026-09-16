@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import './TaskDetailsCard.css'
 
-export default function TaskDetailsCard({ task, user, showMessage, editTask, deleteTask, archiveTask, toggleComplete, restoreTask }) {
+export default function TaskDetailsCard({ task, user, showMessage, editTask, deleteTask, archiveTask, toggleComplete, restoreTask, adminArchiveTask, adminToggleComplete, adminEditTask }) {
     const [editingField, setEditingField] = useState(null);
     const [editValue, setEditValue] = useState(task.title);
     const [editDueDate, setEditDueDate] = useState(task.due_date || '');
     const [isLoading, setIsLoading] = useState(null);
+    const isAdmin = user && user.role === 'admin';
+
+    console.log(isAdmin ? "Admin user" : "Regular user");
 
     const handleAction = async (actionName, action) => {
         setIsLoading(actionName);
@@ -25,9 +28,9 @@ export default function TaskDetailsCard({ task, user, showMessage, editTask, del
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!editValue.trim()) return;
-        await handleAction('save', () => editTask(task.id, editValue, editDueDate));
+        await handleAction('save', () => ( isAdmin ? adminEditTask(task.id, editValue, editDueDate) : editTask(task.id, editValue, editDueDate) ));
         setEditingField(null);
-    }
+    };
 
     return (
         <div className="task-details-card-container">
@@ -97,17 +100,17 @@ export default function TaskDetailsCard({ task, user, showMessage, editTask, del
                         Restore
                     </button>
                 ) : (
-                    <button className="delete button" onClick={() => archiveTask(task.id)}>
+                    <button className="delete button" onClick={() => handleAction('archive', () => ( isAdmin ? adminArchiveTask(task.id) : archiveTask(task.id) ))}>
                         Archive
                     </button>
                 )}
 
                 {task.completed === 1 ? (
-                    <button className="incomplete button" onClick={() => handleAction('incomplete', () => ( toggleComplete(task.id) ))}>
+                    <button className="incomplete button" onClick={() => handleAction('complete', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ))}>
                         Mark Incomplete
                     </button>
                 ) : (
-                    <button className="complete button" onClick={() => handleAction('complete', () => ( toggleComplete(task.id) ))}>
+                    <button className="complete button" onClick={() => handleAction('complete', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ))}>
                         Mark Complete
                     </button>
                 )}

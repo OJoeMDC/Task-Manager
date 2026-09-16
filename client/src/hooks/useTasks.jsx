@@ -65,7 +65,11 @@ export default function useTasks(user, showMessage, taskID) {
     const fetchSingleTask = async (id) => {
         try {
             let endpoint;
-            endpoint = `${API_URL}/api/tasks/task/${id}`;
+            if (user.role === 'admin') {
+                endpoint = `${API_URL}/api/admin/tasks/${id}`;
+            } else {
+                endpoint = `${API_URL}/api/tasks/task/${id}`;
+            }
             console.log('fetching endpoint:', endpoint);
 
             const res = await fetch(endpoint, {
@@ -146,7 +150,7 @@ export default function useTasks(user, showMessage, taskID) {
             prevTasks.filter(task => task.id !== id)
         );
     }
-    
+
     showMessage('Task archived successfully');
 
     await fetchTasks();
@@ -310,7 +314,7 @@ export default function useTasks(user, showMessage, taskID) {
     const adminToggleComplete = async (id) => {
         console.log("adminToggleComplete called for task ID:", id);
         try {
-            const res = await fetch(`${API_URL}/api/admin/tasks/${id}`, {
+            const res = await fetch(`${API_URL}/api/admin/tasks/${id}/update`, {
                 method: 'PUT',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -327,9 +331,22 @@ export default function useTasks(user, showMessage, taskID) {
 
             const updatedTask = await res.json();
             console.log(`Admin toggled task ${id}'s status successfully`);
-            setTasks(prev => prev.filter(task => task.id !== id));
+             if (isDetailsPage) {
+                setSingleTask(updatedTask);
+                } else {
 
-            await fetchTasks();
+                    setTasks(function(prev) {
+                        return prev.map(function(task) {
+
+                            if (task.id === id) {
+                                return updatedTask;
+                            }
+
+                            return task;
+                        });
+                    });
+
+                }
             showMessage('Task status changed');
 
         } catch (err) {
@@ -350,14 +367,18 @@ export default function useTasks(user, showMessage, taskID) {
     });
     if (res.ok) {
         const updated = await res.json();
-        setTasks(prev => prev.map(t => t.id === id ? updated : t));
+        if(isDetailsPage) {
+                setSingleTask(updatedTask);
+            } else {
+                setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+            }
         showMessage('Task updated successfully');
     }
     };
 
     //admin edit task
     const adminEditTask = async (id, newTitle, newDueDate) => {
-        const res = await fetch(`${API_URL}/api/admin/tasks/${id}`, {
+        const res = await fetch(`${API_URL}/api/admin/tasks/${id}/update`, {
             method: 'PUT',
             headers: { 
                 'Content-Type': 'application/json',
@@ -367,7 +388,11 @@ export default function useTasks(user, showMessage, taskID) {
         });
         if (res.ok) {
             const updated = await res.json();
-            setTasks(prev => prev.map(t => t.id === id ? updated : t));
+            if (isDetailsPage) {
+                setSingleTask(updated);
+            } else {
+                setTasks(prev => prev.map(t => t.id === id ? updated : t));
+            }
             showMessage('Task updated successfully');
         }
     };
