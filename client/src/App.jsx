@@ -10,6 +10,7 @@ import Profile from './pages/Profile'
 import Tasks from './pages/Tasks'
 import Admin from './pages/Admin'
 import Toast from './components/Toast'
+import TaskDetails from './pages/TaskDetails'
 
 const API_URL = `${import.meta.env.VITE_API_URL}`
 
@@ -38,6 +39,7 @@ function App() {
         <Route path='/profile' element={<Profile user={user} setUser={setUser} API_URL={API_URL} showMessage={showMessage} />} />
         <Route path='/tasks' element={<Tasks user={user} API_URL={API_URL} showMessage={showMessage} />} />
         <Route path='/admin' element={<Admin user={user} API_URL={API_URL} showMessage={showMessage} />} />
+        <Route path='/tasks/:id' element={<TaskDetails user={user} API_URL={API_URL} showMessage={showMessage} />} />
       </Route>
     </Routes>
   )

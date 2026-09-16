@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-export default function useTasks(user, showMessage) {
+export default function useTasks(user, showMessage, taskID) {
     const [tasks, setTasks] = useState([]);
+    const [singleTask, setSingleTask] = useState(null);
     const [error, setError] = useState('');
     const [viewArchived, setViewArchived] = useState(false);
     const [viewCompleted, setViewCompleted] = useState(false);
     const API_URL = import.meta.env.VITE_API_URL;
     const location = useLocation();
-    const isAdminPage = location.pathname === '/admin'; 
+    const isAdminPage = location.pathname === '/admin';
+    const isDetailsPage = location.pathname.startsWith('/tasks/');
 
 
     // Fetch user tasks
@@ -29,10 +31,10 @@ export default function useTasks(user, showMessage) {
                 }
                 else {
                     if (viewArchived) {
-                        endpoint = `${API_URL}/api/tasks/archived`;
+                        endpoint = `${API_URL}/api/tasks/user/archived`;
                     }
                     else if (viewCompleted) {
-                        endpoint = `${API_URL}/api/tasks/completed`;
+                        endpoint = `${API_URL}/api/tasks/user/completed`;
                     }
                     else {
                         endpoint = `${API_URL}/api/tasks`;
@@ -59,6 +61,31 @@ export default function useTasks(user, showMessage) {
         }
     };
 
+    // Fetch one single task by ID
+    const fetchSingleTask = async (id) => {
+        try {
+            let endpoint;
+            endpoint = `${API_URL}/api/tasks/task/${id}`;
+            console.log('fetching endpoint:', endpoint);
+
+            const res = await fetch(endpoint, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (!res.ok) {
+                const data = await res.json();
+                setError(data.error || 'Failed to fetch tasks');
+                return;
+            }
+            const data = await res.json();
+            setSingleTask(data);
+        } catch (err) {
+            console.error(err);
+            setError('Failed to fetch task');
+        }
+    };
 
     //Create a new Task
     const addTask = async ({ title, dueDate }) => {
@@ -112,9 +139,14 @@ export default function useTasks(user, showMessage) {
 
     console.log('Archived task with ID:', id);
     const updatedTask = await res.json();
-    setTasks(prevTasks => 
-        prevTasks.filter(task => task.id !== id)
-    );
+    if (isDetailsPage) {
+        setSingleTask(updatedTask);
+    } else {
+        setTasks(prevTasks => 
+            prevTasks.filter(task => task.id !== id)
+        );
+    }
+    
     showMessage('Task archived successfully');
 
     await fetchTasks();
@@ -143,8 +175,12 @@ export default function useTasks(user, showMessage) {
 
             console.log('Successfully admin archived task with ID:', id)
             const updatedTask = await res.json();
-            setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
-            await fetchTasks();
+            if (isDetailsPage) {
+                setSingleTask(updatedTask);
+            } else {
+                setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+            }
+
             showMessage('Task archived successfully');
 
         } catch (err) {
@@ -171,11 +207,13 @@ export default function useTasks(user, showMessage) {
             }
 
             console.log(`Task with ID ${id} restored successfully`);
-            setTasks(prevTasks =>
-                prevTasks.filter(task => task.id !== id)
-            );
+            const updatedTask = await res.json();
+            if(isDetailsPage) {
+                setSingleTask(updatedTask);
+            } else {
+                setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+            }
 
-            await fetchTasks();
             showMessage('Task restored successfully');
 
         } catch (err) {
@@ -221,7 +259,7 @@ export default function useTasks(user, showMessage) {
     const toggleComplete = async (id) => {
         console.log("toggleComplete called for task ID:", id);
         try {
-            const res = await fetch(`${API_URL}/api/tasks/${id}`, {
+            const res = await fetch(`${API_URL}/api/tasks/${id}/update`, {
             method: 'PUT',
             headers: { 
             'Content-Type': 'application/json',
@@ -238,8 +276,24 @@ export default function useTasks(user, showMessage) {
 
     const updatedTask = await res.json();
     console.log(`Toggle task ${id}'s status successfully`);
-    setTasks(prev => prev.filter(task => task.id !== id));
 
+    if (isDetailsPage) {
+    setSingleTask(updatedTask);
+    } else {
+
+        setTasks(function(prev) {
+            return prev.map(function(task) {
+
+                if (task.id === id) {
+                    return updatedTask;
+                }
+
+                return task;
+            });
+        });
+
+    }
+ 
     await fetchTasks();
     showMessage('Task status changed');
 
@@ -248,6 +302,9 @@ export default function useTasks(user, showMessage) {
             setError('Failed to toggle task status');
         }
     }
+
+
+
 
     //admin toggle complete task
     const adminToggleComplete = async (id) => {
@@ -318,13 +375,14 @@ export default function useTasks(user, showMessage) {
 
     //Update hook when user, viewArchived, or viewCompleted changes
       useEffect(() => {
-        if (user) {
+        if (user && !isDetailsPage) {
             fetchTasks();
         }
     }, [API_URL, user, viewCompleted]);
 
     return {
         tasks,
+        singleTask,
         setTasks,
         error,
         setError,
@@ -341,6 +399,7 @@ export default function useTasks(user, showMessage) {
         restoreTask,
         toggleComplete,
         addTask,
-        fetchTasks
+        fetchTasks,
+        fetchSingleTask,
     }
 }
