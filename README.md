@@ -47,8 +47,10 @@ Task-Manager/
 │   ├── public/                 # Static assets
 │   ├── src/
 │   │   ├── assets/             # React assets
+│   │   ├── hooks/              # Web hooks to import to pages
 │   │   ├── pages/              # Page-level components
 │   │   ├── App.jsx             # Main app component
+│   │   ├── layout.jsx          # Outlet for all routes
 │   │   └── main.jsx            # React entry point
 │   ├── index.html
 │   ├── package.json
