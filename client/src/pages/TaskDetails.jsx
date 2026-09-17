@@ -38,7 +38,7 @@ function TaskDetails({user, showMessage }) {
     if (!user) {
         return (
             <main>
-            <h1>You are not logged in</h1>
+            <h1 className="task-details-title">You are not logged in</h1>
             <p>Please log in to view tasks</p>
             <a href='/login' className='button'>Login</a>
             </main>
@@ -48,7 +48,7 @@ function TaskDetails({user, showMessage }) {
     if (!task) {
         return (
             <main>
-                <h1>Task not found</h1>
+                <h1 className="task-details-title">Task not found</h1>
                 <p>The task you are looking for does not exist.</p>
                 <a href='/tasks' className='button'>Back to Tasks</a>
             </main>
@@ -58,7 +58,7 @@ function TaskDetails({user, showMessage }) {
   return (
     <div>
         <div>
-            <h1>Task Details</h1>
+            <h1 className="task-details-title">Task Details</h1>
             <TaskDetailsCard
             task={task}
             user={user}
