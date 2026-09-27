@@ -38,3 +38,10 @@ main {
 .task-form button:active {
     transform: scale(0.96);
 }
+
+@media (max-width: 768px) {
+    .task-form {
+        display: flex;
+        flex-direction: column;
+    }
+}
