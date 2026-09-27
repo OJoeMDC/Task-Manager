@@ -139,7 +139,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 disabled={isLoading !== null}
                                 className='restore'
                                 onClick={() => {
-                                    handleAction('restore', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
+                                    handleAction('restore', () => ( isAdmin && isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
                                 }}>
                                     {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
                                 </button>
@@ -154,7 +154,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     type="checkbox" 
                                     className='complete' 
                                     onClick={() => {
-                                        handleAction('complete', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
+                                        handleAction('complete', () => ( isAdmin && isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
                                     }}>
                                         {isLoading === 'complete' ? 'Toggling...' : 'Complete'}
                                 </button>
