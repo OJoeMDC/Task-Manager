@@ -1,4 +1,6 @@
-function Toast({ message, type }) {
+import './Toast.css'
+
+export default function Toast({ message, type }) {
     if (!message) return null;
 
     return (
@@ -7,5 +9,3 @@ function Toast({ message, type }) {
         </div>
     );
 }
-
-export default Toast;
