@@ -3,6 +3,11 @@ import User from "./User"
 import { useState, useEffect } from 'react';
 
 function UserList({ user, API_URL, users, setUsers, archiveUser, restoreUser, deleteUser, editUser}) {
+    /*
+    UserList takes all the users and lists them on the admin dashboard
+
+    this is a component to be placed on a page, notably on admin dashboard
+    */
 
 
     

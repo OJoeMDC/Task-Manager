@@ -7,7 +7,11 @@ import SectionButtons from '../components/sectionButtons';
 
 export default function Tasks({ API_URL, user, showMessage }) {
 
+  /*
+  The Tasks function defines an individual user's tasks dashboard
+  */
 
+  //imports task functions from useTasks
   const {
   tasks,
   setTasks,
@@ -24,12 +28,17 @@ export default function Tasks({ API_URL, user, showMessage }) {
   fetchTasks
 } = useTasks(user, showMessage);
 
+
+//grabs the user's tasks from server
 useEffect(() => {
   if (user) {
     fetchTasks();
   }
 }, [user, viewArchived, viewCompleted]);
 
+
+
+//returns an error page when no user is logged in
 if (!user) {
   return (
     <main>
@@ -39,6 +48,9 @@ if (!user) {
     </main>
   )
 };
+
+
+//normal page for users
     return ( 
       <main>
         <h1>{user.username}'s Tasks</h1>

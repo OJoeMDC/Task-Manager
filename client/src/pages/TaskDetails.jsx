@@ -5,7 +5,12 @@ import TaskDetailsCard from '../components/TaskDetailsCard';
 import './TaskDetails.css'
 
 function TaskDetails({user, showMessage }) {
+    /*
+    Task Details is a dynamic link that allows a user to click a task and view it in a new webpage in more detail
+    */
 
+
+    //pull task id
     const { id } = useParams();
 
     // useTasks hooks
@@ -45,6 +50,8 @@ function TaskDetails({user, showMessage }) {
         )
     };
 
+
+    //if task isnt found display this error page
     if (!task) {
         return (
             <main>
@@ -55,6 +62,8 @@ function TaskDetails({user, showMessage }) {
         )
     }
 
+
+    //normal page functions
   return (
     <div>
         <div>

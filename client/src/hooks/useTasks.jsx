@@ -2,6 +2,14 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export default function useTasks(user, showMessage, taskID) {
+    /*
+    useTasks is a webhook for other components and pages to utilize. This creates a list of CRUD actions for a task
+
+    this is a webhook to be referenced by pages or components
+    */
+
+
+
     const [tasks, setTasks] = useState([]);
     const [singleTask, setSingleTask] = useState(null);
     const [error, setError] = useState('');

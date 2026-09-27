@@ -3,6 +3,9 @@ import './AccountForm.css';
 import {Link} from 'react-router-dom';
 
 export default function Login({ setUser, user, API_URL }) {
+    /*
+    This handles the login page for users to log in to
+    */
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

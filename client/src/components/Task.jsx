@@ -4,6 +4,14 @@ import './Task.css'
 
 
 export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask } ) {
+    /*
+    Task handles what buttons an individual task has in a tasklist
+
+    this is a component to be placed in tasklist, but is able to be called elsewhere
+    */
+
+
+
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
@@ -138,9 +146,9 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 <button 
                                 disabled={isLoading !== null}
                                 className='restore'
-                                onClick={() =>
-                                    handleAction('restore', () => toggleComplete(task.id))
-                                }>
+                                onClick={() => {
+                                    handleAction('restore', () => ( isAdmin && isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
+                                }}>
                                     {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
                                 </button>
                             </>
@@ -154,7 +162,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     type="checkbox" 
                                     className='complete' 
                                     onClick={() => {
-                                        handleAction('complete', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
+                                        handleAction('complete', () => ( isAdmin && isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
                                     }}>
                                         {isLoading === 'complete' ? 'Toggling...' : 'Complete'}
                                 </button>

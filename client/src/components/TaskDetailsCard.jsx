@@ -2,6 +2,14 @@ import { useState } from 'react';
 import './TaskDetailsCard.css'
 
 export default function TaskDetailsCard({ task, user, showMessage, editTask, deleteTask, archiveTask, toggleComplete, restoreTask, adminArchiveTask, adminToggleComplete, adminEditTask }) {
+    /*
+    Task Details Card is the component for task Details 
+
+    this is a component to be placed on a page, specifically task details
+    */
+
+
+
     const [editingField, setEditingField] = useState(null);
     const [editValue, setEditValue] = useState(task.title);
     const [editDueDate, setEditDueDate] = useState(task.due_date || '');

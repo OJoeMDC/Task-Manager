@@ -2,6 +2,14 @@ import { useEffect, useState } from "react";
 import "./Logo.css";
 
 export default function Logo() {
+    /*
+    The logo function animates and displays the self typing logo on the landing page
+
+    this is a component to be placed on a page
+    */
+
+
+
     const [isCorrect, setIsCorrect] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const fullWord = !isCorrect ? "Task Managr" : "Task Manager";

@@ -206,15 +206,20 @@ app.get('/api/tasks/user/completed', authenticateToken, (req, res) => {
 
 //Get all completed tasks
 app.get('/api/tasks/all/completed', authenticateToken, requireAdmin, (req, res) => {
-    const tasks = db.prepare(`
-        SELECT tasks.*, users.username 
-        FROM tasks 
-        INNER JOIN users 
-        ON tasks.user_id = users.id
-        WHERE tasks.completed = 1
-        AND tasks.archived = 0
-        `).all();
-    res.json(tasks);
+    try {
+        const tasks = db.prepare(`
+            SELECT tasks.*, users.username 
+            FROM tasks 
+            INNER JOIN users 
+            ON tasks.user_id = users.id
+            WHERE tasks.completed = 1
+            AND tasks.archived = 0
+            `).all();
+        res.json(tasks);
+    } catch (err) {
+        console.error("GET ALL COMPLETED ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 //POST new task
@@ -247,117 +252,147 @@ app.post('/api/tasks', authenticateToken, (req, res) => {
 
 //PUT update task
 app.put('/api/tasks/:id/update', authenticateToken, (req, res) => {
-    const { title, completed, toggle, dueDate } = req.body;
-    const taskId = parseInt(req.params.id);
-    const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
-    if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
+    try {
+        const { title, completed, toggle, dueDate } = req.body;
+        const taskId = parseInt(req.params.id);
+        const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
+        if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
 
-    if (toggle) {
-        db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ? AND user_id = ?').run(taskId, req.user.id);
-    } else {
-        db.prepare('UPDATE tasks SET title = ?, completed = ?, due_date = ? WHERE id = ? AND user_id = ?').run(
-            title ?? task.title,
-            completed !== undefined ? (completed ? 1 : 0)
-            : task.completed,
-            dueDate ?? task.due_date,
-            taskId,
-            req.user.id
-        );
+        if (toggle) {
+            db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ? AND user_id = ?').run(taskId, req.user.id);
+        } else {
+            db.prepare('UPDATE tasks SET title = ?, completed = ?, due_date = ? WHERE id = ? AND user_id = ?').run(
+                title ?? task.title,
+                completed !== undefined ? (completed ? 1 : 0)
+                : task.completed,
+                dueDate ?? task.due_date,
+                taskId,
+                req.user.id
+            );
+        }
+
+        const updatedTask = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE tasks.id = ?').get(taskId);
+        res.status(200).json(updatedTask);
+    } catch (err) {
+        console.error("UPDATE TASK ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    const updatedTask = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE tasks.id = ?').get(taskId);
-    res.status(200).json(updatedTask);
 });
 
 //PUT update task for another user as admin
 app.put('/api/admin/tasks/:id/update', authenticateToken, requireAdmin, (req, res) => {
-    const { title, completed, toggle, dueDate } = req.body;
-    const taskId = parseInt(req.params.id);
-    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
-    if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
+    try{
+        const { title, completed, toggle, dueDate } = req.body;
+        const taskId = parseInt(req.params.id);
+        const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+        if (!task) return res.status(404).json({ error : 'Task not Found' }); // Error handling if unable to match task in const task
 
-    if (toggle) {
-        db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ?').run(taskId);
-    } else {
-        db.prepare('UPDATE tasks SET title = ?, completed = ?, due_date = ? WHERE id = ?').run(
-            title ?? task.title,
-            completed !== undefined ? (completed ? 1 : 0)
-            : task.completed,
-            dueDate ?? task.due_date,
-            taskId
-        );
+        if (toggle) {
+            db.prepare('UPDATE tasks SET completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END WHERE id = ?').run(taskId);
+        } else {
+            db.prepare('UPDATE tasks SET title = ?, completed = ?, due_date = ? WHERE id = ?').run(
+                title ?? task.title,
+                completed !== undefined ? (completed ? 1 : 0)
+                : task.completed,
+                dueDate ?? task.due_date,
+                taskId
+            );
+        }
+
+        const updatedTask = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE tasks.id = ?').get(taskId);
+        res.status(200).json(updatedTask);
+    } catch (err) {
+        console.error("ADMIN TASK UPDATE ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    const updatedTask = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id WHERE tasks.id = ?').get(taskId);
-    res.status(200).json(updatedTask);
 });
 
 
-// ARCHIVE a task
+//ARCHIVE a task
 app.put('/api/tasks/:id/archive', authenticateToken, (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
-    if (!task) {
-            return res.status(404).json({ error: 'Task not found' });
-        }
+    try{
+        const taskId = parseInt(req.params.id);
+        const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
+        if (!task) {
+                return res.status(404).json({ error: 'Task not found' });
+            }
 
-    db.prepare('UPDATE tasks SET archived = 1 WHERE id = ? and user_id = ?').run(taskId, req.user.id);
-
-
-    const updatedTask = db
-        .prepare('SELECT * FROM tasks WHERE id = ? and user_id = ?')
-        .get(taskId, req.user.id);
+        db.prepare('UPDATE tasks SET archived = 1 WHERE id = ? and user_id = ?').run(taskId, req.user.id);
 
 
-    res.status(200).json(updatedTask);
+        const updatedTask = db
+            .prepare('SELECT * FROM tasks WHERE id = ? and user_id = ?')
+            .get(taskId, req.user.id);
+
+
+        res.status(200).json(updatedTask);
+    } catch (err) {
+        console.error("ARCHIVE TASK ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 //Admin archive task
 app.put('/api/admin/tasks/:id/archive', authenticateToken, requireAdmin, (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
-    if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
+    try{
+        const taskId = parseInt(req.params.id);
+        const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+
+        db.prepare('UPDATE tasks SET archived = 1 WHERE id = ?').run(taskId);
+
+        const updatedTask = db
+            .prepare('SELECT * FROM tasks WHERE id = ?')
+            .get(taskId);
+
+        res.status(200).json(updatedTask);
+    } catch (err) {
+        console.error("ADMIN ARCHIVE TASK ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    db.prepare('UPDATE tasks SET archived = 1 WHERE id = ?').run(taskId);
-
-    const updatedTask = db
-        .prepare('SELECT * FROM tasks WHERE id = ?')
-        .get(taskId);
-
-    res.status(200).json(updatedTask);
 });
 
 //Restore task
 app.put('/api/tasks/:id/restore', authenticateToken, requireAdmin, (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
-    if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
+    try{ 
+        const taskId = parseInt(req.params.id);
+        const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+
+        db.prepare('UPDATE tasks SET archived = 0 WHERE id = ?').run(taskId);
+
+        const updatedTask = db
+            .prepare('SELECT * FROM tasks WHERE id = ?')
+            .get(taskId);
+
+        res.status(200).json(updatedTask);
+    } catch (err) {
+        console.error("RESTORE TASK ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    db.prepare('UPDATE tasks SET archived = 0 WHERE id = ?').run(taskId);
-
-    const updatedTask = db
-        .prepare('SELECT * FROM tasks WHERE id = ?')
-        .get(taskId);
-
-    res.status(200).json(updatedTask);
 });
 
 //Delete Task
 app.delete('/api/tasks/:id/delete', authenticateToken, (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+    try{
+        const taskId = parseInt(req.params.id);
+        const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
 
-    if(!task) {
-        return res.status(404).json({ error: 'Task not found' });
+        if(!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+
+        db.prepare('DELETE FROM tasks WHERE id = ?').run(taskId);
+
+        res.status(204).send();
+    } catch (err) {
+        console.error("DELETE TASK ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    db.prepare('DELETE FROM tasks WHERE id = ?').run(taskId);
-
-    res.status(204).send();
 });
 
 //////////////

@@ -2,6 +2,14 @@ import './Footer.css';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
+    /*
+    Footer defines the buttons and links in the footer of this webpage
+
+    this is a component to be placed on a page
+    */
+
+
+    
 return (
     <footer className='footer'>
         <div className='description'>

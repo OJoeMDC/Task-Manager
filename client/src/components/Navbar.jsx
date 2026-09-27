@@ -2,6 +2,14 @@ import './Navbar.css'
 import {Link} from 'react-router-dom';
 
 function Navbar({ user, setUser }) {
+    /*
+    Navbar sets the layout for the navigation bar at the top of the page
+
+    this is a component to be placed on a page
+    */
+
+
+
     const logout = () => {
         localStorage.removeItem('user');
         setUser(null);

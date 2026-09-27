@@ -2,9 +2,18 @@ import { useState } from 'react'
 import './TaskInput.css'
 
 function TaskInput({ onAdd }) {
+    /*
+    Task Input handles the creation of a new task on the user's dashboard
+
+    this is a component to be placed on a page
+    */
+   
+
+
     const [title, setTitle] = useState('');
     const [dueDate, setDueDate] = useState('');
 
+    //handles submitting the task form
     const handleSubmit = (e) => {
         e.preventDefault()
         if(!title.trim()) return
