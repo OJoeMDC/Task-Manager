@@ -4,6 +4,14 @@ import './Task.css'
 
 
 export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask } ) {
+    /*
+    Task handles what buttons an individual task has in a tasklist
+
+    this is a component to be placed in tasklist, but is able to be called elsewhere
+    */
+
+
+
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);

@@ -3,6 +3,11 @@ import Task from "./Task"
 import useTasks from '../hooks/useTasks';
 
 function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask }) {
+    /*
+    Tasklist takes care of the lists of tasks
+
+    this is a component to be placed on a page
+    */
     
 
     return(

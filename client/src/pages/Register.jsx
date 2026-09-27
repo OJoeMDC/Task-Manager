@@ -2,12 +2,18 @@ import './AccountForm.css';
 import { useState } from 'react';
 
 export default function Register({ setUser, user, API_URL, showMessage }) {
+  /*
+  Register handles the registration page for new users
+  */
 
+  //variables to send to backend
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+
+  //functions to add a new user when regiserting
   const addUser = async (e) => {
     e.preventDefault();
     setError('');
@@ -37,6 +43,8 @@ export default function Register({ setUser, user, API_URL, showMessage }) {
     }
   };
 
+
+  //Normal page functions
   return (
     <main className='accountPage'>
       <h1 className='accountTitle'>Create an Account</h1>
