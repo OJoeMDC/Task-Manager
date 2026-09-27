@@ -2,12 +2,19 @@ import { Link } from 'react-router-dom';
 import './Profile.css';
 
 export default function Profile({ setUser, user, API_URL, showMessage }) {
+    /*
+    This is a user's profile self management page
+    */
+
+    //Handles logging out of a user
     const logout = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         setUser(null);
     }
 
+
+    //returns error page if no user is logged in
     if(!user) {
         return (
             <main className='profilePage'>
@@ -17,7 +24,7 @@ export default function Profile({ setUser, user, API_URL, showMessage }) {
         );
     };
 
-
+    //normal page for logged in user
     return (
         <main className="profilePage">
             <h1>Welcome, {user.username}!</h1>

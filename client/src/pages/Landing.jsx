@@ -3,6 +3,11 @@ import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
 
 export default function Landing({ user }) {
+  /*
+  Landing is the main front page
+  */
+
+  
   return (
     <main className='landing'>
       <div className='landingHero'>

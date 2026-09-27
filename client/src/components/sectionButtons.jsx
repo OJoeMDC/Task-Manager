@@ -2,6 +2,14 @@ import React from 'react';
 import './sectionButtons.css';
 
 export default function SectionButtons({ activeSection, setActiveSection, viewArchived, setViewArchived, viewCompleted, setViewCompleted, viewArchivedUsers, setViewArchivedUsers, user }) {
+    /*
+    Section Buttons manages the buttons in user and admin dashboards
+
+    this is a component to be placed on a page
+    */
+
+
+    
     const isAdminPage = location.pathname === '/admin'; 
 
     return (

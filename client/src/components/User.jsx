@@ -2,6 +2,14 @@ import { useState} from 'react'
 import './Task.css'
 
 export default function User( { user, archiveUser, restoreUser, deleteUser, editUser } ) {
+    /*
+    User defines actions to take on a user in the userlist of the admin dashboard
+
+    this is a component to be placed on a page, notably in the userlist on the admin dashboard
+    */
+
+
+
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(user.username);
     const [newRole, setNewRole] = useState(user.role);

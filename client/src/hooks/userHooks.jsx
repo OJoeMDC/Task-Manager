@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 
 export default function userHooks(showMessage) {
+    /*
+    userHooks manages all CRUD operations able to be taken for a user
+
+    this is a webhook to be referenced by pages or components
+    */
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
     const [viewArchivedUsers, setViewArchivedUsers] = useState(false);

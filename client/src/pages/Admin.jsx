@@ -9,12 +9,18 @@ import { useLocation } from 'react-router-dom';
 
 
 export default function Admin({ user, API_URL, showMessage }) {
+    /*
+    Admin manages an admin user's dashboard for managing other people and their tasks
+    */
+
+
     const location = useLocation();
     const isAdminPage = location.pathname === '/admin';
     const [activeSection, setActiveSection] = useState(
         localStorage.getItem('activeSection') || 'users'
     ); // 'users' or 'tasks'
 
+    //imports from useTasks webhook
     const {
         tasks,
         editTask,
@@ -33,6 +39,7 @@ export default function Admin({ user, API_URL, showMessage }) {
         fetchTasks
     } = useTasks(user, showMessage);
 
+    //imports from userHooks webhook
     const {
         users,
         setUsers,
@@ -50,13 +57,14 @@ useEffect(() => {
     getUsers();
 }, [API_URL, viewArchivedUsers, viewArchived, viewCompleted]);
 
+//get all tasks that exist
 useEffect(() => {
     if (user) {
         fetchTasks();
     }
 }, [user, viewArchived]);
 
-
+    //if an admin is not logged in, return an error page
     if (!user) {
         return (
             <main className='adminPage'>
@@ -66,7 +74,7 @@ useEffect(() => {
         )
     }
 
-
+    //normal admin page response when admin user is logged in
     return (
         <main className='adminPage'>
             <h1 className='adminTitle'>Admin Dashboard</h1>
