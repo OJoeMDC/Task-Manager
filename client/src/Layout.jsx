@@ -4,7 +4,6 @@ import { Outlet } from "react-router-dom";
 import Toast from './components/Toast'
 
 function Layout({ user, setUser, message }) {
-    message = "test";
     return(
         <div className="app-layout">
             <Navbar user={user} setUser={setUser} />
