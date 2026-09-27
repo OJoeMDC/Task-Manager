@@ -1,10 +1,14 @@
 .tasklist {
     display: flex;
     flex-direction: column;
-    width: 60vw;
+    width: max-content;
+    max-width: 90vw;
 
     background-color: var(--surface);
     box-shadow: 6px 6px 0 black;
+
+    padding: 8px;
+    margin: 0;
 }
 
 header {
@@ -20,6 +24,7 @@ header {
     color: var(--text);
     list-style: none;
     margin: 12px;
+    padding: 0;
 }
 
 @media (max-width: 768px) {

@@ -101,14 +101,39 @@
 
 
 @media (max-width: 768px) {
-    .list-item {
+  .list-item {
+        display: flex;
         flex-direction: column;
         align-items: center;
+        text-align: center;
+        gap: 12px;
+        padding: 6px;
+    }
+
+
+    .admin-task {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
+        padding: 6px;
     }
 
     .buttons {
+        display: flex;
+        flex-direction: column;
         margin-top: 8px;
+        width: 100%;
+        min-height: 44px;
     }
+
+    .buttons button {
+    border: none;
+    box-shadow: 6px 6px 0 black;
+    font-weight: 800;
+    text-transform: uppercase;
+}
 
     .delete, .edit, .complete, .save, .cancel, .restore {
         padding: 6px;
