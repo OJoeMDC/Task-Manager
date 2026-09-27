@@ -138,9 +138,9 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 <button 
                                 disabled={isLoading !== null}
                                 className='restore'
-                                onClick={() =>
-                                    handleAction('restore', () => toggleComplete(task.id))
-                                }>
+                                onClick={() => {
+                                    handleAction('restore', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
+                                }}>
                                     {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
                                 </button>
                             </>
