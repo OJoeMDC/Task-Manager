@@ -1,0 +1,38 @@
+.toast {
+    position: fixed;
+    top: 25%;
+    left: 65%;
+
+    width: auto;
+    padding: 24px;
+
+    background: var(--surface);
+
+    border-radius: 12px;
+    box-shadow: 5px 10px 2px black;
+    opacity: 0;
+
+    z-index: 1000;
+
+    animation: slideIn 3s ease-in-out forwards; 
+    /* name duration timing-function delay iteration-count direction fill-mode; */
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0%;
+        transform: translateY(-50px)
+    }
+    11% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+    78% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+}
