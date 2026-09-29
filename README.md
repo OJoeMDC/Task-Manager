@@ -167,4 +167,3 @@ sql
 - **Group Management / Owners**
 - **Task assignment to accounts**
 - **Password reset**
-- **Individual Task cards, like amazon shop items**
