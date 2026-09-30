@@ -137,21 +137,22 @@ VITE_API_URL=http://localhost:3000
 
 ```text
 sql
- CREATE TABLE users (
-   id INTEGER PRIMARY KEY AUTOINCREMENT,
-   username TEXT NOT NULL UNIQUE,
-   username_normalized TEXT NOT NULL UNIQUE,
-   password TEXT NOT NULL,
-   role TEXT DEFAULT 'user'
-  );
+ CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    username_normalized TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    role TEXT DEFAULT 'user'
+    );
     
- CREATE TABLE tasks (
-   id INTEGER PRIMARY KEY AUTOINCREMENT,
-   title TEXT NOT NULL,
-   completed INTEGER DEFAULT 0,
-   user_id INTEGER NOT NULL,
-   FOREIGN KEY (user_id) REFERENCES users(id)
- );
+ CREATE TABLE IF NOT EXISTS tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    completed INTEGER DEFAULT 0,
+    user_id INTEGER NOT NULL,
+    archived INTEGER DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
 ```
 
 ## Scripts
@@ -167,3 +168,4 @@ sql
 - **Group Management / Owners**
 - **Task assignment to accounts**
 - **Password reset**
+- **Offload user accounts to Prisma**

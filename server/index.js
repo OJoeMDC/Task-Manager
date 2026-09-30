@@ -60,148 +60,181 @@ db.exec(`
     )
     `);
 
- //add due date column to task if not exists
- try {
-    db.prepare('ALTER TABLE tasks ADD COLUMN due_date TEXT').run();
-    console.log('Added due_date column to tasks table');
-} catch (err) {
-    if (err.message.includes('duplicate column name: due_date')) {
-        console.log('due_date column already exists in tasks table');
-    } else {
-        console.error('Error adding due_date column to tasks table:', err);
-    }
-}
-
- //GET all tasks for a user
+ //GET basic tasks for a user
  app.get('/api/tasks', authenticateToken, (req, res) => {
-    const userId = req.user.id;
+    try {
+        const userId = req.user.id;
 
-    const tasks = db.prepare(`
-        SELECT tasks.*, users.username 
-        FROM tasks 
-        INNER JOIN users 
-        ON tasks.user_id = users.id 
-        WHERE tasks.user_id = ?
-        AND tasks.archived = 0
-        AND tasks.completed = 0
-        `).all(userId);
-    res.json(tasks);
+        const tasks = db.prepare(`
+            SELECT tasks.*, users.username 
+            FROM tasks 
+            INNER JOIN users 
+            ON tasks.user_id = users.id 
+            WHERE tasks.user_id = ?
+            AND tasks.archived = 0
+            AND tasks.completed = 0
+            `).all(userId);
+        res.json(tasks);
+    } catch (err) {
+        console.error("GET basic user tasks ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
-//Get all tasks for a user
+//Get ALL tasks for a user
 app.get('/api/tasks/user/all', authenticateToken, (req, res) => {
-    const userId = req.user.id;
+    try {
+        const userId = req.user.id;
 
-    const tasks = db.prepare(`
-        SELECT tasks.*, users.username 
-        FROM tasks 
-        INNER JOIN users 
-        ON tasks.user_id = users.id
-        WHERE tasks.user_id = ?`
-    ).all(userId);
-    res.json(tasks);
+        const tasks = db.prepare(`
+            SELECT tasks.*, users.username 
+            FROM tasks 
+            INNER JOIN users 
+            ON tasks.user_id = users.id
+            WHERE tasks.user_id = ?`
+        ).all(userId);
+        res.json(tasks);
+    } catch (err) {
+        console.error("GET all user tasks ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 //Get specific task for details page
 app.get('/api/tasks/task/:id', authenticateToken, (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const userId = req.user.id;
+    try {
+        const taskId = parseInt(req.params.id);
+        const userId = req.user.id;
 
-    const task = db.prepare(`
-        SELECT tasks.*, users.username 
-        FROM tasks 
-        INNER JOIN users 
-        ON tasks.user_id = users.id
-        WHERE tasks.id = ?
-        AND tasks.user_id = ?`
-    ).get(taskId, userId);
+        const task = db.prepare(`
+            SELECT tasks.*, users.username 
+            FROM tasks 
+            INNER JOIN users 
+            ON tasks.user_id = users.id
+            WHERE tasks.id = ?
+            AND tasks.user_id = ?`
+        ).get(taskId, userId);
 
-    if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+
+        res.json(task);
+    } catch (err) {
+        console.error("GET user detailed task ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    res.json(task);
 });
 
 //Admin Get specific task for details page
 app.get('/api/admin/tasks/:id', authenticateToken, requireAdmin, (req, res) => {
-    const taskId = parseInt(req.params.id);
+    try {
+        const taskId = parseInt(req.params.id);
 
-    const task = db.prepare(`
-        SELECT tasks.*, users.username 
-        FROM tasks 
-        INNER JOIN users 
-        ON tasks.user_id = users.id
-        WHERE tasks.id = ?`
-    ).get(taskId);
+        const task = db.prepare(`
+            SELECT tasks.*, users.username 
+            FROM tasks 
+            INNER JOIN users 
+            ON tasks.user_id = users.id
+            WHERE tasks.id = ?`
+        ).get(taskId);
 
-    if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+
+        res.json(task);
+    } catch (err) {
+        console.error("GET admin detailed task ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    res.json(task);
 });
 
 //Get ALL tasks
 app.get('/api/tasks/all/all', authenticateToken, requireAdmin, (req, res) => {
-    const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id').all();
-    res.json(tasks);
+    try {
+        const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id').all();
+        res.json(tasks);
+    } catch (err) {
+        console.error("GET ALL/ALL tasks ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 //Get all unarchived tasks
 app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
-    const tasks = db.prepare(`
-        SELECT tasks.*, users.username
-        FROM tasks
-        INNER JOIN users
-        ON tasks.user_id = users.id
-        WHERE tasks.archived = 0
-        AND tasks.completed = 0
-        `).all();
-        res.json(tasks);
+    try {
+        const tasks = db.prepare(`
+            SELECT tasks.*, users.username
+            FROM tasks
+            INNER JOIN users
+            ON tasks.user_id = users.id
+            WHERE tasks.archived = 0
+            AND tasks.completed = 0
+            `).all();
+            res.json(tasks);
+        } catch (err) {
+            console.error("GET ALL unarchived ERROR:", err);
+            res.status(500).json({ error: err.message });
+        }
 })
 
 //Get user archived tasks
 app.get('/api/tasks/user/archived', authenticateToken, (req, res) => {
-    const userId = req.user.id;
+    try {
+        const userId = req.user.id;
 
-    const tasks = db.prepare(`
-        SELECT tasks.*, users.username
-        FROM tasks
-        INNER JOIN users
-        ON tasks.user_id = users.id
-        WHERE tasks.user_id = ?
-        AND tasks.archived = 1
-        `).all(userId);
-    res.json(tasks);
+        const tasks = db.prepare(`
+            SELECT tasks.*, users.username
+            FROM tasks
+            INNER JOIN users
+            ON tasks.user_id = users.id
+            WHERE tasks.user_id = ?
+            AND tasks.archived = 1
+            `).all(userId);
+        res.json(tasks);
+    } catch (err) {
+        console.error("GET user archived ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 //Get all archived tasks
 app.get('/api/tasks/all/archived', authenticateToken, requireAdmin, (req, res) => {
-    const tasks = db.prepare(`
-        SELECT tasks.*, users.username
-        FROM tasks
-        INNER JOIN users
-        ON tasks.user_id = users.id
-        WHERE tasks.archived = 1
-        `).all();
-        res.json(tasks);
+    try {
+        const tasks = db.prepare(`
+            SELECT tasks.*, users.username
+            FROM tasks
+            INNER JOIN users
+            ON tasks.user_id = users.id
+            WHERE tasks.archived = 1
+            `).all();
+            res.json(tasks);
+    } catch (err) {
+        console.error("GET ALL archived ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 })
 
 //Get completed tasks
 app.get('/api/tasks/user/completed', authenticateToken, (req, res) => {
-    const userId = req.user.id;
+    try {
+        const userId = req.user.id;
 
-    const tasks = db.prepare(`
-        SELECT tasks.*, users.username 
-        FROM tasks 
-        INNER JOIN users 
-        ON tasks.user_id = users.id
-        WHERE tasks.user_id = ?
-        AND tasks.completed = 1
-        AND tasks.archived = 0
-        `).all(userId);
-    res.json(tasks);
+        const tasks = db.prepare(`
+            SELECT tasks.*, users.username 
+            FROM tasks 
+            INNER JOIN users 
+            ON tasks.user_id = users.id
+            WHERE tasks.user_id = ?
+            AND tasks.completed = 1
+            AND tasks.archived = 0
+            `).all(userId);
+        res.json(tasks);
+        } catch (err) {
+            console.error("GET User Completed Tasks ERROR:", err);
+            res.status(500).json({ error: err.message });
+        }
 });
 
 //Get all completed tasks
@@ -400,22 +433,37 @@ app.delete('/api/tasks/:id/delete', authenticateToken, (req, res) => {
 //////////////
 
 
-//Get users
+//Get active users
 app.get('/api/users', authenticateToken, requireAdmin, (req, res) => {
-    const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users WHERE archived = 0').all();
-    res.json(users);
+    try {
+        const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users WHERE archived = 0').all();
+        res.json(users);
+    } catch (err) {
+        console.error("GET active users ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 //Get ALL users
 app.get('/api/users/all', authenticateToken, requireAdmin, (req, res) => {
-    const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users').all();
-    res.json(users);
+    try {
+        const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users').all();
+        res.json(users);
+    } catch (err) {
+        console.error("GET ALL usersERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 //Get archived users
 app.get('/api/users/archived', authenticateToken, requireAdmin, (req, res) => {
-    const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users WHERE archived = 1').all();
-    res.json(users);
+    try {
+        const users = db.prepare('SELECT id, username, username_normalized, role, archived FROM users WHERE archived = 1').all();
+        res.json(users);
+    } catch (err) {
+        console.error("GET archived users ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 
@@ -435,7 +483,8 @@ app.post('/api/users', async (req, res) => {
         const newUser = db.prepare('SELECT username, username_normalized, role FROM users WHERE id = ?').get(result.lastInsertRowid);
         res.status(201).json(newUser);
     } catch {
-        res.status(500).send();
+        console.error("Create user ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -483,11 +532,8 @@ app.put('/api/users/:id/edit', authenticateToken, requireAdmin, (req, res) => {
 
             res.status(200).json(updatedUser);
     } catch (err) {
-        console.error(err)
-
-        res.status(500).json({
-            error: 'Failed to update users'
-        });
+        console.error("Edit user ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -496,21 +542,26 @@ app.put('/api/users/:id/edit', authenticateToken, requireAdmin, (req, res) => {
 
 //Archive User
 app.put('/api/users/:id/archive', authenticateToken, requireAdmin, (req, res) => {
-    const userId = parseInt(req.params.id);
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+    try {
+        const userId = parseInt(req.params.id);
+        const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
 
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        db.prepare('UPDATE users SET archived = 1 WHERE id = ?').run(userId);
+
+        const updatedUser = db
+            .prepare('SELECT id, username, username_normalized, role FROM users WHERE id = ?')
+            .get(userId);
+
+
+        res.status(204).send(updatedUser);
+    } catch (err) {
+        console.error("Archive user ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    db.prepare('UPDATE users SET archived = 1 WHERE id = ?').run(userId);
-
-    const updatedUser = db
-        .prepare('SELECT id, username, username_normalized, role FROM users WHERE id = ?')
-        .get(userId);
-
-
-    res.status(204).send(updatedUser);
 });
 
 
@@ -518,36 +569,46 @@ app.put('/api/users/:id/archive', authenticateToken, requireAdmin, (req, res) =>
 
 //Restore User
 app.put('/api/users/:id/restore', authenticateToken, requireAdmin, (req, res) => {
-    const userId = parseInt(req.params.id);
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+    try {
+        const userId = parseInt(req.params.id);
+        const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
 
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        db.prepare('UPDATE users SET archived = 0 WHERE id = ?').run(userId);
+
+        const updatedUser = db
+            .prepare('SELECT id, username, username_normalized, role FROM users WHERE id = ?')
+            .get(userId);
+
+        res.status(204).send(updatedUser);
+    } catch (err) {
+        console.error("Restore user ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    db.prepare('UPDATE users SET archived = 0 WHERE id = ?').run(userId);
-
-    const updatedUser = db
-        .prepare('SELECT id, username, username_normalized, role FROM users WHERE id = ?')
-        .get(userId);
-
-    res.status(204).send(updatedUser);
 });
 
 
 
 //Delete User
 app.delete('/api/users/:id/delete', authenticateToken, requireAdmin, (req, res) => {
-    const userId = parseInt(req.params.id);
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+    try {
+        const userId = parseInt(req.params.id);
+        const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
 
-    if(!user) {
-        return res.status(404).json({ error: 'User not found' });
+        if(!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        db.prepare('DELETE FROM users WHERE id = ?').run(userId);
+
+        res.status(204).send();
+    } catch (err) {
+        console.error("Delete user ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
-
-    db.prepare('DELETE FROM users WHERE id = ?').run(userId);
-
-    res.status(204).send();
 });
 
 
@@ -580,23 +641,29 @@ app.post('/api/users/login', async (req, res) => {
         });
 
     } catch(err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("User login ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 });
 
 
 //Token Authentication
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
 
-    if(token == null) return res.sendStatus(401);
+        if(token == null) return res.sendStatus(401);
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    })
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if (err) return res.sendStatus(403);
+            req.user = user;
+            next();
+        })
+    } catch (err) {
+        console.error("Token Authentication ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
 }
 
 //Account Seeding
@@ -616,32 +683,38 @@ async function seedUsers() {
     },
   ];
 
+  //When called, this finds if a user exists
   const findUser = db.prepare(`
     SELECT id, username_normalized, role
     FROM users
     WHERE username_normalized = ?
   `);
 
+  //When called, this inserts the user dictionary into the DB
   const insertUser = db.prepare(`
     INSERT INTO users (username, username_normalized, password, role)
     VALUES (?, ?, ?, ?)
   `);
 
+  //Add users after checking for provided password or existing user
   for (const user of users) {
+    //If no password is present, skip adding to DB
     if (!user.password) {
       console.warn(`Skipping ${user.username}: no password configured`);
       continue;
     }
 
+    //Find A User To see if it exists
     const existingUser = findUser.get(user.username_normalized);
-
     if (existingUser) {
       console.log(`${user.username} already exists`);
       continue;
     }
 
+    //Encrypt password with bcrypt
     const passwordHash = await bcrypt.hash(user.password, 12);
 
+    //Inserts the user
     insertUser.run(
       user.username,
       user.username_normalized,
@@ -653,6 +726,7 @@ async function seedUsers() {
   }
 }
 
+//When called, ensures the task requires user to be admin
 function requireAdmin(req, res, next) {
     if (req.user.role !== 'admin') {
         return res.status(403).json({ error: 'Access denied' });
@@ -660,6 +734,8 @@ function requireAdmin(req, res, next) {
     next();
 }
 
+
+//Starts the server
 async function startServer() {
   try {
     await seedUsers();
@@ -673,4 +749,6 @@ async function startServer() {
   }
 }
 
+
+//Call the server start function
 startServer();
