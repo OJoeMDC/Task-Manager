@@ -154,9 +154,7 @@ export default function useTasks(user, showMessage, taskID) {
     if (isDetailsPage) {
         setSingleTask(updatedTask);
     } else {
-        setTasks(prevTasks => 
-            prevTasks.filter(task => task.id !== id)
-        );
+        await fetchTasks();
     }
 
     showMessage('Task archived successfully');
@@ -190,7 +188,7 @@ export default function useTasks(user, showMessage, taskID) {
             if (isDetailsPage) {
                 setSingleTask(updatedTask);
             } else {
-                setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+                await fetchTasks();
             }
 
             showMessage('Task archived successfully');
@@ -223,7 +221,7 @@ export default function useTasks(user, showMessage, taskID) {
             if(isDetailsPage) {
                 setSingleTask(updatedTask);
             } else {
-                setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+                await fetchTasks();
             }
 
             showMessage('Task restored successfully');
@@ -290,20 +288,9 @@ export default function useTasks(user, showMessage, taskID) {
     console.log(`Toggle task ${id}'s status successfully`);
 
     if (isDetailsPage) {
-    setSingleTask(updatedTask);
+        setSingleTask(updatedTask);
     } else {
-
-        setTasks(function(prev) {
-            return prev.map(function(task) {
-
-                if (task.id === id) {
-                    return updatedTask;
-                }
-
-                return task;
-            });
-        });
-
+        await fetchTasks();
     }
  
     await fetchTasks();
@@ -342,18 +329,7 @@ export default function useTasks(user, showMessage, taskID) {
              if (isDetailsPage) {
                 setSingleTask(updatedTask);
                 } else {
-
-                    setTasks(function(prev) {
-                        return prev.map(function(task) {
-
-                            if (task.id === id) {
-                                return updatedTask;
-                            }
-
-                            return task;
-                        });
-                    });
-
+                    await fetchTasks();
                 }
             showMessage('Task status changed');
 
@@ -365,7 +341,7 @@ export default function useTasks(user, showMessage, taskID) {
 
     //Edit Task
     const editTask = async (id, newTitle, newDueDate) => {
-    const res = await fetch(`${API_URL}/api/tasks/${id}`, {
+    const res = await fetch(`${API_URL}/api/tasks/${id}/update`, {
         method: 'PUT',
         headers: { 
         'Content-Type': 'application/json',
@@ -374,11 +350,11 @@ export default function useTasks(user, showMessage, taskID) {
         body: JSON.stringify({ title: newTitle, dueDate: newDueDate })
     });
     if (res.ok) {
-        const updated = await res.json();
+        const updatedTask = await res.json();
         if(isDetailsPage) {
                 setSingleTask(updatedTask);
             } else {
-                setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+                await fetchTasks();
             }
         showMessage('Task updated successfully');
     }
@@ -395,11 +371,11 @@ export default function useTasks(user, showMessage, taskID) {
             body: JSON.stringify({ title: newTitle, dueDate: newDueDate })
         });
         if (res.ok) {
-            const updated = await res.json();
+            const updatedTask = await res.json();
             if (isDetailsPage) {
-                setSingleTask(updated);
+                setSingleTask(updatedTask);
             } else {
-                setTasks(prev => prev.map(t => t.id === id ? updated : t));
+                await fetchTasks();
             }
             showMessage('Task updated successfully');
         }
