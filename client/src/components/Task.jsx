@@ -1,6 +1,11 @@
 import { useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Task.css'
+import { Check, Pencil, Trash2, Archive, RotateCcw } from "lucide-react";
+
+
+{/* 
+<Trash2 size={20} /> */}
 
 
 export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask } ) {
@@ -126,7 +131,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 onClick={() =>
                                     handleAction('restore', () => restoreTask(task.id))
                                 }>
-                                    {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
+                                    <p className="button-icon">
+                                        <RotateCcw size={20} />
+                                    </p>
+                                    <p className="button-text">
+                                        {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
+                                    </p>
                                 </button>
                                 <button
                                 disabled={isLoading !== null}
@@ -134,7 +144,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 onClick={() =>
                                     handleAction('delete', () => deleteTask(task.id))
                                 }>
+                                    <p className="button-icon">
+                                        <Trash2 size={20} />
+                                    </p>
+                                    <p className="button-text">
                                     {isLoading === 'delete' ? 'Deleting...' : 'Delete'}
+                                    </p>
                                 </button>
                             </>
                             
@@ -149,7 +164,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 onClick={() => {
                                     handleAction('restore', () => ( isAdmin && isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
                                 }}>
-                                    {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
+                                    <p className="button-icon">
+                                        <RotateCcw size={20} />
+                                    </p>
+                                    <p className="button-text">
+                                        {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
+                                    </p>
                                 </button>
                             </>
                         )}
@@ -164,7 +184,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     onClick={() => {
                                         handleAction('complete', () => ( isAdmin && isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
                                     }}>
-                                        {isLoading === 'complete' ? 'Toggling...' : 'Complete'}
+                                        <p className="button-icon">
+                                            <Check size={20} />
+                                        </p>
+                                        <p className="button-text">   
+                                            {isLoading === 'complete' ? 'Toggling...' : 'Complete'}
+                                        </p>
                                 </button>
 
                                 <button
@@ -174,7 +199,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     onClick={() => {
                                         console.log("Edit clicked for task ID:", task.id);
                                         setIsEditing(true)}}>
-                                        Edit
+                                            <p className="button-icon">
+                                                <Pencil size={20} />
+                                            </p>
+                                            <p className="button-text">
+                                                Edit
+                                            </p>
                                 </button>
 
                                 <button
@@ -183,7 +213,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     onClick={() => {
                                         handleAction('archive', () => ( isAdmin ? adminArchiveTask(task.id) : archiveTask(task.id) ));
                                     }}>
+                                        <p className="button-icon">
+                                            <Archive size={20} />
+                                        </p>
+                                        <p className="button-text">
                                         {isLoading === 'archive' ? 'Archiving...' : 'Archive'}
+                                        </p>
                                 </button>
                             </>
                             

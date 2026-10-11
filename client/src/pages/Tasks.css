@@ -11,3 +11,9 @@
     gap: 12px;
 
 }
+
+@media (max-width: 768px) {
+    .tasks {
+        gap: 8px;
+    }
+}

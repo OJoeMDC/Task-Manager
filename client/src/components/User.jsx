@@ -1,5 +1,6 @@
 import { useState} from 'react'
 import './Task.css'
+import { Check, Pencil, Trash2, Archive, RotateCcw } from "lucide-react";
 
 export default function User( { user, archiveUser, restoreUser, deleteUser, editUser } ) {
     /*
@@ -81,12 +82,22 @@ export default function User( { user, archiveUser, restoreUser, deleteUser, edit
                                 <button 
                                     className='edit'
                                     onClick={(() => setIsEditing(true))}>
-                                        Edit
+                                        <p className="button-icon">
+                                            <Pencil size={20} />
+                                        </p>
+                                        <p className="button-text">
+                                            Edit
+                                        </p>
                                 </button>
                                 <button 
                                     className='delete' 
                                     onClick={() => archiveUser(user.id)}>
-                                        Archive
+                                        <p className="button-icon">
+                                            <Archive size={20} />
+                                        </p>
+                                        <p className="button-text">
+                                            Archive
+                                        </p>
                                 </button>
                             </>
                         )}
@@ -97,14 +108,24 @@ export default function User( { user, archiveUser, restoreUser, deleteUser, edit
                             <button 
                                 className='restore' 
                                 onClick={() => restoreUser(user.id)}>
-                                    Restore
-                            </button>
+                                    <p className="button-icon">
+                                        <RotateCcw size={20} />
+                                    </p>
+                                    <p className="button-text">
+                                        Restore
+                                    </p>
+                                </button>
 
-                            <button
-                                className='delete'
-                                onClick={() => deleteUser(user.id)}>
-                                    DELETE
-                            </button>
+                                <button
+                                    className='delete'
+                                    onClick={() => deleteUser(user.id)}>
+                                    <p className="button-icon">
+                                        <Trash2 size={20} />
+                                    </p>
+                                    <p className="button-text">
+                                        DELETE
+                                    </p>
+                                </button>
                             </>
                             
                         )}

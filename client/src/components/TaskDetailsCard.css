@@ -80,3 +80,22 @@
     color: black;
     font: inherit;
 }
+
+/*Mobile CSS*/
+@media (max-width: 768px) {
+    .task-details-card-container {
+        margin-top: 24px;
+    }
+
+    .task-details-card {
+        width: 100%;
+    }
+
+    .task-details-card-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        gap: 12px;
+    }
+}
