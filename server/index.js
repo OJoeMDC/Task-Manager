@@ -388,7 +388,29 @@ app.put('/api/admin/tasks/:id/archive', authenticateToken, requireAdmin, (req, r
 });
 
 //Restore task
-app.put('/api/tasks/:id/restore', authenticateToken, requireAdmin, (req, res) => {
+app.put('/api/tasks/:id/restore', authenticateToken, (req, res) => {
+    try{ 
+        const taskId = parseInt(req.params.id);
+        const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, req.user.id);
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+
+        db.prepare('UPDATE tasks SET archived = 0 WHERE id = ? AND user_id = ?').run(taskId, req.user.id);
+
+        const updatedTask = db
+            .prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?')
+            .get(taskId, req.user.id);
+
+        res.status(200).json(updatedTask);
+    } catch (err) {
+        console.error("RESTORE TASK ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+//Admin restore task
+app.put('/api/admin/tasks/:id/restore', authenticateToken, requireAdmin, (req, res) => {
     try{ 
         const taskId = parseInt(req.params.id);
         const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);

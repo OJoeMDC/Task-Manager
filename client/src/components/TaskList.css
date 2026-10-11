@@ -42,6 +42,7 @@ header {
         align-items: center;
         text-align: center;
         color: var(--text);
+        gap: 64px;
         
     }
 }

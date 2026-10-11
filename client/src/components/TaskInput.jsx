@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './TaskInput.css'
+import { Plus, Trash2 } from "lucide-react";
 
 function TaskInput({ onAdd }) {
     /*
@@ -36,7 +37,29 @@ function TaskInput({ onAdd }) {
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 />
-                <button type='submit'>Add</button>
+                <article className='task-form-buttons'>
+                    <button type='submit' className='button add-button'>
+                        <p className="button-icon">
+                        <Plus size={20} />
+                        </p>
+                        <p className="button-text">
+                            Add Task
+                        </p>
+                    </button>
+                    <button type='reset' className='button clear-button'
+                    onClick={() => {
+                        setTitle('')
+                        setDueDate('')
+                    }}>
+                        <p className="button-icon">
+                            <Trash2 size={20} />
+                        </p>
+                        <p className="button-text">
+                            Clear
+                        </p>
+
+                    </button>
+                </article>
             </form>
         </main>
     )

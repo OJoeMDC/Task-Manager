@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './TaskDetailsCard.css'
+import { X, Archive, Check, RotateCcw } from "lucide-react";
 
 export default function TaskDetailsCard({ task, user, showMessage, editTask, deleteTask, archiveTask, toggleComplete, restoreTask, adminArchiveTask, adminToggleComplete, adminEditTask }) {
     /*
@@ -105,21 +106,41 @@ export default function TaskDetailsCard({ task, user, showMessage, editTask, del
             <div className="task-details-card-buttons">
                 {task.archived === 1 ? (
                     <button className="restore button" onClick={() => restoreTask(task.id)}>
-                        Restore
+                        <p className="button-icon">
+                            <RotateCcw size={20} />
+                        </p>
+                        <p className="button-text">  
+                            Restore
+                        </p>
                     </button>
                 ) : (
                     <button className="delete button" onClick={() => handleAction('archive', () => ( isAdmin ? adminArchiveTask(task.id) : archiveTask(task.id) ))}>
-                        Archive
+                        <p className="button-icon">
+                            <Archive size={20} />
+                        </p>
+                        <p className="button-text">
+                            Archive
+                        </p>
                     </button>
                 )}
 
                 {task.completed === 1 ? (
                     <button className="incomplete button" onClick={() => handleAction('complete', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ))}>
-                        Mark Incomplete
+                        <p className="button-icon">
+                            <X size={20} />
+                        </p>
+                        <p className="button-text">
+                            Mark Incomplete
+                        </p>
                     </button>
                 ) : (
                     <button className="complete button" onClick={() => handleAction('complete', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ))}>
-                        Mark Complete
+                        <p className="button-icon">
+                            <Check size={20} />
+                        </p>
+                        <p className="button-text">
+                            Mark Complete
+                        </p>
                     </button>
                 )}
             </div>
