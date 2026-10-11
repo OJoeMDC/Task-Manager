@@ -91,6 +91,10 @@ body,
     width: fit-content;
 }
 
+button svg {
+    color: var(--text);
+}
+
 button.secondary {
     scale: 0.8;
 }
