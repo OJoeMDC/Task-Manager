@@ -15,8 +15,6 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     this is a component to be placed in tasklist, but is able to be called elsewhere
     */
 
-
-    const idVisibility = false; // Set to true to show the task ID in the list item
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
@@ -25,6 +23,9 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     const [isLoading, setIsLoading] = useState(null);
     const location = useLocation();
     const isAdminPage = location.pathname === '/admin';
+
+    
+    var idVisibility = false; // Set to true to show the task ID in the list item
 
     const handleAction = async (actionName, action) => {
         setIsLoading(actionName);
@@ -105,10 +106,11 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
         <li 
         key={task.id} 
         className={`
+            list-item
             ${task.completed === 1 ?'completed' : ''} 
             ${task.archived === 1 ? 'archived' : ''} 
             ${isAdminPage ? 'admin-task' : ''} 
-            ${idVisibility ? 'list-item-id' : 'list-item'}
+            ${idVisibility ? '' : 'hide-id'}
             `}
         onClick={() => navigate(`/tasks/${task.id}`)}
         >
