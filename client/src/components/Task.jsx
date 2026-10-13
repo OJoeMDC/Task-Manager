@@ -16,7 +16,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     */
 
 
-
+    const idVisibility = false; // Set to true to show the task ID in the list item
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(task.title);
@@ -104,10 +104,15 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     return (
         <li 
         key={task.id} 
-        className={`list-item ${task.completed === 1 ?'completed' : ''} ${task.archived === 1 ? 'archived' : ''} ${isAdminPage ? 'admin-task' : ''}`}
+        className={`
+            ${task.completed === 1 ?'completed' : ''} 
+            ${task.archived === 1 ? 'archived' : ''} 
+            ${isAdminPage ? 'admin-task' : ''} 
+            ${idVisibility ? 'list-item-id' : 'list-item'}
+            `}
         onClick={() => navigate(`/tasks/${task.id}`)}
         >
-                    <span>ID: {task.id}</span>
+                    {idVisibility && <span className="task-id">ID: {task.id}</span>}
                    <span><b>Task Name:</b> {task.title}</span>
                    <span
                    className={`${task.due_date && new Date(task.due_date) <= new Date() && task.completed === 0 ? 'overdue' : ''}`}>
