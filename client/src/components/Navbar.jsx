@@ -18,7 +18,7 @@ function Navbar({ user, setUser }) {
 
     return(
         <nav className='navbar'>
-            <Link className='navTitle' to='/'>Task Manager</Link>
+            <Link className='navTitle' to='/'>Task <p>Manager</p></Link>
             <div className='links'>
                 {user ? (
                     <>
@@ -32,7 +32,7 @@ function Navbar({ user, setUser }) {
                 ) : (
                     <>
                         <Link className='link' to='/login'>Login</Link>
-                        <Link className='link' to='/register'>Register</Link>
+                        <Link className='link' to='/register'><span className='highlight'>Register</span></Link>
                     </>
                 )}
             </div>
