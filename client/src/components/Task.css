@@ -1,18 +1,127 @@
 .list-item {
     display: grid;
-    grid-template-columns: 0.5fr 1fr 1fr auto;
-    align-items: center;
-    gap: 12px;
-    padding: 8px;
-}
-
-.list-item.hide-id {
-    display: grid;
     grid-template-columns: 1fr 1fr auto;
     align-items: center;
     gap: 12px;
     padding: 8px;
+
+    border-bottom: 1px solid var(--border);
 }
+
+.user-list-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        gap: 4px;
+    }
+
+
+.task-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 4px;
+}
+
+        .task-due {
+            font-weight: 600;
+        }
+
+        .task-title {
+        font-weight: 900;
+        }
+
+
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+
+}
+
+        .button-icon {
+            display: none;
+        }
+
+        .button-text {
+            display: inline;
+        }
+
+        .buttons button {
+            border: none;
+            box-shadow: 6px 6px 0 black;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .buttons button:hover {
+            box-shadow: 4px 4px 0 black;
+            cursor: pointer;
+        }
+
+        .buttons button:active {
+            transform: scale(0.96);
+        } 
+
+        .delete {
+            background: var(--primary);
+        }
+
+        .edit {
+            background: var(--warning);
+        }
+
+        .complete {
+            background: var(--success);
+        }
+
+        .save {
+            background-color: var(--success);
+        }
+
+        .cancel {
+            background-color: var(--primary);
+        }
+
+        .restore {
+            background-color: var(--success);
+        }
+
+        .edit-form {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+        }
+
+        .overdue {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+.task-id {
+    text-align: flex-end;
+}
+
+        .list-item.hide-id {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+        }
+
+
 
 .list-item:hover {
     background-color: var(--border);
@@ -21,16 +130,12 @@
 
 .admin-task {
     display: grid;
-    grid-template-columns: 0.2fr 1fr 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr 1fr auto;
     align-items: center;
     gap: 12px;
     padding: 8px;
 }
 
-.list-item b {
-    font-weight: bold;
-    text-decoration: underline;
-}
 
 .list-item > span {
     text-align: left;
@@ -50,70 +155,7 @@
     text-align: left;
 }
 
-.buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-}
 
-.button-icon {
-    display: none;
-}
-
-.button-text {
-    display: inline;
-}
-
-.buttons button {
-    border: none;
-    box-shadow: 6px 6px 0 black;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
-.buttons button:hover {
-    box-shadow: 4px 4px 0 black;
-    cursor: pointer;
-}
-
-.buttons button:active {
-    transform: scale(0.96);
-} 
-
-.delete {
-    background: var(--primary);
-}
-
-.edit {
-    background: var(--warning);
-}
-
-.complete {
-    background: var(--success);
-}
-
-.save {
-    background-color: var(--success);
-}
-
-.cancel {
-    background-color: var(--primary);
-}
-
-.restore {
-    background-color: var(--success);
-}
-
-.edit-form {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-}
-
-.overdue {
-    color: var(--primary);
-    font-weight: bold;
-}
 
 
 

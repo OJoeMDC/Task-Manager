@@ -14,7 +14,6 @@
 }
 
 button.toggled {
-    background-color: var(--success);
     color: black;
 }
 
@@ -24,7 +23,7 @@ button.toggled {
 
 .mainButtons,
 .secondaryButtons {
-    width: 75%;
+    flex-shrink: 0;
     display: flex;
     justify-content: center;
     gap: 20px;

@@ -186,7 +186,6 @@ const editUser = async (id, newUsername, role) => {
         editUser,
         deleteUser,
         viewArchivedUsers,
-        setViewArchivedUsers,
-        idVisibility
+        setViewArchivedUsers
     }
 }

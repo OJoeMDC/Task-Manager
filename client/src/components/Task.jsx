@@ -112,12 +112,16 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
             `}
         onClick={() => navigate(`/tasks/${task.id}`)}
         >
-                    {idVisibility && <span className="task-id">ID: {task.id}</span>}
-                   <span><b>Task Name:</b> {task.title}</span>
-                   <span
-                   className={`${task.due_date && new Date(task.due_date) <= new Date() && task.completed === 0 ? 'overdue' : ''}`}>
-                       <b>Due date:</b> {task.due_date || "No due date"}
-                   </span>
+                    <div className='task-info'>
+                        <span className='task-title'>{task.title}</span>
+                        <span
+                        className={`
+                            task-due
+                        ${task.due_date && new Date(task.due_date) <= new Date() && task.completed === 0 ? 'overdue' : ''}`
+                        }>
+                        {task.due_date || "No due date"}
+                        </span>
+                    </div>
 
 
                    {isAdminPage && <span><b>User:</b> {task.username}</span>}
@@ -228,6 +232,9 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                             </>
                             
                         )}
+                    </div>
+                    <div className='task-id'>
+                        {idVisibility && <span className="task-id">ID: {task.id}</span>}
                     </div>
                 </li>
     )

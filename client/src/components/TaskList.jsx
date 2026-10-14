@@ -12,10 +12,10 @@ function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreT
 
     return(
         <div className='tasklist'>
-        <header className='tasklist-title'>
+        <header className='tasklist-header'>
             {viewArchived && <h1>Archived Tasks</h1>}
             {viewCompleted && <h1>Completed Tasks</h1>}
-            {!viewArchived && !viewCompleted && <h1>Tasks</h1>}
+            {!viewArchived && !viewCompleted && <h1 className='tasklist-title'>Tasks</h1>}
         </header>
         
         <ul className='list'>

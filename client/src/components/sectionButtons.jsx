@@ -19,7 +19,10 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
                 {/* Show Manage Users button only if the user is an admin and is on the admin page */}
                 {user.role === 'admin' && isAdminPage && (
                     <button 
-                    className={`button ${activeSection === 'users' ? 'active' : ''}`}
+                    className={`
+                        button 
+                        ${activeSection === 'users' ? 'active toggled' : ''}
+                        `}
                     onClick={() => {
                         setActiveSection('users');
                         localStorage.setItem('activeSection', 'users'); // Store the active section in localStorage
@@ -32,7 +35,10 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
                 {/* Show Manage Tasks button only if the user is an admin and is on the admin page */}
                 {user.role === 'admin' && isAdminPage && (
                     <button 
-                    className={`button ${activeSection === 'tasks' ? 'active' : ''}`}
+                    className={`
+                        button 
+                        ${activeSection === 'tasks' ? 'active toggled' : ''}
+                        `}
                     onClick={() => {
                         setActiveSection('tasks');
                         localStorage.setItem('activeSection', 'tasks'); // Store the active section in localStorage
@@ -47,7 +53,11 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
             <section className='secondaryButtons'>
                 
                 {/* View Archived button for tasks */}
-                <button className={`button ${viewArchived ? 'toggled' : ''} secondary`} onClick={() => {
+                <button className={`
+                    button 
+                    ${viewArchived ? 'toggled' : ''} 
+                    secondary
+                `} onClick={() => {
                     setViewArchived(!viewArchived); // Toggle between active and archived
                     setViewCompleted(false); // Reset viewCompleted when toggling archived
                     {user.role == 'admin' && isAdminPage && setViewArchivedUsers(!viewArchivedUsers);} //toggle between archived and unarchived users
@@ -58,7 +68,11 @@ export default function SectionButtons({ activeSection, setActiveSection, viewAr
 
                 
                 {(!isAdminPage || activeSection === 'tasks') && (
-                    <button className={`button ${viewCompleted ? 'toggled' : ''} secondary`} onClick={() => {
+                    <button className={`
+                        button 
+                        ${viewCompleted ? 'toggled' : ''} 
+                        secondary
+                    `} onClick={() => {
                     setViewCompleted(!viewCompleted); // Toggle between active and completed
                     setViewArchived(false); // Reset viewArchived when toggling completed
                 }}>

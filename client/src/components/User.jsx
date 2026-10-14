@@ -72,9 +72,15 @@ export default function User( { user, archiveUser, restoreUser, deleteUser, edit
     }
 
     return (
-        <li key={user.id} className={`list-item ${user.archived === 1 ? 'archived' : ''}`}>
-                   <span>{user.username}</span>
+        <li key={user.id} className={`
+                user-list-item 
+                ${user.archived === 1 ? 'archived' : ''}
+            `}>
+                <div className='user-info'>
+                    <span className='task-title'>{user.username}</span>
                    <span>Role: {user.role}</span>
+                </div>
+                   
                     <div className="buttons">
                         {/* Delete button if they're not already archived */}
                         {user.archived === 0 && (
