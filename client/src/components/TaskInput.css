@@ -107,4 +107,14 @@ input[type=date] {
         justify-content: center;
     }
 
+    input[type=date] {
+    color: black;
+    -webkit-text-fill-color: black;
+    color-scheme: light;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    color: black;
+}
+
 }
