@@ -1,10 +1,20 @@
 .logo {
   font-size: 4rem;
+  font-weight: 900px;
   font-family: "JetBrains Mono", monospace;
   letter-spacing: -2px;
 }
 
+.task {
+  color: var(--secondary);
+}
+
+.manager {
+  color: var(--primary);
+}
+
 .cursor {
+  color: black;
   animation: blink 0.8s infinite;
 }
 
