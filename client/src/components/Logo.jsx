@@ -54,7 +54,8 @@ export default function Logo() {
 
     return (
         <span className="logo">
-            {text}
+            <span className="task">{text.slice(0, 5)}</span>
+            <span className="manager">{text.slice(5)}</span>
             <span className="cursor">|</span>
         </span>
     )

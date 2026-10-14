@@ -32,11 +32,17 @@ function TaskInput({ onAdd }) {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 />
-                <input
-                type='date'
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-                />
+                <span>
+                    <input
+                    type='date'
+                    value={dueDate}
+                    onChange={(e) => setDueDate(e.target.value)}
+                    />
+                    {/* <button type='clear' className='button'>
+                        X
+                    </button> */}
+                </span>
+                
                 <article className='task-form-buttons'>
                     <button type='submit' className='button add-button'>
                         <p className="button-icon">

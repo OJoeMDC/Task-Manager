@@ -7,6 +7,8 @@ function Layout({ user, setUser, message, toastKey }) {
     /*
     This function describes the basic layout of all pages adding a toast, navbar, and footer
     */
+
+    
     return(
         <div className="app-layout">
             <Navbar user={user} setUser={setUser} />

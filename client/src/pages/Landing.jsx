@@ -1,6 +1,7 @@
 import './Landing.css';
 import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
+import {FilePlus2, Settings, ChartNoAxesColumnIncreasing, ArrowRight } from 'lucide-react';
 
 export default function Landing({ user }) {
   /*
@@ -20,7 +21,7 @@ export default function Landing({ user }) {
            <span className='highlight'> SQLite</span></p>
           <div className='landingCTA'>
             {user ? (
-              <Link className='button' to='/tasks'>View Dashboard</Link>
+              <Link className='button' to='/tasks'>View Dashboard <ArrowRight size={32} /></Link>
             ) : (
               <>
                 <Link className='button' to='/login'>Login</Link> <p>or</p> <Link className='button' to='/register'>Register</Link> <p>to get started</p>
@@ -34,17 +35,41 @@ export default function Landing({ user }) {
 
       <section className='cards'>
         <article className='card'>
-          <h3 className='card-title'>Task Creation</h3>
+          <div className='card-header-icon'>
+            <div className='card-icon'>
+              <FilePlus2 size={32} />
+            </div>
+              <div className='card-header'>
+              <p>01</p>
+              <h3 className='card-title'>Task Creation</h3>
+            </div>
+          </div>
           <p>Create tasks with a title, description, and due date.</p>
         </article>
 
         <article className='card'>
-          <h3 className='card-title'>Task Management</h3>
+          <div className='card-header-icon'>
+            <div className='card-icon'>
+              <Settings size={32} />
+            </div>
+              <div className='card-header'>
+              <p>02</p>
+              <h3 className='card-title'>Task Management</h3>
+            </div>
+          </div>
           <p>Manage your tasks with ease, update their status, and set reminders.</p>
         </article>
 
          <article className='card'>
-          <h3 className='card-title'>Stay Organized</h3>
+          <div className='card-header-icon'>
+            <div className='card-icon'>
+              <ChartNoAxesColumnIncreasing size={32} />
+            </div>
+              <div className='card-header'>
+              <p>03</p>
+              <h3 className='card-title'>Stay Organized</h3>
+            </div>
+          </div>
           <p>Keep your tasks sorted and prioritized for maximum productivity.</p>
         </article>
 

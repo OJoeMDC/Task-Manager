@@ -13,22 +13,17 @@
     font-weight: inherit;
 }
 
-button.active {
-    background-color: var(--warning);
-    color: black;
-}
-
-button.active:hover {
-    background-color: var(--warning-hover);
-}
-
 button.toggled {
     background-color: var(--success);
     color: black;
 }
 
+.sectionButtons button.toggled:hover {
+    background-color: var(--success);
+}
+
 .mainButtons,
-secondaryButtons {
+.secondaryButtons {
     width: 75%;
     display: flex;
     justify-content: center;

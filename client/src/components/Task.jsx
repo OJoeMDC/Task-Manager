@@ -8,14 +8,12 @@ import { Check, Pencil, Trash2, Archive, RotateCcw } from "lucide-react";
 <Trash2 size={20} /> */}
 
 
-export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask } ) {
+export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask, idVisibility } ) {
     /*
     Task handles what buttons an individual task has in a tasklist
 
     this is a component to be placed in tasklist, but is able to be called elsewhere
     */
-
-
 
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
@@ -25,6 +23,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     const [isLoading, setIsLoading] = useState(null);
     const location = useLocation();
     const isAdminPage = location.pathname === '/admin';
+
 
     const handleAction = async (actionName, action) => {
         setIsLoading(actionName);
@@ -104,10 +103,16 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     return (
         <li 
         key={task.id} 
-        className={`list-item ${task.completed === 1 ?'completed' : ''} ${task.archived === 1 ? 'archived' : ''} ${isAdminPage ? 'admin-task' : ''}`}
+        className={`
+            list-item
+            ${task.completed === 1 ?'completed' : ''} 
+            ${task.archived === 1 ? 'archived' : ''} 
+            ${isAdminPage ? 'admin-task' : ''} 
+            ${idVisibility ? '' : 'hide-id'}
+            `}
         onClick={() => navigate(`/tasks/${task.id}`)}
         >
-                    <span>ID: {task.id}</span>
+                    {idVisibility && <span className="task-id">ID: {task.id}</span>}
                    <span><b>Task Name:</b> {task.title}</span>
                    <span
                    className={`${task.due_date && new Date(task.due_date) <= new Date() && task.completed === 0 ? 'overdue' : ''}`}>
