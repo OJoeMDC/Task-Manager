@@ -185,6 +185,7 @@
 
     .buttons button {
         border: none;
+        color: black;
         box-shadow: 4px 4px 0 black;
         font-weight: 800;
         text-transform: uppercase;
