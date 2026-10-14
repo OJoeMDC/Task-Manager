@@ -2,7 +2,7 @@ import './TaskList.css'
 import Task from "./Task"
 import useTasks from '../hooks/useTasks';
 
-function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask }) {
+function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask, idVisibility , viewArchived, viewCompleted}) {
     /*
     Tasklist takes care of the lists of tasks
 
@@ -12,8 +12,10 @@ function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreT
 
     return(
         <div className='tasklist'>
-        <header>
-            <h1>Tasks</h1>
+        <header className='tasklist-title'>
+            {viewArchived && <h1>Archived Tasks</h1>}
+            {viewCompleted && <h1>Completed Tasks</h1>}
+            {!viewArchived && !viewCompleted && <h1>Tasks</h1>}
         </header>
         
         <ul className='list'>
@@ -33,6 +35,7 @@ function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreT
                     editTask={editTask}
                     user={user}
                     restoreTask={restoreTask}
+                    idVisibility={idVisibility}
                     />
                 ))
             )}

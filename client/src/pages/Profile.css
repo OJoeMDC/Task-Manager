@@ -1,10 +1,182 @@
 .profilePage {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.profileHeader h1,
+.profileHeader p {
+    margin: 0px;
+    padding: 0px;
+}
+
+.profileHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding: 0px;
+    margin-top: 12px;
+    margin-bottom: 24px;
+    text-align: left;
+    width: 60%;
 }
 
 .profileLinks {
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
+    width: 60%;
+    
     gap: 1rem;
-    align-items: center;
 }
+
+.profileInfoTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 12px;
+    margin: 0px;
+
+    height: 100%;
+    width: 100%;
+
+    background-color: var(--secondary);
+    color: black;
+    border-left: 6px solid var(--primary);
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+
+    width: 60%;
+
+    background-color: var(--surface);
+    padding: 0px;
+    gap: 0px;
+    box-shadow: 6px 6px 0 black;
+    margin: 24px;
+}
+
+.profileInfo p,
+.profileInfo h3 {
+    margin: 0px;
+    padding: 0px;
+}
+
+.profileInfo h3 {
+    margin-top: 24px;
+}
+
+.profileInfo p {
+    padding: 12px;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+}
+
+.displaySettings {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+
+    width: 60%;
+
+    background-color: var(--surface);
+    padding: 0px;
+    gap: 0px;
+    box-shadow: 6px 6px 0 black;
+    margin: 24px;
+}
+
+.setting {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    padding: 12px;
+    margin: 0px;
+
+    border: 1px solid var(--border);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: var(--border);
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.slider::before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: var(--bg);
+    transition: 0.4s;
+}
+
+.switch input:checked + .slider {
+    background-color: var(--success);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(26px);
+}
+
+.switch input:focus-visible + .slider {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
+}
+
+.profileDetails {
+    margin: 24px;
+}
+
+.logout {
+    background-color: var(--primary);
+    box-shadow: 4px 4px 0 black, 4px 4px 0px 2px black;
+}
+
+.logout:hover {
+    background-color: var(--primary);
+    box-shadow: 2px 2px 0 black;
+}
+
+
+
+
+
+@media (max-width: 768px) {
+    .profilePage {
+        padding: 12px;
+    }
+
+    .profileInfo, .displaySettings {
+        margin: 12px;
+    }
+
+    .setting {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}  

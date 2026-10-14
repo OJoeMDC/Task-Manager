@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import './Profile.css';
+import { LogOut } from 'lucide-react';
 
-export default function Profile({ setUser, user, API_URL, showMessage }) {
+export default function Profile({ setUser, user, toggleIdVisibility, idVisibility }) {
     /*
     This is a user's profile self management page
     */
@@ -27,13 +28,49 @@ export default function Profile({ setUser, user, API_URL, showMessage }) {
     //normal page for logged in user
     return (
         <main className="profilePage">
-            <h1>Welcome, {user.username}!</h1>
-            <p>You role is currently: <span className="highlight">{user?.role}</span></p>
+
+
+            <div className="profileHeader">
+                <h1>Profile</h1>
+                <p>Manage your profile information</p>
+            </div>
+
+
+            <div className="profileInfo">
+                <h2 className="profileInfoTitle">Account Information</h2>
+                <div className="profileDetails">
+                    <h3>Username</h3>
+                    <p className="highlight">{user?.username}</p>
+                    <h3>Role</h3>
+                    <p className="highlight">{user?.role}</p>
+                </div>
+            </div>
+
+
+            <div className='displaySettings'>
+                <h2 className="profileInfoTitle">Display Settings</h2>
+                <div className="profileDetails">
+                    <span className='setting'>
+                        <p>Task ID Visibility: <span className="highlight">{idVisibility ? 'Visible' : 'Hidden'}</span></p>
+                        <label className="switch">
+                            <input 
+                            type='checkbox'
+                            checked={idVisibility}
+                            onChange={() => toggleIdVisibility()}
+                             />
+                             <span className='slider'></span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+
+
             <div className="profileLinks">
                 <button
-                className="button"
+                className="button logout"
                 onClick={logout}
                 >
+                    <LogOut size={32} />
                     Logout
                 </button>
 
@@ -45,3 +82,5 @@ export default function Profile({ setUser, user, API_URL, showMessage }) {
         </main>
     );
 };
+
+ 

@@ -1,11 +1,11 @@
 import TaskList from '../components/TaskList';
 import TaskInput from '../components/TaskInput';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import './Tasks.css';
 import useTasks from '../hooks/useTasks';
 import SectionButtons from '../components/sectionButtons';
 
-export default function Tasks({ API_URL, user, showMessage }) {
+export default function Tasks({user, showMessage, idVisibility }) {
 
   /*
   The Tasks function defines an individual user's tasks dashboard
@@ -73,7 +73,11 @@ if (!user) {
           toggleComplete={toggleComplete}
           editTask={editTask}
           restoreTask={restoreTask}
-          user={user}/>
+          user={user}
+          idVisibility={idVisibility}
+          viewArchived={viewArchived}
+          viewCompleted={viewCompleted}
+          />
         </div>
       </main>
     );

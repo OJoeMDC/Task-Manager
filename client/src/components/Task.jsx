@@ -8,7 +8,7 @@ import { Check, Pencil, Trash2, Archive, RotateCcw } from "lucide-react";
 <Trash2 size={20} /> */}
 
 
-export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask } ) {
+export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask, idVisibility } ) {
     /*
     Task handles what buttons an individual task has in a tasklist
 
@@ -24,8 +24,6 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     const location = useLocation();
     const isAdminPage = location.pathname === '/admin';
 
-    
-    var idVisibility = false; // Set to true to show the task ID in the list item
 
     const handleAction = async (actionName, action) => {
         setIsLoading(actionName);
