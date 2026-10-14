@@ -107,6 +107,8 @@ useEffect(() => {
                     restoreTask={restoreTask}
                     deleteTask={deleteTask}
                     idVisibility={idVisibility}
+                    viewArchived={viewArchived}
+                    viewCompleted={viewCompleted}
                         />
                 </section>
             )}

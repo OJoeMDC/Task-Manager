@@ -117,8 +117,8 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                         <span
                         className={`
                             task-due
-                        ${task.due_date && new Date(task.due_date) <= new Date() && task.completed === 0 ? 'overdue' : ''}`
-                        }>
+                            ${task.due_date && new Date(task.due_date) <= new Date() && task.completed === 0 ? 'overdue' : ''}
+                        `}>
                         {task.due_date || "No due date"}
                         </span>
                     </div>

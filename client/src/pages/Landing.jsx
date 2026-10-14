@@ -1,6 +1,6 @@
 import './Landing.css';
 import Logo from '../components/Logo';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import {FilePlus2, Settings, ChartNoAxesColumnIncreasing, ArrowRight, LogIn, UserRoundPlus, User, UserRound } from 'lucide-react';
 
 export default function Landing({ user }) {

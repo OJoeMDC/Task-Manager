@@ -38,32 +38,28 @@ function TaskInput({ onAdd }) {
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
                     />
-                    {/* <button type='clear' className='button'>
-                        X
-                    </button> */}
                 </span>
                 
                 <article className='task-form-buttons'>
                     <button type='submit' className='button add-button'>
-                        <p className="button-icon">
+                        <span className="button-icon">
                         <Plus size={20} />
-                        </p>
-                        <p className="button-text">
+                        </span>
+                        <span className="button-text">
                             Add Task
-                        </p>
+                        </span>
                     </button>
                     <button type='reset' className='button clear-button'
                     onClick={() => {
                         setTitle('')
                         setDueDate('')
                     }}>
-                        <p className="button-icon">
+                        <span className="button-icon">
                             <Trash2 size={20} />
-                        </p>
-                        <p className="button-text">
+                        </span>
+                        <span className="button-text">
                             Clear
-                        </p>
-
+                        </span>
                     </button>
                 </article>
             </form>

@@ -1,7 +1,7 @@
 import { useState} from "react";
 import './AccountForm.css';
 import {Link} from 'react-router-dom';
-import { UserRoundPlus, LogIn } from 'lucide-react';
+import { UserRoundPlus, LogIn, ArrowRight, UserRound } from 'lucide-react';
 
 export default function Login({ setUser, user, API_URL }) {
     /*
@@ -51,11 +51,25 @@ export default function Login({ setUser, user, API_URL }) {
     if (loggedInUser) {
         return (
             <main className="accountPage">
-                {success && <p className='success'>Logged in</p>}
-                {loggedInUser && <p>Welcome back, {user?.username}</p>}
+                {success && 
+                    <p className='success'>
+                        Logged in
+                    </p>
+                }
+                {loggedInUser &&   
+                    <p className='welcome-back'>
+                        Welcome back, {user?.username}
+                    </p>
+                }
                 <div className='loginLinks'>
-                    <Link to='/tasks' className='button'>View Dashboard</Link>
-                    <Link to='/profile' className='button'>Profile</Link>
+                    <Link to='/tasks' className='button'>
+                        View Dashboard
+                        <ArrowRight size={24} />
+                    </Link>
+                    <Link to='/profile' className='button'>
+                        Profile
+                        <UserRound size={24} />
+                    </Link>
                 </div>
             </main>
         )

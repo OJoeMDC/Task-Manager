@@ -1,12 +1,19 @@
 .list-item {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr 65px auto;
     align-items: center;
     gap: 12px;
     padding: 8px;
 
     border-bottom: 1px solid var(--border);
 }
+        .admin-task {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 65px auto;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+        }
 
 .user-list-item {
     display: grid;
@@ -166,14 +173,6 @@
 .list-item:hover {
     background-color: var(--border);
     cursor: pointer;
-}
-
-.admin-task {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
-    align-items: center;
-    gap: 12px;
-    padding: 8px;
 }
 
 

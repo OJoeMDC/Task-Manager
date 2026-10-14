@@ -1,5 +1,5 @@
 import './Navbar.css'
-import {Link} from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 function Navbar({ user, setUser }) {
     /*
@@ -23,10 +23,22 @@ function Navbar({ user, setUser }) {
                 {user ? (
                     <>
                         {user.role === 'admin' && (
-                            <Link className='link' to='/admin'>Admin</Link>
+                            <NavLink 
+                            className={({ isActive }) =>
+                                isActive ? 'link active': 'link'
+                            }
+                            to='/admin'>
+                                Admin
+                            </NavLink>
                         )}
-                        <Link className='link' to='/tasks'>Tasks</Link>
-                        <Link className='link' to='/profile'>Profile</Link>
+                        <NavLink className={({ isActive }) =>
+                                isActive ? 'link active': 'link'
+                            }
+                            to='/tasks'>Tasks</NavLink>
+                        <NavLink className={({ isActive }) =>
+                                isActive ? 'link active': 'link'
+                            }
+                            to='/profile'>Profile</NavLink>
                         <button className='link' onClick={logout}>Logout</button>
                     </>
                 ) : (
