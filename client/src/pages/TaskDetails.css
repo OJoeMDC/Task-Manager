@@ -1,9 +1,30 @@
+.main-details-containter {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+
 .task-details-title {
     justify-content: center;
     text-align: center;
 
     padding: 12px;
+    margin: 0px;
 
-    color: var(--text);
-    border: 4px solid var(--border);
+    color: black;
+    border-left: 4px solid var(--primary);
+    background: var(--secondary);
+}
+
+.details-card {
+    gap: 0;
+    margin: 0;
+    padding: 0;
+
+    background: var(--surface);
+}
+
+.back-button {
+    margin-top: 12px;
 }

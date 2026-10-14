@@ -173,12 +173,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 onClick={() => {
                                     handleAction('restore', () => ( isAdmin && isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
                                 }}>
-                                    <p className="button-icon">
+                                    <span className="button-icon">
                                         <RotateCcw size={20} />
-                                    </p>
-                                    <p className="button-text">
+                                    </span>
+                                    <span className="button-text">
                                         {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
-                                    </p>
+                                    </span>
                                 </button>
                             </>
                         )}
@@ -193,12 +193,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     onClick={() => {
                                         handleAction('complete', () => ( isAdmin && isAdminPage ? adminToggleComplete(task.id) : toggleComplete(task.id) ));
                                     }}>
-                                        <p className="button-icon">
+                                        <span className="button-icon">
                                             <Check size={20} />
-                                        </p>
-                                        <p className="button-text">   
+                                        </span>
+                                        <span className="button-text">
                                             {isLoading === 'complete' ? 'Toggling...' : 'Complete'}
-                                        </p>
+                                        </span>
                                 </button>
 
                                 <button
@@ -208,12 +208,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     onClick={() => {
                                         console.log("Edit clicked for task ID:", task.id);
                                         setIsEditing(true)}}>
-                                            <p className="button-icon">
+                                            <span className="button-icon">
                                                 <Pencil size={20} />
-                                            </p>
-                                            <p className="button-text">
+                                            </span>
+                                            <span className="button-text">
                                                 Edit
-                                            </p>
+                                            </span>
                                 </button>
 
                                 <button
@@ -222,12 +222,12 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     onClick={() => {
                                         handleAction('archive', () => ( isAdmin ? adminArchiveTask(task.id) : archiveTask(task.id) ));
                                     }}>
-                                        <p className="button-icon">
+                                        <span className="button-icon">
                                             <Archive size={20} />
-                                        </p>
-                                        <p className="button-text">
+                                        </span>
+                                        <span className="button-text">
                                         {isLoading === 'archive' ? 'Archiving...' : 'Archive'}
-                                        </p>
+                                        </span>
                                 </button>
                             </>
                             

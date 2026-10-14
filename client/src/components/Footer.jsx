@@ -13,7 +13,7 @@ export default function Footer() {
 return (
     <footer className='footer'>
         <div className='description'>
-            <h3>Task Manager</h3>
+            <h3 className='footer-title'>Task <span className='highlight'>Manager</span></h3>
             <p className='subtext'>A full-stack task management app built with React, Express, and SQLITE</p>
         </div>
         <div className='footerLinks'>

@@ -65,8 +65,8 @@ function TaskDetails({user, showMessage }) {
 
     //normal page functions
   return (
-    <div>
-        <div>
+    <div className="main-details-contianer">
+        <div className='details-card'>
             <h1 className="task-details-title">Task Details</h1>
             <TaskDetailsCard
             task={task}
@@ -82,7 +82,7 @@ function TaskDetails({user, showMessage }) {
             adminEditTask={adminEditTask}
             />
         </div>
-        <div>
+        <div className="back-button">
             <button
             className='button'
             onClick={() => window.history.back()}>

@@ -68,7 +68,7 @@ input[type=date] {
     background-color: var(--success);
 }
 
-.button-icon {
+.task-form-buttons .button-icon {
     display: none;
 }
 

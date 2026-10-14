@@ -25,6 +25,16 @@
         gap: 4px;
     }
 
+    .user-list-item .buttons {
+        justify-content: flex-start;
+    }
+
+    .user-list-item .buttons button {
+        width: fit-content;
+        padding: 8px 12px;
+        flex: 0 0 auto;
+    }
+
 
 .task-info {
     display: flex;
@@ -41,25 +51,55 @@
         font-weight: 900;
         }
 
+.list-item input,
+.user-list-item input {
+    display: flex;
+    outline: none;
+
+    border: 2px solid black;
+    background: var(--secondary);
+    box-shadow: 6px 6px 0px black;
+
+    padding: 8px;
+    align-items: left;
+    margin: 12px;
+}
+
 
 
 .buttons {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 12px;
 
 }
 
-        .button-icon {
-            display: none;
+        .buttons .button-icon {
+            display: inline-flex;
+            align-items: center;
         }
 
         .button-text {
-            display: inline;
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
         }
 
         .buttons button {
-            border: none;
+            display: inline-flex;
+            width: fit-content;
+
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+            padding: 8px 12px;
+            gap: 6px;
+
+            
+        border: 3px solid black;
             box-shadow: 6px 6px 0 black;
             font-weight: 800;
             text-transform: uppercase;
@@ -209,15 +249,6 @@
 
         margin-top: 8px;
         padding: 0;
-    }
-
-    .button-text {
-        display: none;
-    
-    }
-
-    .button-icon {
-        display: inline;
     }
 
     .button svg {

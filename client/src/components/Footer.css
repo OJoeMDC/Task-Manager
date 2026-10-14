@@ -11,6 +11,8 @@
 
     color: var(--text);
     background-color: var(--surface);
+
+    border-top: 4px solid black;
 }
 
 .footer p {
@@ -27,17 +29,22 @@
 
     gap: 12px;
     padding-top: 8px;
+
+    color: var(--secondary)
 }
 
 
-.description h3 {
+.footer-title {
     font-size: 1.2rem;
     margin: 0;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 900;
+    color: var(--secondary);
 }
 
 .subtext {
     font-size: small;
-    color: var(--text-muted);
 }
 
 .footerLinks {
@@ -53,5 +60,4 @@
 
 .copyright {
     font-size: x-small;
-    color: var(--text-muted);
 }

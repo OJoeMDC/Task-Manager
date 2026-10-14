@@ -88,9 +88,9 @@ export default function User( { user, archiveUser, restoreUser, deleteUser, edit
                                 <button 
                                     className='edit'
                                     onClick={(() => setIsEditing(true))}>
-                                        <p className="button-icon">
+                                        <span className="button-icon">
                                             <Pencil size={20} />
-                                        </p>
+                                        </span>
                                         <p className="button-text">
                                             Edit
                                         </p>
@@ -98,9 +98,9 @@ export default function User( { user, archiveUser, restoreUser, deleteUser, edit
                                 <button 
                                     className='delete' 
                                     onClick={() => archiveUser(user.id)}>
-                                        <p className="button-icon">
+                                        <span className="button-icon">
                                             <Archive size={20} />
-                                        </p>
+                                        </span>
                                         <p className="button-text">
                                             Archive
                                         </p>
@@ -114,23 +114,23 @@ export default function User( { user, archiveUser, restoreUser, deleteUser, edit
                             <button 
                                 className='restore' 
                                 onClick={() => restoreUser(user.id)}>
-                                    <p className="button-icon">
+                                    <span className="button-icon">
                                         <RotateCcw size={20} />
-                                    </p>
-                                    <p className="button-text">
+                                    </span>
+                                    <span className="button-text">
                                         Restore
-                                    </p>
+                                    </span>
                                 </button>
 
                                 <button
                                     className='delete'
                                     onClick={() => deleteUser(user.id)}>
-                                    <p className="button-icon">
+                                    <span className="button-icon">
                                         <Trash2 size={20} />
-                                    </p>
-                                    <p className="button-text">
+                                    </span>
+                                    <span className="button-text">
                                         DELETE
-                                    </p>
+                                    </span>
                                 </button>
                             </>
                             

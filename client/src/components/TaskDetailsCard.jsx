@@ -45,9 +45,9 @@ export default function TaskDetailsCard({ task, user, showMessage, editTask, del
         <div className="task-details-card-container">
         {/* Display the task ID as immutable information */}
             <span className="immutable-info">
-                <p className="task-item"><strong>ID:</strong> {task.id}</p>
-                <p className="task-item"><strong>Status:</strong> {task.completed === 1 ? 'Completed' : 'Incomplete'}</p>
-                <p className="task-item"><strong>Archived:</strong> {task.archived === 1 ? 'Yes' : 'No'}</p>
+                <p className="task-item immutable"><strong>ID:</strong> {task.id}</p>
+                <p className="task-item immutable"><strong>Status:</strong> {task.completed === 1 ? 'Completed' : 'Incomplete'}</p>
+                <p className="task-item immutable"><strong>Archived:</strong> {task.archived === 1 ? 'Yes' : 'No'}</p>
             </span>
 
         {/* Display the task details in a card format */}
@@ -106,41 +106,41 @@ export default function TaskDetailsCard({ task, user, showMessage, editTask, del
             <div className="task-details-card-buttons">
                 {task.archived === 1 ? (
                     <button className="restore button" onClick={() => restoreTask(task.id)}>
-                        <p className="button-icon">
+                        <span className="button-icon">
                             <RotateCcw size={20} />
-                        </p>
-                        <p className="button-text">  
+                        </span>
+                        <span className="button-text">  
                             Restore
-                        </p>
+                        </span>
                     </button>
                 ) : (
                     <button className="delete button" onClick={() => handleAction('archive', () => ( isAdmin ? adminArchiveTask(task.id) : archiveTask(task.id) ))}>
-                        <p className="button-icon">
+                        <span className="button-icon">
                             <Archive size={20} />
-                        </p>
-                        <p className="button-text">
+                        </span>
+                        <span className="button-text">
                             Archive
-                        </p>
+                        </span>
                     </button>
                 )}
 
                 {task.completed === 1 ? (
                     <button className="incomplete button" onClick={() => handleAction('complete', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ))}>
-                        <p className="button-icon">
+                        <span className="button-icon">
                             <X size={20} />
-                        </p>
-                        <p className="button-text">
+                        </span>
+                        <span className="button-text">
                             Mark Incomplete
-                        </p>
+                        </span>
                     </button>
                 ) : (
                     <button className="complete button" onClick={() => handleAction('complete', () => ( isAdmin ? adminToggleComplete(task.id) : toggleComplete(task.id) ))}>
-                        <p className="button-icon">
+                        <span className="button-icon">
                             <Check size={20} />
-                        </p>
-                        <p className="button-text">
+                        </span>
+                        <span className="button-text">
                             Mark Complete
-                        </p>
+                        </span>
                     </button>
                 )}
             </div>
