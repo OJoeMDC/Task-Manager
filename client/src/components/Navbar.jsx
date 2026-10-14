@@ -39,7 +39,6 @@ function Navbar({ user, setUser }) {
                                 isActive ? 'link active': 'link'
                             }
                             to='/profile'>Profile</NavLink>
-                        <button className='link' onClick={logout}>Logout</button>
                     </>
                 ) : (
                     <>

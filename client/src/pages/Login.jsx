@@ -113,7 +113,7 @@ export default function Login({ setUser, user, API_URL }) {
 
             <p className='loginFooter'>
                 Don't have an Account? 
-                <a href='/login' className='button'>
+                <a href='/register' className='button'>
                 Register
                 <UserRoundPlus size={24} />
                 </a>
