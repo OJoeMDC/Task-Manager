@@ -8,7 +8,7 @@ import SectionButtons from '../components/sectionButtons';
 import { useLocation } from 'react-router-dom';
 
 
-export default function Admin({ user, API_URL, showMessage }) {
+export default function Admin({ user, API_URL, showMessage, idVisibility }) {
     /*
     Admin manages an admin user's dashboard for managing other people and their tasks
     */
@@ -106,6 +106,7 @@ useEffect(() => {
                     editTask={editTask}
                     restoreTask={restoreTask}
                     deleteTask={deleteTask}
+                    idVisibility={idVisibility}
                         />
                 </section>
             )}

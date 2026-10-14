@@ -2,6 +2,7 @@
     --primary: #EF4444;
     --primary-dark: #DC2626;
     --secondary: #f3eeda;
+    --secondary-dark: #e0d8b0;
 
     --bg: #0F172A;
 
@@ -78,49 +79,63 @@ body,
 .button {
     border: none;
     text-decoration: none;
-    background-color: var(--border);
+    appearance: none;
+
+    display: inline-flex;
+    width: fit-content;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
 
     text-transform: uppercase;
-    font-weight: 600;
+    
 
     padding: 12px;
-    box-shadow: 6px 6px 0 black;
+    box-shadow: 4px 4px 0 var(--primary), 4px 4px 0px 2px black;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 
-    color: var(--text);
-
-    width: fit-content;
-}
-
-button svg {
-    color: var(--text);
-}
-
-button.secondary {
-    scale: 0.8;
-}
-
-button.toggled {
-    background-color: var(--warning);
-}
-
-button.toggled:hover {
-    background-color: var(--warning-hover);
+    color: black;
+    background-color: var(--secondary);
+    border: 4px solid black;
 }
 
 .button:hover {
     cursor: pointer;
-    box-shadow: 4px 4px 0 black;
-    background-color: var(--bg);
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px black;
+    background-color: var(--secondary-dark);
 }
 
-a.button {
-    border: none;
-    text-decoration: none;
-    color: var(--warning)
+button.secondary {
+    padding: 8px;
+    font-size: 0.8rem;
+    border: 2px solid black;
+    box-shadow: 4px 4px 0 var(--primary), 4px 4px 0px 2px black;
+    margin: 8px;
 }
+
+.button.secondary:hover {
+    cursor: pointer;
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px black;
+    background-color: var(--secondary-dark);
+}
+
+button.toggled {
+    background-color: var(--warning);
+    transform: translate(2px, 2px);
+    box-shadow:2px 2px 0px black;
+}
+
+button.toggled:hover {
+    background-color: var(--secondary-dark);
+}
+
 
 .highlight {
-    color: var(--warning);
+    color: var(--primary);
 }
 
 .subtitle {

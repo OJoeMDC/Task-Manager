@@ -6,6 +6,8 @@ export default function userHooks(showMessage) {
 
     this is a webhook to be referenced by pages or components
     */
+
+    
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
     const [viewArchivedUsers, setViewArchivedUsers] = useState(false);
@@ -184,6 +186,7 @@ const editUser = async (id, newUsername, role) => {
         editUser,
         deleteUser,
         viewArchivedUsers,
-        setViewArchivedUsers
+        setViewArchivedUsers,
+        idVisibility
     }
 }

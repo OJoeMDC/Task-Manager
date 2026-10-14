@@ -12,6 +12,11 @@
 
 }
 
+.tasklist-title {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
 header {
     justify-content: center;
     text-align: center;

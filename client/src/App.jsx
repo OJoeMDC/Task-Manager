@@ -1,6 +1,6 @@
 import './App.css'
 import Layout from './Layout'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Routes, Route } from 'react-router-dom'
 import Landing from './pages/Landing'
@@ -9,10 +9,10 @@ import Register from './pages/Register'
 import Profile from './pages/Profile'
 import Tasks from './pages/Tasks'
 import Admin from './pages/Admin'
-import Toast from './components/Toast'
 import TaskDetails from './pages/TaskDetails'
 
 const API_URL = `${import.meta.env.VITE_API_URL}`
+
 
 
 function App() {
@@ -24,6 +24,30 @@ function App() {
   const [user, setUser] = useState(() => {
     return JSON.parse(localStorage.getItem('user'));
   });
+
+
+
+  //Set preferences for task ID visibility based on user role and local storage
+ const [idVisibility, setIdVisibility] = useState(true);
+
+ //Load false if the user is not an admin and no preference is saved in local storage
+ useEffect(() => {
+  if (!user?.id) return;
+
+  const saved = localStorage.getItem(`idVisibility_${user.id}`);
+  setIdVisibility(saved === null 
+    ? user.role === 'admin'
+    : JSON.parse(saved));
+    }, [user?.id]);
+
+  //Handle toggling idVisbility
+  const toggleIdVisibility = () => {
+    const newVis = !idVisibility;
+
+    setIdVisibility(newVis);
+    localStorage.setItem(`idVisibility_${user.id}`, JSON.stringify(newVis));
+  };
+
 
 
   //Toast msg variables
@@ -49,9 +73,9 @@ function App() {
         <Route path='/' element={<Landing user={user} />} />
         <Route path='/login' element={<Login user={user} setUser={setUser} API_URL={API_URL} showMessage={showMessage} />} />
         <Route path='/register' element={<Register setUser={setUser} user={user} API_URL={API_URL} showMessage={showMessage} />} />
-        <Route path='/profile' element={<Profile user={user} setUser={setUser} API_URL={API_URL} showMessage={showMessage} />} />
-        <Route path='/tasks' element={<Tasks user={user} API_URL={API_URL} showMessage={showMessage} />} />
-        <Route path='/admin' element={<Admin user={user} API_URL={API_URL} showMessage={showMessage} />} />
+        <Route path='/profile' element={<Profile user={user} setUser={setUser} toggleIdVisibility={toggleIdVisibility} idVisibility={idVisibility}/>} />
+        <Route path='/tasks' element={<Tasks user={user} showMessage={showMessage} idVisibility={idVisibility}/>} />
+        <Route path='/admin' element={<Admin user={user} API_URL={API_URL} showMessage={showMessage} idVisibility={idVisibility} />} />
         <Route path='/tasks/:id' element={<TaskDetails user={user} API_URL={API_URL} showMessage={showMessage} />} />
       </Route>
     </Routes>
