@@ -1,6 +1,7 @@
 import { useState} from "react";
 import './AccountForm.css';
 import {Link} from 'react-router-dom';
+import { UserRoundPlus, LogIn } from 'lucide-react';
 
 export default function Login({ setUser, user, API_URL }) {
     /*
@@ -62,10 +63,10 @@ export default function Login({ setUser, user, API_URL }) {
 
     return (
         <main className='accountPage'>
-            <h1 className='loginTitle'>Login</h1>
+            <h1 className='loginTitle'>Account Login</h1>
             <form onSubmit={loginUser} className='accountForm'>
                 <div className='formEntry'>
-                    <label htmlFor='username'>Username</label>
+                    <label htmlFor='username' className="username">Username</label>
                     <input
                     id='username'
                     type='text'
@@ -76,7 +77,7 @@ export default function Login({ setUser, user, API_URL }) {
                     />
                 </div>
                 <div className='formEntry'>
-                    <label htmlFor='password'>Password</label>
+                    <label htmlFor='password' className="password">Password</label>
                     <input
                     id='password'
                     type='password'
@@ -90,10 +91,19 @@ export default function Login({ setUser, user, API_URL }) {
                 className='button'
                 type='submit'>
                     Login
+                    <LogIn size={24} />
                 </button>
 
                 {error && <p className='error'>{error}</p>}
             </form>
+
+            <p className='loginFooter'>
+                Don't have an Account? 
+                <a href='/login' className='button'>
+                Register
+                <UserRoundPlus size={24} />
+                </a>
+            </p>
         </main>
     );
     console.log({success});

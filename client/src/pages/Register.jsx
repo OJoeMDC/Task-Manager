@@ -1,5 +1,6 @@
 import './AccountForm.css';
 import { useState } from 'react';
+import { UserRoundPlus, LogIn } from 'lucide-react';
 
 export default function Register({ setUser, user, API_URL, showMessage }) {
   /*
@@ -51,7 +52,7 @@ export default function Register({ setUser, user, API_URL, showMessage }) {
 
       <form onSubmit={addUser} className='accountForm'>
         <div className='formEntry'>
-          <label htmlFor='username'>Username</label>
+          <label htmlFor='username' className='username'>Username</label>
           <input
             id='username'
             type='text'
@@ -63,7 +64,7 @@ export default function Register({ setUser, user, API_URL, showMessage }) {
         </div>
 
         <div className='formEntry'>
-          <label htmlFor='password'>Password</label>
+          <label htmlFor='password' className='password'>Password</label>
           <input
             id='password'
             type='password'
@@ -80,13 +81,20 @@ export default function Register({ setUser, user, API_URL, showMessage }) {
         type='submit'
         disabled={success}>
           Register
+          <UserRoundPlus size={24} />
         </button>
 
         {error && <p className='error'>{error}</p>}
         {success && <p className='success'>Account Created</p>}
       </form>
 
-      <p className='loginFooter'>Already have an account? <a href='/login' className='button'>Login</a></p>
+      <p className='loginFooter'>
+        Already have an account? 
+        <a href='/login' className='button'>
+        Login
+        <LogIn size={24} />
+        </a>
+      </p>
     </main>
   );
 }

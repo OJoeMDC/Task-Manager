@@ -92,8 +92,8 @@ body,
     text-transform: uppercase;
     
 
-    padding: 12px;
-    box-shadow: 4px 4px 0 var(--primary), 4px 4px 0px 2px black;
+    padding: 16px 24px;
+    box-shadow: 8px 8px 0 var(--primary), 8px 8px 0px 4px black;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 
     color: black;

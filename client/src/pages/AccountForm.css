@@ -7,13 +7,17 @@
     max-width: 100%;
     max-height: 100%;
 
-    background-color: var(--surface);
-    box-shadow: 6px 6px 0px black;
+    background-color: var(--secondary);
+    box-shadow: 10px 10px 0px var(--primary), 10px 10px 0px 4px black;
+    border: 4px solid black;
     box-sizing: border-box;
 }
 
-.accountTitle {
+.accountTitle,
+.loginTitle {
     text-align: center;
+    text-transform: uppercase;
+    color: black;
 }
 
 .accountForm {
@@ -30,6 +34,13 @@
     max-width: 400px;
 }
 
+.username,
+.password {
+    color: black;
+    text-align: left;
+    font-weight: 900;
+}
+
 .formEntry {
     box-sizing: border-box;
     width: auto;
@@ -42,15 +53,33 @@
     text-transform: uppercase;
 }
 
+.accountForm button {
+    font-size: large;
+}
+
 .accountForm button,
 .accountForm input {
     box-sizing: border-box;
     width: auto;
 }
 
+.accountForm input:-webkit-autofill {
+    -webkit-box-shadow: 
+    0 0 0 1000px var(--secondary) inset,
+    6px 6px 0 black;
+    -webkit-text-fill-color: black;
+}
+
 .accountForm input {
+    border: 3px solid black;
     padding: 8px;
+    background-color: var(--secondary);
     box-shadow: 6px 6px 0px black;
+}
+
+.accountForm input:focus-visible {
+    outline: none;
+    box-shadow: 6px 6px 0 var(--primary), 6px 6px 0px 3px black;
 }
 
 .success {
@@ -61,7 +90,17 @@
 }
 
 .loginFooter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 60px;
+
+    gap: 12px;
+
+
+    color: black;
+    text-transform: uppercase;
+    font-weight: 900;
 }
 
 .loginLinks {

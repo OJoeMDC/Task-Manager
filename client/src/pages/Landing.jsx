@@ -1,7 +1,7 @@
 import './Landing.css';
 import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
-import {FilePlus2, Settings, ChartNoAxesColumnIncreasing, ArrowRight } from 'lucide-react';
+import {FilePlus2, Settings, ChartNoAxesColumnIncreasing, ArrowRight, LogIn, UserRoundPlus, User, UserRound } from 'lucide-react';
 
 export default function Landing({ user }) {
   /*
@@ -24,7 +24,14 @@ export default function Landing({ user }) {
               <Link className='button' to='/tasks'>View Dashboard <ArrowRight size={32} /></Link>
             ) : (
               <>
-                <Link className='button' to='/login'>Login</Link> <p>or</p> <Link className='button' to='/register'>Register</Link> <p>to get started</p>
+                <Link className='button' to='/login'>
+                Login
+                <LogIn size={24} />
+                </Link> 
+                <Link className='button' to='/register'>
+                Register
+                <UserRoundPlus size={24} />
+                </Link> 
               </>
             )}
           </div>
