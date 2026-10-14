@@ -172,6 +172,11 @@
         aspect-ratio: 1/1;
 }
 
+.buttons button svg {
+    color: inherit;
+    stroke: currentColor;
+}
+
     .delete, .edit, .complete, .save, .cancel, .restore {
         padding: 6px;
         font-size: 12px;
