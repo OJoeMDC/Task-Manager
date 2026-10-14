@@ -1,9 +1,10 @@
 main {
-    padding: 24px;
+    width: 80vw;
 }
 
 .task-form {
     display: flex;
+    flex-direction: row;
     gap: 12px;
     text-align: center;
     justify-content: center;
@@ -20,10 +21,36 @@ main {
     border: 4px solid black;
 }
 
-input[type=date] {
-    color: black;
-    color-scheme: light;
-}
+        .title-wrapper {
+            position: relative;
+            display: block;
+            width: auto;
+            box-sizing: border-box;
+        }
+
+        .title-wrapper input {
+            width:100%;
+            box-sizing: border-box;
+        }
+
+        .date-wrapper {
+            width: auto;
+            box-sizing: border-box;
+        }
+
+        .date-wrapper input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input::-webkit-datetime-edit {
+            color: black;
+            -webkit-text-fill-color: black;
+        }
+
+        .date-placeholder {
+            display: none
+        }
 
 .task-form input:hover {
     cursor: pointer;
@@ -90,9 +117,54 @@ input[type=date] {
     .task-form {
         display: flex;
         flex-direction: column;
+        box-sizing: border-box;
+        margin: 0px;
+        align-items: center;
     }
 
-    .button-icon {
+    .date-placeholder {
+        display: block;
+        position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: black;
+            pointer-events: none;
+            z-index: 1;
+    }
+
+    .title-wrapper input {
+        padding: 12px 16px;
+    }
+
+    .date-wrapper,
+    .title-wrapper {
+        width: 80%;
+        box-sizing: border-box;
+    }
+
+    .date-wrapper {
+        position: relative;
+        box-sizing: border-box;
+        background-color: var(--secondary);
+        border: 4px solid black;
+        box-shadow: 6px 6px 0 black;
+    }
+
+    .date-wrapper input[type="date"] {
+        display: block;
+        padding: 12px 0;
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        margin: 0;
+        text-align: left;
+    }
+
+    .task-form .button-icon {
         display: inline;
     }
 
@@ -107,14 +179,9 @@ input[type=date] {
         justify-content: center;
     }
 
-    input[type=date] {
-    color: black;
-    -webkit-text-fill-color: black;
-    color-scheme: light;
-}
-
-input[type="date"]::-webkit-datetime-edit {
-    color: black;
-}
+    input {
+        color: black;
+        -webkit-text-fill-color: black;
+    }
 
 }

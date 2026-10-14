@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
 const allowedOrigins = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'http://192.168.0.12:5173',
     'https://bubbly-reprieve-production-4d0b.up.railway.app'
 ];
 
@@ -762,7 +763,7 @@ async function startServer() {
   try {
     await seedUsers();
 
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
     });
   } catch (err) {

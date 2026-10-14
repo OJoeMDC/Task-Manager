@@ -148,6 +148,8 @@
         max-width: 100%;
         overflow-wrap: break-word;
         text-align: center;
+        
+        width: 100%;
     }
 
     .navlinks {

@@ -73,10 +73,6 @@ export default function Profile({ setUser, user, toggleIdVisibility, idVisibilit
                     <LogOut size={32} />
                     Logout
                 </button>
-
-                {user.role === 'admin' && (
-                    <Link to='/admin' className='button'>Admin Dashboard</Link>
-                )}
             </div>
             
         </main>

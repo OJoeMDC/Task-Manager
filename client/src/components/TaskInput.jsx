@@ -26,13 +26,20 @@ function TaskInput({ onAdd }) {
     return (
         <main>
             <form onSubmit={handleSubmit} className='task-form'>
-                <input
-                type='text'
-                placeholder='Enter a new task'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                />
-                <span>
+                <span className='title-wrapper'>
+                    <input
+                        type='text'
+                        placeholder='Enter a new task'
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                </span>
+                <span className='date-wrapper'>
+                    {!dueDate && (
+                        <span className='date-placeholder'>
+                            Select a date
+                        </span>
+                    )}
                     <input
                     type='date'
                     value={dueDate}
@@ -43,7 +50,7 @@ function TaskInput({ onAdd }) {
                 <article className='task-form-buttons'>
                     <button type='submit' className='button add-button'>
                         <span className="button-icon">
-                        <Plus size={20} />
+                            <Plus size={20} />
                         </span>
                         <span className="button-text">
                             Add Task

@@ -179,4 +179,10 @@
         flex-direction: column;
         align-items: flex-start;
     }
+
+    .profileLinks {
+        display: flex;
+        flex-direction: row;
+        align-items: left;
+    }
 }  
