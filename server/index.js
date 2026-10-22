@@ -61,6 +61,17 @@ db.exec(`
     )
     `);
 
+    try {
+    db.exec(`
+        ALTER TABLE tasks
+        ADD COLUMN position INTEGER DEFAULT 0;
+        `);
+    }
+    catch (err) {
+        console.log(err)
+        console.log("Column POSITION already exists")
+    }
+
  //GET basic tasks for a user
  app.get('/api/tasks', authenticateToken, (req, res) => {
     try {
@@ -74,6 +85,7 @@ db.exec(`
             WHERE tasks.user_id = ?
             AND tasks.archived = 0
             AND tasks.completed = 0
+            ORDER BY tasks.position ASC, tasks.id ASC
             `).all(userId);
         res.json(tasks);
     } catch (err) {
@@ -92,7 +104,8 @@ app.get('/api/tasks/user/all', authenticateToken, (req, res) => {
             FROM tasks 
             INNER JOIN users 
             ON tasks.user_id = users.id
-            WHERE tasks.user_id = ?`
+            WHERE tasks.user_id = ?
+            ORDER BY tasks.position ASC, tasks.id ASC`
         ).all(userId);
         res.json(tasks);
     } catch (err) {
@@ -154,7 +167,13 @@ app.get('/api/admin/tasks/:id', authenticateToken, requireAdmin, (req, res) => {
 //Get ALL tasks
 app.get('/api/tasks/all/all', authenticateToken, requireAdmin, (req, res) => {
     try {
-        const tasks = db.prepare('SELECT tasks.*, users.username FROM tasks INNER JOIN users ON tasks.user_id = users.id').all();
+        const tasks = db.prepare(`
+            SELECT tasks.*, users.username 
+            FROM tasks 
+            INNER JOIN users 
+            ON tasks.user_id = users.id 
+            ORDER BY tasks.position ASC, tasks.id ASC
+            `).all();
         res.json(tasks);
     } catch (err) {
         console.error("GET ALL/ALL tasks ERROR:", err);
@@ -172,6 +191,7 @@ app.get('/api/tasks/all', authenticateToken, requireAdmin, (req, res) => {
             ON tasks.user_id = users.id
             WHERE tasks.archived = 0
             AND tasks.completed = 0
+            ORDER BY tasks.position ASC, tasks.id ASC
             `).all();
             res.json(tasks);
         } catch (err) {
@@ -192,6 +212,7 @@ app.get('/api/tasks/user/archived', authenticateToken, (req, res) => {
             ON tasks.user_id = users.id
             WHERE tasks.user_id = ?
             AND tasks.archived = 1
+            ORDER BY tasks.position ASC, tasks.id ASC
             `).all(userId);
         res.json(tasks);
     } catch (err) {
@@ -209,6 +230,7 @@ app.get('/api/tasks/all/archived', authenticateToken, requireAdmin, (req, res) =
             INNER JOIN users
             ON tasks.user_id = users.id
             WHERE tasks.archived = 1
+            ORDER BY tasks.position ASC, tasks.id ASC
             `).all();
             res.json(tasks);
     } catch (err) {
@@ -230,6 +252,7 @@ app.get('/api/tasks/user/completed', authenticateToken, (req, res) => {
             WHERE tasks.user_id = ?
             AND tasks.completed = 1
             AND tasks.archived = 0
+            ORDER BY tasks.position ASC, tasks.id ASC
             `).all(userId);
         res.json(tasks);
         } catch (err) {
@@ -248,6 +271,7 @@ app.get('/api/tasks/all/completed', authenticateToken, requireAdmin, (req, res) 
             ON tasks.user_id = users.id
             WHERE tasks.completed = 1
             AND tasks.archived = 0
+            ORDER BY tasks.position ASC, tasks.id ASC
             `).all();
         res.json(tasks);
     } catch (err) {
@@ -269,9 +293,15 @@ app.post('/api/tasks', authenticateToken, (req, res) => {
         console.log("userId:", userId);
         console.log("dueDate:", dueDate);
 
+        const positionUpdate = db.prepare(
+            `SELECT COALESCE(MAX(position), -1) + 1 AS nextPosition
+            FROM tasks
+            WHERE user_id = ?`
+        ).get(userId)
+
         const result = db.prepare(
-            'INSERT INTO tasks (title, completed, user_id, due_date) VALUES (?, ?, ?, ?)'
-        ).run(title, completed ? 1 : 0, userId, dueDate || null);
+            'INSERT INTO tasks (title, completed, user_id, due_date, position) VALUES (?, ?, ?, ?, ?)'
+        ).run(title, completed ? 1 : 0, userId, dueDate || null, positionUpdate.nextPosition);
 
         const newTask = db.prepare(
             'SELECT * FROM tasks WHERE id = ?'
@@ -309,6 +339,58 @@ app.put('/api/tasks/:id/update', authenticateToken, (req, res) => {
         res.status(200).json(updatedTask);
     } catch (err) {
         console.error("UPDATE TASK ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+//Update task order in list
+app.put(`/api/list/tasks/update`, authenticateToken, (req, res) => {
+    console.log("REORDER ENDPOINT REACHED");
+
+
+    try {
+        const updatedTasks = req.body;
+
+
+        //Check if updatedTasks is an array
+        if(!Array.isArray(updatedTasks)) {
+            return res.status(400).json({
+                error: "Expected an array of tasks"
+            })
+        };
+
+        //Check if every field in the array is filled (ID and position)
+        if (!updatedTasks.every(task =>
+                task.id !== undefined && task.position !== undefined
+            )) 
+        {
+            return res.status(400).json({
+                error: "Invalid task data"
+            });
+        }
+
+
+        const updateOrder = db.transaction(() => {
+            for (const task of updatedTasks) {
+                const taskId = task.id
+                const taskPos = task.position
+                const update = db.prepare(`UPDATE tasks SET position = ? WHERE id = ? AND user_id = ?`).run(taskPos, taskId, req.user.id)
+
+                if (update.changes === 0) {
+                    throw new Error("Task not found");
+                }
+            }
+        });
+        updateOrder();
+
+
+        res.status(200).json({
+            message: "Task order updated successfully"
+        })
+
+
+    } catch (err) {
+        console.error("Move task error:", err)
         res.status(500).json({ error: err.message });
     }
 });

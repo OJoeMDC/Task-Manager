@@ -1,13 +1,54 @@
 import './TaskList.css'
 import Task from "./Task"
-import useTasks from '../hooks/useTasks';
+import { useState, useRef } from 'react';
 
-function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask, idVisibility , viewArchived, viewCompleted}) {
+function TaskList({ user, tasks, setTasks, archiveTask, toggleComplete, editTask, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask, idVisibility , viewArchived, viewCompleted, handleUpdateList}) {
     /*
     Tasklist takes care of the lists of tasks
 
     this is a component to be placed on a page
     */
+
+    const [draggedTask, setDraggedTask] = useState(null);
+    const originalTasks = useRef(null);
+
+    const handleDragStart = (taskId) => {
+        console.log(taskId)
+        originalTasks.current = [...tasks];
+        setDraggedTask(taskId);
+    };
+
+    function swapTasks(a, b) {
+        let temp = tasks[b]
+        const newTasks = [...tasks]
+        newTasks[b] = tasks[a]
+        newTasks[a] = temp
+
+        setTasks(newTasks)
+    };
+
+     const handleSwap = (b) => {
+        const indexB = tasks.findIndex(tasks => tasks.id === b);
+        const indexA = tasks.findIndex(tasks => tasks.id === draggedTask)
+        console.log(`indexB ${indexB}`)
+        console.log(`indexA ${indexA}`)
+        if (indexA != indexB) {
+            swapTasks(indexB, indexA)
+        }
+    };
+
+    const handleDragEnd = async () => {
+        setDraggedTask(null);
+
+        try {
+            await handleUpdateList(tasks);
+        } catch (err) {
+            setTasks(originalTasks.current);
+            console.error("Failed to update task list order");
+        }
+    };
+
+
     
 
     return(
@@ -36,6 +77,12 @@ function TaskList({ user, tasks, archiveTask, toggleComplete, editTask, restoreT
                     user={user}
                     restoreTask={restoreTask}
                     idVisibility={idVisibility}
+                    swapTasks={swapTasks}
+                    draggedTask={draggedTask}
+                    setDraggedTask={setDraggedTask}
+                    handleSwap={handleSwap}
+                    handleDragStart={handleDragStart}
+                    handleDragEnd={handleDragEnd}
                     />
                 ))
             )}

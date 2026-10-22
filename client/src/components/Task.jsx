@@ -8,7 +8,7 @@ import { Check, Pencil, Trash2, Archive, RotateCcw } from "lucide-react";
 <Trash2 size={20} /> */}
 
 
-export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask, idVisibility } ) {
+export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask, idVisibility, swapTasks, draggedTask, setDraggedTask, handleSwap, handleDragStart, handleDragEnd } ) {
     /*
     Task handles what buttons an individual task has in a tasklist
 
@@ -53,7 +53,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
     // Task Buttons if currently editing
     if (isEditing) {
     return (
-        <li 
+        <li
         key={task.id}
         className='list-item'
         onClick={() => navigate(`/tasks/${task.id}`)}
@@ -101,7 +101,11 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
 
    // Normal Task Buttons if not editing 
     return (
-        <li 
+        <li
+        draggable={true}
+        onDragStart={() => handleDragStart(task.id)}
+        onDragEnter={() => handleSwap(task.id)}
+        onDragEnd={() => handleDragEnd()}
         key={task.id} 
         className={`
             list-item

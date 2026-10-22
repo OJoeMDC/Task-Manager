@@ -25,7 +25,8 @@ export default function Tasks({user, showMessage, idVisibility }) {
   archiveTask,
   restoreTask,
   toggleComplete,
-  fetchTasks
+  fetchTasks,
+  handleUpdateList
 } = useTasks(user, showMessage);
 
 
@@ -77,6 +78,8 @@ if (!user) {
           idVisibility={idVisibility}
           viewArchived={viewArchived}
           viewCompleted={viewCompleted}
+          setTasks={setTasks}
+          handleUpdateList={handleUpdateList}
           />
         </div>
       </main>

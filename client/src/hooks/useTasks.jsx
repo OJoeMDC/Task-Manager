@@ -381,6 +381,35 @@ export default function useTasks(user, showMessage, taskID) {
         }
     };
 
+    //Update moving tasks around in the list
+    const handleUpdateList = async (updatedTasks) => {
+        const newPositions = updatedTasks.map((task, index) => {
+            return {
+                id: task.id,
+                position: index
+            };
+        });
+
+        const res = await fetch(`${API_URL}/api/list/tasks/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(newPositions)
+        });
+        if (res.ok) {
+            const updatedTask = await res.json();
+
+        }
+
+        if (!res.ok) {
+            const data = await res.json();
+                setError(data.error || 'Failed to toggle task status');
+                return;
+        }
+    };
+
 
     //Update hook when user, viewArchived, or viewCompleted changes
       useEffect(() => {
@@ -410,5 +439,6 @@ export default function useTasks(user, showMessage, taskID) {
         addTask,
         fetchTasks,
         fetchSingleTask,
+        handleUpdateList
     }
 }
