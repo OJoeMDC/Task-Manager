@@ -8,7 +8,7 @@ import { Check, Pencil, Trash2, Archive, RotateCcw } from "lucide-react";
 <Trash2 size={20} /> */}
 
 
-export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask, idVisibility, swapTasks, draggedTask, setDraggedTask, handleSwap, handleDragStart, handleDragEnd } ) {
+export default function Task( { task, archiveTask, toggleComplete, editTask, user, restoreTask, deleteTask, adminArchiveTask, adminToggleComplete, adminEditTask, idVisibility, swapTasks, draggedTask, setDraggedTask, handleSwap, handleDragStart, handleDragEnd, startPosition, wasDragged } ) {
     /*
     Task handles what buttons an individual task has in a tasklist
 
@@ -102,19 +102,43 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
    // Normal Task Buttons if not editing 
     return (
         <li
-        draggable={true}
-        onDragStart={() => handleDragStart(task.id)}
-        onDragEnter={() => handleSwap(task.id)}
-        onDragEnd={() => handleDragEnd()}
-        key={task.id} 
+        onPointerDown={(e) => handleDragStart(e, task.id)}
+        onPointerMove={(e) => {
+            if (draggedTask === null) return;
+            const element = document.elementFromPoint(e.clientX, e.clientY);
+            const taskElement = element?.closest('[data-task-id]');
+            if (!taskElement) return;
+            const taskId = Number(taskElement.dataset.taskId);
+            const distance = Math.hypot(
+                e.clientX - startPosition.current.x,
+                e.clientY - startPosition.current.y
+            );
+
+            if (distance > 5){
+                wasDragged.current = true;
+            }
+
+            handleSwap(taskId)
+        }}
+        onPointerUp={handleDragEnd}
+        key={task.id}
+        data-task-id={task.id} 
         className={`
             list-item
             ${task.completed === 1 ?'completed' : ''} 
             ${task.archived === 1 ? 'archived' : ''} 
             ${isAdminPage ? 'admin-task' : ''} 
             ${idVisibility ? '' : 'hide-id'}
+            ${draggedTask === task.id ? 'dragging' : ''}
             `}
-        onClick={() => navigate(`/tasks/${task.id}`)}
+        onClick={(e) => {
+            if (wasDragged.current) {
+                e.preventDefault();
+                e.stopPropagation();
+                wasDragged.current = false;
+                return;
+            }
+            navigate(`/tasks/${task.id}`)}}
         >
                     <div className='task-info'>
                         <span className='task-title'>{task.title}</span>

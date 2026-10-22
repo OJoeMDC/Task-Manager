@@ -11,8 +11,13 @@ function TaskList({ user, tasks, setTasks, archiveTask, toggleComplete, editTask
 
     const [draggedTask, setDraggedTask] = useState(null);
     const originalTasks = useRef(null);
+    const startPosition = useRef(null);
+    const wasDragged = useRef(false);
 
-    const handleDragStart = (taskId) => {
+    const handleDragStart = (e, taskId) => {
+        startPosition.current = { x: e.clientX, y: e.clientY };
+        wasDragged.current = false;
+         e.currentTarget.setPointerCapture(e.pointerId);
         console.log(taskId)
         originalTasks.current = [...tasks];
         setDraggedTask(taskId);
@@ -39,6 +44,7 @@ function TaskList({ user, tasks, setTasks, archiveTask, toggleComplete, editTask
 
     const handleDragEnd = async () => {
         setDraggedTask(null);
+        console.log("POINTER RELEASED");
 
         try {
             await handleUpdateList(tasks);
@@ -47,7 +53,6 @@ function TaskList({ user, tasks, setTasks, archiveTask, toggleComplete, editTask
             console.error("Failed to update task list order");
         }
     };
-
 
     
 
@@ -83,6 +88,8 @@ function TaskList({ user, tasks, setTasks, archiveTask, toggleComplete, editTask
                     handleSwap={handleSwap}
                     handleDragStart={handleDragStart}
                     handleDragEnd={handleDragEnd}
+                    startPosition={startPosition}
+                    wasDragged={wasDragged}
                     />
                 ))
             )}

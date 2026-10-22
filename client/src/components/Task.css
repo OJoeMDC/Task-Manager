@@ -6,6 +6,12 @@
     padding: 8px;
 
     border-bottom: 1px solid var(--border);
+
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+
+    transition: transform 0.2s ease;
 }
         .admin-task {
             display: grid;
@@ -13,6 +19,12 @@
             align-items: center;
             gap: 12px;
             padding: 8px;
+        }
+
+        .list-item.dragging {
+            transform: scale(1.05);
+            z-index: 10;
+            position: relative;
         }
 
 .user-list-item {
