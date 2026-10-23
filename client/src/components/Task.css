@@ -204,6 +204,10 @@
     text-align: left;
 }
 
+.list-item.archived button{
+    height: 42px;
+}
+
 
 
 
