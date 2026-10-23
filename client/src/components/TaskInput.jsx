@@ -28,6 +28,7 @@ function TaskInput({ onAdd }) {
             <form onSubmit={handleSubmit} className='task-form'>
                 <span className='title-wrapper'>
                     <input
+                        className='task-name-input'
                         type='text'
                         placeholder='Enter a new task'
                         value={title}
