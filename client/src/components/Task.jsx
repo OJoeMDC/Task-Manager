@@ -251,7 +251,7 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     disabled={isLoading !== null}
                                     className='delete' 
                                     onClick={() => {
-                                        handleAction('archive', () => ( isAdmin ? adminArchiveTask(task.id) : archiveTask(task.id) ));
+                                        handleAction('archive', () => ( isAdmin && isAdminPage ? adminArchiveTask(task.id) : archiveTask(task.id) ));
                                     }}>
                                         <span className="button-icon">
                                             <Archive size={20} />
