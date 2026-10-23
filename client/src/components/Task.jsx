@@ -154,8 +154,11 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
 
                    {isAdminPage && <span><b>User:</b> {task.username}</span>}
                     <div 
-                    className="buttons"
-                    onClick={e => e.stopPropagation()} // Prevent click from propagating to the li
+                        className="buttons"
+                        onClick={e => e.stopPropagation()} // Prevent click from propagating to the li
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onPointerMove={(e) => e.stopPropagation()}
+                        onPointerUp={(e) => e.stopPropagation()}
                     >
 
 
@@ -165,9 +168,9 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 <button 
                                 disabled={isLoading !== null}
                                 className='restore'
-                                onClick={() =>
+                                onClick={() =>{
                                     handleAction('restore', () => restoreTask(task.id))
-                                }>
+                                }}>
                                     <p className="button-icon">
                                         <RotateCcw size={20} />
                                     </p>
