@@ -1,6 +1,6 @@
 .list-item {
     display: grid;
-    grid-template-columns: 1fr 1fr 65px auto;
+    grid-template-columns: minmax(0, 1fr) max-content 65px;
     align-items: center;
     gap: 12px;
     padding: 8px;
@@ -15,7 +15,7 @@
 }
         .admin-task {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 65px auto;
+            grid-template-columns: 1fr max-content max-content 65px;
             align-items: center;
             gap: 12px;
             padding: 8px;
@@ -29,7 +29,7 @@
 
 .user-list-item {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr max-content;
     align-items: center;
     gap: 12px;
     padding: 8px;
@@ -68,6 +68,11 @@
 
         .task-title {
         font-weight: 900;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
+        max-width: 100%;
         }
 
 .list-item input,

@@ -1,8 +1,9 @@
 .tasklist {
     display: flex;
     flex-direction: column;
-    width: max-content;
+    width: 100%;
     max-width: 90vw;
+    box-sizing: border-box;
 
     background-color: var(--surface);
     box-shadow: 6px 6px 0 black;
@@ -10,10 +11,12 @@
 
     padding: 0px;
     margin: 0;
-
+    margin-bottom: 24px;
 }
 
 .tasklist-header {
+    position: relative;
+
     padding-left: 24px;
     padding-right: 24px;
     margin: 0;
@@ -21,7 +24,6 @@
     justify-content: center;
     text-align: center;
 
-    border: none;
     border-bottom: 4px solid black;
     background: var(--secondary);
 }

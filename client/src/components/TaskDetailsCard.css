@@ -6,6 +6,7 @@
     text-align: left;
     padding: 8px;
 
+    max-width: 420px;
 }
 
 .immutable-info {
@@ -23,6 +24,9 @@
 
 .task-details-card {
     width: 100%;
+    max-width: 420px;
+    min-width: 0;
+    box-sizing: border-box;
 
     display: flex;
     flex-direction: column;
@@ -46,6 +50,11 @@
 .task-item {
     width: 100%;
     height: 45px;
+    box-sizing: border-box;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 
     justify-content: center;
     align-items: center;
@@ -78,7 +87,10 @@
 
 
 .detail-field input {
-    width: auto;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     height: 45px;
     flex: 1;
     padding: 8px;
