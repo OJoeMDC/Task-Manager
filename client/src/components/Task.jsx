@@ -66,13 +66,21 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                 onKeyDown={e => {
                                     if(e.key === 'Escape') handleCancel();
                                 }}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onPointerMove={(e) => e.stopPropagation()}
+                                onPointerUp={(e) => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation()}
                                 autoFocus
                             />
 
                             <input
-                            type='date'
-                            value={editDueDate}
-                            onChange={e => setEditDueDate(e.target.value)}
+                                type='date'
+                                value={editDueDate}
+                                onChange={(e) => setEditDueDate(e.target.value)}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onPointerMove={(e) => e.stopPropagation()}
+                                onPointerUp={(e) => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation()}
                             />
 
                             <div 
@@ -209,6 +217,19 @@ export default function Task( { task, archiveTask, toggleComplete, editTask, use
                                     </span>
                                     <span className="button-text">
                                         {isLoading === 'restore' ? 'Restoring...' : 'Restore'}
+                                    </span>
+                                </button>
+                                <button 
+                                disabled={isLoading !== null}
+                                className='delete'
+                                onClick={() => {
+                                    handleAction('delete', () => deleteTask(task.id));
+                                }}>
+                                    <span className="button-icon">
+                                        <Trash2 size={20} />
+                                    </span>
+                                    <span className="button-text">
+                                        {isLoading === 'delete' ? 'Deleting...' : 'Delete'}
                                     </span>
                                 </button>
                             </>
